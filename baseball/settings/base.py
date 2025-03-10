@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+
 from pathlib import Path
+from dotenv import load_dotenv
+
+# 環境変数をロード
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,15 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-*gn5sgzb#cbud^p-bqiyx-jj4pr3=3^3)im7zw^=xa^m_gpga7'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'sugar191.pythonanywhere.com',
-]
 
 
 # Application definition
@@ -76,20 +72,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'baseball.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'baseball',  # 作成したデータベース名
-        'USER': 'baseball_user',  # MySQLのユーザー名
-        'PASSWORD': 'password',  # MySQLのパスワード
-        'HOST': 'localhost',  # MySQLがローカルにインストールされている場合
-        'PORT': '3306',  # MySQLのポート番号（デフォルト）
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -131,3 +113,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
