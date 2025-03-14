@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Player
 
-def hello_world(request):
-    return HttpResponse("Hello World")
+def player_list(request):
+    players = Player.objects.all()  # 全選手のデータを取得
+    return render(request, 'player/player_list.html', {'players': players})

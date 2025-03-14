@@ -15,7 +15,7 @@ ALLOWED_HOSTS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'baseball',  # 作成したデータベース名
+        'NAME': 'sugar191$baseball',  # 作成したデータベース名
         'USER': 'baseball_user',  # MySQLのユーザー名
         'PASSWORD': 'password',  # MySQLのパスワード
         'HOST': 'localhost',  # MySQLがローカルにインストールされている場合

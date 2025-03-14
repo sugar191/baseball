@@ -56,7 +56,7 @@ ROOT_URLCONF = 'baseball.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['E:/Workspace/Django/baseball/player/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
