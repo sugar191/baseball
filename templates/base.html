@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <!-- 固定メニューバー -->
+    <div class="navbar">
+        <ul>
+            <li><a href="/players/">ホーム</a></li>
+            {% if user.is_authenticated and user.is_superuser %}
+                <li><a href="/admin/">管理画面</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

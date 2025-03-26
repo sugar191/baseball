@@ -1,16 +1,8 @@
-"""
-WSGI config for baseball project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
-"""
-
 import os
-
 from django.core.wsgi import get_wsgi_application
+from dotenv import load_dotenv
+from pathlib import Path
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'baseball.settings')
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / '.env')  # .envを読み込む
 
 application = get_wsgi_application()

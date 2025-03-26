@@ -6,7 +6,7 @@ class Place(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)  # 場所名
     sort_order = models.IntegerField(default=0)  # 表示順
     is_foreign = models.BooleanField(default=True)  #海外かどうか
-    
+
     class Meta:
         db_table = 'places'  # 使用するテーブル名を指定
 
@@ -17,7 +17,8 @@ class Place(models.Model):
 class Currency(models.Model):
     code = models.CharField(max_length=10, null=False, blank=False, unique=True)  # 通貨コード
     name = models.CharField(max_length=30, null=False, blank=False)  # 通貨
-    
+    symbol = models.CharField(max_length=10, null=False, blank=False, default="")  # 通貨記号
+
     class Meta:
         db_table = 'currencies'  # 使用するテーブル名を指定
 
@@ -29,18 +30,18 @@ class ExchangeRate(models.Model):
     year = models.IntegerField()  # 年度
     currency = models.ForeignKey(Currency, on_delete=models.RESTRICT, null=True, blank=True)
     rate = models.DecimalField(max_digits=10, decimal_places=2)  # 1単位あたりの円レート（例: 1 USD = 110円）
-    
+
     class Meta:
         db_table = 'exchange_rates'  # 使用するテーブル名を指定
         unique_together = ('year', 'currency')  # 同じ年と通貨の組み合わせを一意に
 
     def __str__(self):
-        return self.name
+        return self.year
 
 # 投手手のマスターテーブル
 class HandThrowing(models.Model):
     name = models.CharField(max_length=10)
-    
+
     class Meta:
         db_table = 'hands_throwing'  # 使用するテーブル名を指定
 
@@ -50,7 +51,7 @@ class HandThrowing(models.Model):
 # 打席手のマスターテーブル
 class HandBatting(models.Model):
     name = models.CharField(max_length=10)
-    
+
     class Meta:
         db_table = 'hands_batting'  # 使用するテーブル名を指定
 
@@ -61,7 +62,7 @@ class HandBatting(models.Model):
 class PositionCategory(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)  # 名前
     sort_order = models.IntegerField(default=0)  # 表示順
-    
+
     class Meta:
         db_table = 'position_categories'  # 使用するテーブル名を指定
 
@@ -138,12 +139,10 @@ class PlayerCommonRecord(models.Model):
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)  # 通貨
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
-    
+
     class Meta:
         db_table = 'player_common_records'  # 使用するテーブル名を指定
         unique_together = ('player', 'year')  # 選手と年度の組み合わせは一意
-    
 
     def __str__(self):
-        return self.name
-
+        return f"{self.player.name} ({self.year})"

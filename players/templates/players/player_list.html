@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>選手一覧</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}選手一覧{% endblock %}
+
+{% block content %}
     <h1>選手一覧</h1>
     <table border="1">
         <thead>
@@ -27,7 +24,4 @@
             {% endfor %}
         </tbody>
     </table>
-    <br>
-    <a href="{% url 'add_player' %}">選手を追加する</a>
-</body>
-</html>
+{% endblock %}
