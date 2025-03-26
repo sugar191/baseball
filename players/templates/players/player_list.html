@@ -7,15 +7,27 @@
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>球団</th>
                 <th>名前</th>
+                <th>背番号</th>
+                <th>年齢</th>
+                <th>投打</th>
             </tr>
         </thead>
         <tbody>
             {% for player in players %}
                 <tr>
-                    <td>{{ player.id }}</td>
+                    <td>
+                        {% if player.team_logo %}
+                            <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                     <td>{{ player.name }}</td>
+                    <td>{{ player.number }}</td>
+                    <td>{{ player.age }}</td>
+                    <td>{{ player.throw_bat_display }}</td>
                 </tr>
             {% empty %}
                 <tr>

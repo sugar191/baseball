@@ -36,3 +36,19 @@
     margin-top: 60px; /* メニューバーの高さ分スペースを空ける */
     padding: 20px;
 }
+
+/* テーブル */
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+img {
+    display: block; /* 余計な空白を除去できる場合もある */
+}

@@ -127,6 +127,21 @@ class Player(models.Model):
 
     def __str__(self):
         return self.name
+    
+    # 年齢を計算するプロパティ
+    @property
+    def age(self):
+        from datetime import date
+        if self.birthday:
+            return date.today().year - self.birthday.year
+        return None
+
+    # 投打表記（右投右打など）を作成するプロパティ
+    @property
+    def throw_bat_display(self):
+        throwing = self.throwing_hand.name if self.throwing_hand else "不明"
+        batting = self.batting_hand.name if self.batting_hand else "不明"
+        return f"{throwing}投{batting}打"
 
 # 選手共通記録
 class PlayerCommonRecord(models.Model):
