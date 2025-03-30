@@ -4,36 +4,47 @@
 
 {% block content %}
     <h1>選手一覧</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>球団</th>
-                <th>名前</th>
-                <th>背番号</th>
-                <th>年齢</th>
-                <th>投打</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for player in players %}
-                <tr>
-                    <td>
+
+    <div class="player-list">
+        {% for player in players %}
+            <div class="player-card">
+                <div class="player-header">
+                    <div class="team-logo">
                         {% if player.team_logo %}
                             <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
                         {% else %}
                             -
                         {% endif %}
-                    </td>
-                    <td>{{ player.name }}</td>
-                    <td>{{ player.number }}</td>
-                    <td>{{ player.age }}</td>
-                    <td>{{ player.throw_bat_display }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="2">登録された選手はまだいません。</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    </div>
+                    <div class="player-name">
+                        <strong>{{ player.name }}</strong>
+                    </div>
+                </div>
+                <div class="player-details">
+                    <div><strong>背番号:</strong> {{ player.number }}</div>
+                    <div><strong>ポジション:</strong> 
+                        {% if player.position %}
+                            {{ player.position.name }}
+                        {% else %}
+                            未登録
+                        {% endif %}
+                    </div>
+                    <div><strong>誕生日:</strong> {{ player.birthday |date:"Y/m/d" }}</div>
+                    <div><strong>年齢:</strong> {{ player.age }}</div>
+                    <div><strong>投打:</strong> {{ player.throw_bat_display }}</div>
+                    <div><strong>身長:</strong> {{ player.height }}cm</div>
+                    <div><strong>体重:</strong> {{ player.weight }}kg</div>
+                    <div><strong>出身地:</strong> 
+                        {% if player.place %}
+                            {{ player.place.name }}
+                        {% else %}
+                            未登録
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="no-players">登録された選手はまだいません。</div>
+        {% endfor %}
+    </div>
 {% endblock %}

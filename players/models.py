@@ -105,8 +105,8 @@ class Player(models.Model):
     birth_year = models.IntegerField(null=True, blank=True)  # 年のみを保存
     birth_month = models.IntegerField(null=True, blank=True)  # 月のみを保存
     place = models.ForeignKey(Place, on_delete=models.RESTRICT, null=True, blank=True)  # 出身地をForeignKeyで参照
-    height = models.IntegerField(null=True, blank=True)  # 身長（cm）
-    weight = models.IntegerField(null=True, blank=True)  # 体重（kg）
+    height = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 身長（cm）
+    weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 体重（kg）
     is_married = models.BooleanField(default=True) #  結婚しているかどうか
     partner = models.CharField(max_length=50, null=True, blank=True) #  結婚相手
     hobby = models.CharField(max_length=50, null=True, blank=True) #  趣味

@@ -37,18 +37,71 @@
     padding: 20px;
 }
 
-/* テーブル */
-table {
-    border-collapse: collapse;
+/* リスト */
+.player-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
 }
 
-td {
-    padding-top: 0;
-    padding-bottom: 0;
-    line-height: 1;
-    vertical-align: middle;
+/* player-card */
+.player-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%; /* 初期では1列に表示 */
+    padding: 10px;
+    box-sizing: border-box;
+    transition: transform 0.3s;
 }
 
-img {
-    display: block; /* 余計な空白を除去できる場合もある */
+.player-card:hover {
+    transform: translateY(-5px); /* ホバー時に少し上に動くエフェクト */
+}
+
+/* チームロゴと名前を1行で表示 */
+.player-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.team-logo img {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.player-name {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.player-details div {
+    margin-bottom: 5px;
+}
+
+.player-details strong {
+    font-weight: bold;
+}
+
+/* モバイル画面向けのレスポンシブデザイン */
+@media (max-width: 768px) {
+    .player-card {
+        width: 100%; /* スマホ画面では1列で表示 */
+    }
+}
+
+/* PCでは2列表示 */
+@media (min-width: 769px) {
+    .player-card {
+        width: calc(50% - 20px); /* PCでは2列に表示 */
+    }
+}
+
+/* プレイヤーがいない場合のメッセージ */
+.no-players {
+    text-align: center;
+    font-size: 1.2em;
+    color: #888;
 }
