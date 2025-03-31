@@ -86,6 +86,7 @@ class Team(models.Model):
     logo = models.ImageField(upload_to='team_logos/')  # 球団ロゴ画像
     league = models.ForeignKey(League, related_name='teams', on_delete=models.CASCADE)  # リーグとの関連
     sort_order = models.IntegerField(default=0)  # 表示順（順位に基づく）
+    color = models.CharField(max_length=50, null=True, blank=True) # 球団カラーのカラーコード
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 

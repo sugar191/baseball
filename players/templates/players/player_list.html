@@ -3,11 +3,11 @@
 {% block title %}選手一覧{% endblock %}
 
 {% block content %}
-    <h1>選手一覧</h1>
+    <div class="page_title">選手一覧</div>
 
     <div class="player-list">
         {% for player in players %}
-            <div class="player-card">
+            <div class="player-card" style="background-color: rgba({{ player.color }}, 0.2);">
                 <div class="player-header">
                     <div class="team-logo">
                         {% if player.team_logo %}
@@ -29,11 +29,12 @@
                             未登録
                         {% endif %}
                     </div>
+                    <div><strong>年俸:</strong> {{ player.salary }}</div>
                     <div><strong>誕生日:</strong> {{ player.birthday |date:"Y/m/d" }}</div>
                     <div><strong>年齢:</strong> {{ player.age }}</div>
                     <div><strong>投打:</strong> {{ player.throw_bat_display }}</div>
-                    <div><strong>身長:</strong> {{ player.height }}cm</div>
-                    <div><strong>体重:</strong> {{ player.weight }}kg</div>
+                    <div><strong>身長:</strong> {{ player.height }}</div>
+                    <div><strong>体重:</strong> {{ player.weight }}</div>
                     <div><strong>出身地:</strong> 
                         {% if player.place %}
                             {{ player.place.name }}

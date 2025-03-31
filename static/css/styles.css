@@ -34,15 +34,23 @@
 
 .content {
     margin-top: 60px; /* メニューバーの高さ分スペースを空ける */
-    padding: 20px;
+    padding: 10px;
+}
+
+.page_title {
+    display: block;
+    font-size: 2em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
 }
 
 /* リスト */
 .player-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
+    gap: 10px;
 }
 
 /* player-card */
