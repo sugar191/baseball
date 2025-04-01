@@ -84,7 +84,7 @@ class League(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=50)
     logo = models.ImageField(upload_to='team_logos/')  # 球団ロゴ画像
-    league = models.ForeignKey(League, related_name='teams', on_delete=models.CASCADE)  # リーグとの関連
+    league = models.ForeignKey(League, on_delete=models.CASCADE)  # リーグとの関連
     sort_order = models.IntegerField(default=0)  # 表示順（順位に基づく）
     color = models.CharField(max_length=50, null=True, blank=True) # 球団カラーのカラーコード
     created_at = models.DateTimeField(default=timezone.now)
@@ -108,7 +108,7 @@ class Player(models.Model):
     place = models.ForeignKey(Place, on_delete=models.RESTRICT, null=True, blank=True)  # 出身地をForeignKeyで参照
     height = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 身長（cm）
     weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 体重（kg）
-    is_married = models.BooleanField(default=True) #  結婚しているかどうか
+    is_married = models.BooleanField(null=True, blank=True) #  結婚しているかどうか
     partner = models.CharField(max_length=50, null=True, blank=True) #  結婚相手
     hobby = models.CharField(max_length=50, null=True, blank=True) #  趣味
     specialty = models.CharField(max_length=50, null=True, blank=True) #  特技
@@ -137,12 +137,25 @@ class Player(models.Model):
             return date.today().year - self.birthday.year
         return None
 
-    # 投打表記（右投右打など）を作成するプロパティ
+    # 利腕を表示するプロパティ
     @property
-    def throw_bat_display(self):
-        throwing = self.throwing_hand.name if self.throwing_hand else "不明"
-        batting = self.batting_hand.name if self.batting_hand else "不明"
-        return f"{throwing}投{batting}打"
+    def throw_bat(self):
+        throwing = f"{self.throwing_hand.name}投" if self.throwing_hand else None
+        batting = f"{self.batting_hand.name}打" if self.batting_hand else None
+        return f"{throwing}{batting}"
+    
+    # 婚姻を表示するプロパティ
+    @property
+    def marriage(self):
+        if self.is_married == 1:
+            marriage = '既婚'
+            if self.partner != '':
+                marriage = marriage + ' (' + self.partner + ')'
+        elif self.is_married == 0:
+            marriage = '独身'
+        else:
+            marriage = None
+        return marriage  # これが抜けていると None が返る
 
 # 選手共通記録
 class PlayerCommonRecord(models.Model):

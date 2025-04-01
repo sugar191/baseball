@@ -4,7 +4,10 @@
 
 {% block content %}
     <div class="page_title">選手一覧</div>
-
+    <form method="GET" action="{% url 'player_list' %}">
+        <input type="text" name="q" placeholder="選手名・ふりがな・登録名で検索" value="{{ request.GET.q }}">
+        <button type="submit">検索</button>
+    </form>
     <div class="player-list">
         {% for player in players %}
             <div class="player-card" style="background-color: rgba({{ player.color }}, 0.2);">
@@ -16,11 +19,12 @@
                             -
                         {% endif %}
                     </div>
-                    <div class="player-name">
-                        <strong>{{ player.name }}</strong>
-                    </div>
+                    <div class="player-name"><a href="{% url 'player_detail' player.id %}"><strong>{{ player.name }}</strong></a></div>
                 </div>
                 <div class="player-details">
+                    {% if player.nickname %}
+                        <div class="player-name"><strong>「{{ player.nickname }}」</strong></div>
+                    {% endif %}
                     <div><strong>背番号:</strong> {{ player.number }}</div>
                     <div><strong>ポジション:</strong> 
                         {% if player.position %}
@@ -30,9 +34,9 @@
                         {% endif %}
                     </div>
                     <div><strong>年俸:</strong> {{ player.salary }}</div>
-                    <div><strong>誕生日:</strong> {{ player.birthday |date:"Y/m/d" }}</div>
+                    <div><strong>誕生日:</strong> {{ player.birthday }}</div>
                     <div><strong>年齢:</strong> {{ player.age }}</div>
-                    <div><strong>投打:</strong> {{ player.throw_bat_display }}</div>
+                    <div><strong>投打:</strong> {{ player.throw_bat }}</div>
                     <div><strong>身長:</strong> {{ player.height }}</div>
                     <div><strong>体重:</strong> {{ player.weight }}</div>
                     <div><strong>出身地:</strong> 
@@ -40,6 +44,25 @@
                             {{ player.place.name }}
                         {% else %}
                             未登録
+                        {% endif %}
+                    </div>
+                    <div><strong>婚姻:</strong> {{ player.marriage }}</div>
+                    <div><strong>趣味:</strong> {{ player.hobby }}</div>
+                    <div><strong>特技:</strong> {{ player.specialty }}</div>
+                    <div>
+                        <strong>関連リンク:</strong> 
+                        {% if player.wikipedia %}
+                            <a href="{{ player.wikipedia }}" target="_blank" title="Wikipedia">
+                                <i class="fa-brands fa-wikipedia-w"></i>
+                            </a>
+                        {% endif %}
+                        {% if player.youtube %}
+                            <a href="{{ player.youtube }}" target="_blank" title="YouTube">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                        {% endif %}
+                        {% if user.is_authenticated and user.is_superuser %}
+                            <a href="{% url 'admin:players_player_change' player.id %}" target="_blank">[編集]</a>
                         {% endif %}
                     </div>
                 </div>

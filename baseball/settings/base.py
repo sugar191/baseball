@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'import_export',
     'players',  # 自分のアプリ追加
 ]
@@ -119,3 +120,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = '/players/'  # ログイン後のリダイレクト先URL
+LOGOUT_REDIRECT_URL = '/players/'  # ログアウト後のリダイレクト先

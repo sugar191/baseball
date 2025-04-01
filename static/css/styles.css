@@ -32,6 +32,19 @@
     text-decoration: underline;
 }
 
+.navbar button {
+    background: none; /* 背景を透明にする */
+    border: none; /* 枠線をなくす */
+    color: white; /* 文字色をリンクと同じに */
+    font-size: 16px; /* 文字サイズ調整 */
+    cursor: pointer; /* ホバー時のカーソル */
+    padding: 0;
+}
+
+.navbar button:hover {
+    text-decoration: underline;
+}
+
 .content {
     margin-top: 60px; /* メニューバーの高さ分スペースを空ける */
     padding: 10px;
@@ -112,4 +125,19 @@
     text-align: center;
     font-size: 1.2em;
     color: #888;
+}
+
+a {
+    text-decoration: none;
+    margin-right: 10px; /* アイコンの間隔 */
+}
+
+.fa-wikipedia-w {
+    color: #000; /* 黒色 */
+    font-size: 18px;
+}
+
+.fa-youtube {
+    color: #FF0000; /* 赤色 */
+    font-size: 18px;
 }

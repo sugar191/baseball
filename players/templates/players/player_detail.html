@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ player.name }}{% endblock %}
+
+{% block content %}
+    <div class="page_title">{{ player.name }}</div>
+    <div>ふりがな: {{ player.furigana }}</div>
+    <div>通称: {{ player.nickname }}</div>
+    <div>ポジション: {{player.main_position_category }}</div>
+    <div>誕生日: {{ player.birthday }}</div>
+    <div>年齢: {{ player.age }}</div>
+    <div>出身地: {{ player.place }}</div>
+    <div>身長: {{ player.height }} cm</div>
+    <div>体重: {{ player.weight }} kg</div>
+    <div>投打: {{ player.throw_bat }}</div>
+    <div>ファン球団: {{ player.favorite_team }}</div>
+    <div>趣味: {{ player.hobby }}</div>
+    <div>特技: {{ player.specialty }}</div>
+    <div>婚姻: {{ player.marriage }}</div>
+    <a href="{% url 'player_list' %}">戻る</a>
+    {% if user.is_authenticated and user.is_superuser %}
+        <a href="{% url 'admin:players_player_change' player.id %}" target="_blank">[編集]</a>
+    {% endif %}
+{% endblock %}
