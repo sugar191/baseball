@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load format_filters %}
 
 {% block title %}選手一覧{% endblock %}
 
@@ -33,7 +34,12 @@
                             未登録
                         {% endif %}
                     </div>
-                    <div><strong>年俸:</strong> {{ player.salary }}</div>
+                    {% if player.position.id == 1 %}
+                        <div><strong>成績({{ player.pitching_year }}年):</strong> {% format_pitching_stats player.earned_average player.win player.lose player.save player.hold player.strike_out %}</div>
+                    {% else %}
+                        <div><strong>成績({{ player.batting_year }}年):</strong> {% format_batting_stats player.average player.homerun player.rbi player.steal %}</div>
+                    {% endif %}
+                    <div><strong>年俸({{ player.common_year }}年):</strong> {{ player.salary|format_salary }}</div>
                     <div><strong>誕生日:</strong> {{ player.birthday }}</div>
                     <div><strong>年齢:</strong> {{ player.age }}</div>
                     <div><strong>投打:</strong> {{ player.throw_bat }}</div>

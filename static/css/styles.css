@@ -141,3 +141,28 @@ a {
     color: #FF0000; /* 赤色 */
     font-size: 18px;
 }
+
+table {
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 10px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+thead {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}

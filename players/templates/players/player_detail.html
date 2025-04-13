@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load format_filters %}
 
 {% block title %}{{ player.name }}{% endblock %}
 
@@ -17,6 +18,90 @@
     <div>趣味: {{ player.hobby }}</div>
     <div>特技: {{ player.specialty }}</div>
     <div>婚姻: {{ player.marriage }}</div>
+    <table>
+        <thead>
+            <tr>
+                <th>年</th>
+                <th>球団</th>
+                <th>背番号</th>
+                <th>登録名</th>
+                <th>年俸</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for common in commons %}
+                <tr>
+                    <td>{{ common.year }}</td>
+                    <td>
+                        <div class="team-logo">
+                            {% if common.team.logo %}
+                                <img src="{{ common.team.logo.url }}" alt="Team Logo" height="25">
+                            {% else %}
+                                -
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>{{ common.number }}</td>
+                    <td>{{ common.registered_name }}</td>
+                    <td>{{ common.salary|format_salary }}{{ common.currency }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">データがありません</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>年</th>
+                <th colspan=6>成績</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pitching in pitchings %}
+                <tr>
+                    <td>{{ pitching.year|format_year }}</td>
+                    <td>{{ pitching.earned_run_average|format_pitching_average }}</td>
+                    <td>{{ pitching.wins|format_integer }}勝</td>
+                    <td>{{ pitching.loses|format_integer }}敗</td>
+                    <td>{{ pitching.saves|format_integer }}S</td>
+                    <td>{{ pitching.holds|format_integer }}H</td>
+                    <td>{{ pitching.strike_outs|format_integer }}奪三振</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">データがありません</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>年</th>
+                <th colspan=5>成績</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for batting in battings %}
+                <tr>
+                    <td>{{ batting.year|format_year }}</td>
+                    <td>{{ batting.batting_average|format_batting_average }}</td>
+                    <td>{{ batting.home_runs|format_integer }}本</td>
+                    <td>{{ batting.runs_batted_in|format_integer }}点</td>
+                    <td>{{ batting.stolen_bases|format_integer }}盗塁</td>
+                    <td>{{ batting.hits|format_integer }}安打</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">データがありません</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <a href="{% url 'player_list' %}">戻る</a>
     {% if user.is_authenticated and user.is_superuser %}
         <a href="{% url 'admin:players_player_change' player.id %}" target="_blank">[編集]</a>

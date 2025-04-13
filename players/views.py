@@ -1,23 +1,6 @@
 from django.db.models import OuterRef, Subquery, Exists, Q
 from django.shortcuts import render, get_object_or_404
-from .models import Player, PlayerCommonRecord
-
-# 「2億5千万」のような日本語表記に変換する関数
-def format_japanese_number(num):
-    if num == int(num):
-        formatted_num = int(num)  # 整数にする
-    else:
-        formatted_num = float(num)  # floatに変換して余分なゼロを取り除く
-
-    units = [("億", 10**8), ("万", 10**4), ("", 1)]
-    result = []
-
-    for unit, value in units:
-        if formatted_num >= value:
-            result.append(f"{formatted_num // value}{unit}")
-            formatted_num %= value
-
-    return "".join(result)
+from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord
 
 # 16進カラーコードをRGB形式に変換
 def hex_to_rgb(hex_color):
@@ -28,12 +11,12 @@ def hex_to_rgb(hex_color):
 def player_list(request):
     query = request.GET.get('q', '')  # 検索キーワード取得
     
-    latest_records = PlayerCommonRecord.objects.filter(
+    latest_common_records = PlayerCommonRecord.objects.filter(
         player=OuterRef('id')
     ).order_by('-year').values('id')[:1]
 
     players = Player.objects.annotate(
-        latest_record_id=Subquery(latest_records)
+        latest_record_id=Subquery(latest_common_records)
     ).filter(
         Exists(PlayerCommonRecord.objects.filter(id=OuterRef('latest_record_id'))) &  # AND条件を明示的に指定
         Q(name__icontains=query) | 
@@ -52,22 +35,40 @@ def player_list(request):
 
     player_data = []
     for player in players:
-        height = format_japanese_number(player.height) + " cm" if player.height else '不明'
-        weight = format_japanese_number(player.weight) + " kg" if player.weight else '不明'
+        height = f"{player.height} cm" if player.height else '不明'
+        weight = f"{player.weight} kg" if player.height else '不明'
         wikipedia_url = "https://ja.wikipedia.org/wiki/" + player.wikipedia_parameter if player.wikipedia_parameter else ''
         youtube_url = "https://www.youtube.com/watch?v=" + player.youtube_parameter if player.youtube_parameter else ''
 
         # 最新年度のレコードを取得
-        latest_record = PlayerCommonRecord.objects.filter(player=player).order_by('-year').first()
-        name = latest_record.registered_name if latest_record else None
-        team_logo = latest_record.team.logo if latest_record else None
-        team_color = hex_to_rgb(latest_record.team.color) if latest_record else None
-        number = latest_record.number if latest_record else None
-        salary = f"{format_japanese_number(latest_record.salary)}{latest_record.currency.name}" if latest_record.salary else '不明'
+        latest_common_record = PlayerCommonRecord.objects.filter(player=player).order_by('-year').first()
+        name = latest_common_record.registered_name if latest_common_record else None
+        common_year = latest_common_record.year if latest_common_record else None
+        team_logo = latest_common_record.team.logo if latest_common_record else None
+        team_color = hex_to_rgb(latest_common_record.team.color) if latest_common_record else None
+        number = latest_common_record.number if latest_common_record else None
+        salary = latest_common_record.salary if latest_common_record.salary else '不明'
+
+        latest_batting_record = PlayerBattingRecord.objects.filter(player=player, year__lt=9000).order_by('-year').first()
+        batting_year = latest_batting_record.year if latest_batting_record else None
+        average = latest_batting_record.batting_average if latest_batting_record else None
+        homerun = latest_batting_record.home_runs if latest_batting_record else None
+        rbi = latest_batting_record.runs_batted_in if latest_batting_record else None
+        steal = latest_batting_record.stolen_bases if latest_batting_record else None
+
+        latest_pitching_record = PlayerPitchingRecord.objects.filter(player=player, year__lt=9000).order_by('-year').first()
+        pitching_year = latest_pitching_record.year if latest_pitching_record else None
+        earned_average = latest_pitching_record.earned_run_average if latest_pitching_record else None
+        win = latest_pitching_record.wins if latest_pitching_record else None
+        lose = latest_pitching_record.loses if latest_pitching_record else None
+        save = latest_pitching_record.saves if latest_pitching_record else None
+        hold = latest_pitching_record.holds if latest_pitching_record else None
+        strike_out = latest_pitching_record.strike_outs if latest_pitching_record else None
 
         player_data.append({
             'id': player.id,
             'name': name,
+            'common_year': common_year,
             'nickname': player.nickname,
             'team_logo': team_logo,
             'number': number,
@@ -85,10 +86,25 @@ def player_list(request):
             'specialty': player.specialty,
             'wikipedia': wikipedia_url,
             'youtube': youtube_url,
+            'batting_year': batting_year,
+            'average': average,
+            'homerun': homerun,
+            'rbi': rbi,
+            'steal': steal,
+            'pitching_year': pitching_year,
+            'earned_average': earned_average,
+            'win': win,
+            'lose': lose,
+            'save': save,
+            'hold': hold,
+            'strike_out': strike_out,
         })
 
     return render(request, 'players/player_list.html', {'players': player_data, 'query': query})
 
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
-    return render(request, 'players/player_detail.html', {'player': player})
+    common_records = PlayerCommonRecord.objects.filter(player=player).order_by('year')
+    batting_records = PlayerBattingRecord.objects.filter(player=player).order_by('year')
+    pitching_records = PlayerPitchingRecord.objects.filter(player=player).order_by('year')
+    return render(request, 'players/player_detail.html', {'player': player, 'commons': common_records, 'battings': batting_records, 'pitchings': pitching_records})
