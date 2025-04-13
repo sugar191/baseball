@@ -42,7 +42,7 @@ class HandBattingAdmin(admin.ModelAdmin):
 # leagues
 class LeagueResource(resources.ModelResource):
     class Meta:
-        model = Team
+        model = League
 
 class LeagueAdmin(ImportExportModelAdmin):
     list_display = ('name', 'sort_order')  # sort_orderも表示
