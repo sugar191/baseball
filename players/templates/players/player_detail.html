@@ -24,15 +24,14 @@
                 <th>年</th>
                 <th>球団</th>
                 <th>背番号</th>
-                <th>登録名</th>
                 <th>年俸</th>
             </tr>
         </thead>
         <tbody>
             {% for common in commons %}
                 <tr>
-                    <td>{{ common.year }}</td>
-                    <td>
+                    <td align="center">{{ common.year }}</td>
+                    <td align="center">
                         <div class="team-logo">
                             {% if common.team.logo %}
                                 <img src="{{ common.team.logo.url }}" alt="Team Logo" height="25">
@@ -41,9 +40,8 @@
                             {% endif %}
                         </div>
                     </td>
-                    <td>{{ common.number }}</td>
-                    <td>{{ common.registered_name }}</td>
-                    <td>{{ common.salary|format_salary }}{{ common.currency }}</td>
+                    <td align="center">{{ common.number }}</td>
+                    <td align="right">{{ common.salary|format_salary }}{{ common.currency }}</td>
                 </tr>
             {% empty %}
                 <tr>
@@ -62,13 +60,13 @@
         <tbody>
             {% for pitching in pitchings %}
                 <tr>
-                    <td>{{ pitching.year|format_year }}</td>
-                    <td>{{ pitching.earned_run_average|format_pitching_average }}</td>
-                    <td>{{ pitching.wins|format_integer }}勝</td>
-                    <td>{{ pitching.loses|format_integer }}敗</td>
-                    <td>{{ pitching.saves|format_integer }}S</td>
-                    <td>{{ pitching.holds|format_integer }}H</td>
-                    <td>{{ pitching.strike_outs|format_integer }}奪三振</td>
+                    <td align="center">{{ pitching.year|format_year }}</td>
+                    <td align="right">{{ pitching.earned_run_average|format_pitching_average }}</td>
+                    <td align="right">{{ pitching.wins|format_integer }}勝</td>
+                    <td align="right">{{ pitching.loses|format_integer }}敗</td>
+                    <td align="right">{{ pitching.saves|format_integer }}S</td>
+                    <td align="right">{{ pitching.holds|format_integer }}H</td>
+                    <td align="right">{{ pitching.strike_outs|format_integer }}奪</td>
                 </tr>
             {% empty %}
                 <tr>
@@ -88,12 +86,12 @@
         <tbody>
             {% for batting in battings %}
                 <tr>
-                    <td>{{ batting.year|format_year }}</td>
-                    <td>{{ batting.batting_average|format_batting_average }}</td>
-                    <td>{{ batting.home_runs|format_integer }}本</td>
-                    <td>{{ batting.runs_batted_in|format_integer }}点</td>
-                    <td>{{ batting.stolen_bases|format_integer }}盗塁</td>
-                    <td>{{ batting.hits|format_integer }}安打</td>
+                    <td align="center">{{ batting.year|format_year }}</td>
+                    <td align="right">{{ batting.batting_average|format_batting_average }}</td>
+                    <td align="right">{{ batting.home_runs|format_integer }}本</td>
+                    <td align="right">{{ batting.runs_batted_in|format_integer }}点</td>
+                    <td align="right">{{ batting.stolen_bases|format_integer }}盗</td>
+                    <td align="right">{{ batting.hits|format_integer }}安打</td>
                 </tr>
             {% empty %}
                 <tr>

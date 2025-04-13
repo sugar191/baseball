@@ -8,9 +8,9 @@ def format_year(value):
     try:
         value = int(value)
         if value == 9000:
-            value = "国内通算"
+            value = "NPB"
         elif value == 9001:
-            value = "海外通算"
+            value = "MLB"
     except (TypeError, ValueError, InvalidOperation):
         return '0'
     
