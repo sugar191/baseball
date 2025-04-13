@@ -100,6 +100,7 @@ class PlayerFieldingRecordAdmin(ImportExportModelAdmin):
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(Currency, CurrencyAdmin)
 admin.site.register(ExchangeRate, ExchangeRateAdmin)
+admin.site.register(Position, PositionAdmin)
 admin.site.register(PositionCategory, PositionCategoryAdmin)
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(HandThrowing, HandThrowingAdmin)
