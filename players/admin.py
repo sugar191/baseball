@@ -40,9 +40,14 @@ class HandBattingAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 # leagues
-class LeagueAdmin(admin.ModelAdmin):
+class LeagueResource(resources.ModelResource):
+    class Meta:
+        model = Team
+
+class LeagueAdmin(ImportExportModelAdmin):
     list_display = ('name', 'sort_order')  # sort_orderも表示
     list_editable = ('sort_order',)  # 管理画面でsort_orderを編集可能にする
+    resource_class = LeagueResource
 
 # teams
 class TeamResource(resources.ModelResource):
