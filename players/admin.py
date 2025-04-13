@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from .models import Place, Currency, ExchangeRate, PositionCategory, Player, League, Team, HandThrowing, HandBatting, PlayerCommonRecord, PlayerPitchingRecord, PlayerBattingRecord, PlayerFieldingRecord
+from .models import Place, Currency, ExchangeRate, Position, PositionCategory, Player, League, Team, HandThrowing, HandBatting, PlayerCommonRecord, PlayerPitchingRecord, PlayerBattingRecord, PlayerFieldingRecord
 
 # places
 class PlaceResource(resources.ModelResource):
@@ -18,6 +18,14 @@ class CurrencyAdmin(admin.ModelAdmin):
 # exchange_rates
 class ExchangeRateAdmin(admin.ModelAdmin):
     list_display = ('year','currency',)
+
+# position
+class PositionResource(resources.ModelResource):
+    class Meta:
+        model = Position
+
+class PositionAdmin(ImportExportModelAdmin):
+    resource_class = PositionResource
 
 # position_categories
 class PositionCategoryAdmin(admin.ModelAdmin):
