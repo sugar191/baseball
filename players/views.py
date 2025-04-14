@@ -10,7 +10,7 @@ def hex_to_rgb(hex_color):
 # 選手一覧を表示するビュー
 def player_list(request):
     query = request.GET.get('q', '')  # 検索キーワード取得
-    
+
     latest_common_records = PlayerCommonRecord.objects.filter(
         player=OuterRef('id')
     ).order_by('-year').values('id')[:1]
@@ -35,8 +35,6 @@ def player_list(request):
 
     player_data = []
     for player in players:
-        height = f"{player.height} cm" if player.height else '不明'
-        weight = f"{player.weight} kg" if player.height else '不明'
         wikipedia_url = "https://ja.wikipedia.org/wiki/" + player.wikipedia_parameter if player.wikipedia_parameter else ''
         youtube_url = "https://www.youtube.com/watch?v=" + player.youtube_parameter if player.youtube_parameter else ''
 
@@ -48,6 +46,7 @@ def player_list(request):
         team_color = hex_to_rgb(latest_common_record.team.color) if latest_common_record else None
         number = latest_common_record.number if latest_common_record else None
         salary = latest_common_record.salary if latest_common_record.salary else '不明'
+        currency = latest_common_record.currency if latest_common_record.currency else '不明'
 
         latest_batting_record = PlayerBattingRecord.objects.filter(player=player, year__lt=9000).order_by('-year').first()
         batting_year = latest_batting_record.year if latest_batting_record else None
@@ -76,10 +75,11 @@ def player_list(request):
             'birthday': player.birthday,
             'age': player.age,
             'throw_bat': player.throw_bat,
-            'height': height,
-            'weight': weight,
+            'height': player.height,
+            'weight': player.weight,
             'place': player.place,
             'salary': salary,
+            'currency': currency,
             'color': team_color,
             'marriage': player.marriage,
             'hobby': player.hobby,
@@ -107,4 +107,25 @@ def player_detail(request, player_id):
     common_records = PlayerCommonRecord.objects.filter(player=player).order_by('year')
     batting_records = PlayerBattingRecord.objects.filter(player=player).order_by('year')
     pitching_records = PlayerPitchingRecord.objects.filter(player=player).order_by('year')
-    return render(request, 'players/player_detail.html', {'player': player, 'commons': common_records, 'battings': batting_records, 'pitchings': pitching_records})
+    return render(request, 'players/player_detail.html', {
+        'player': player, 
+        'commons': common_records, 
+        'battings': batting_records, 
+        'pitchings': pitching_records
+    })
+
+def player_year_detail(request, player_id, year):
+    player = get_object_or_404(Player, id=player_id)
+    common_record = PlayerCommonRecord.objects.filter(player=player, year=year).first()
+    batting_record = PlayerBattingRecord.objects.filter(player=player, year=year).first()
+    pitching_record = PlayerPitchingRecord.objects.filter(player=player, year=year).first()
+    # 他の必要なデータもここで取得
+
+    return render(request, 'players/player_year_detail.html', {
+        'player': player,
+        'year': year,
+        'common_record': common_record,
+        'batting_record': batting_record,
+        'pitching_record': pitching_record,
+        # 必要な変数を追加
+    })

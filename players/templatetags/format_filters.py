@@ -4,6 +4,18 @@ from decimal import Decimal, InvalidOperation
 register = template.Library()
 
 @register.filter
+def format_decimal_trim(value):
+    try:
+        d = Decimal(value)
+        # 小数点がある場合だけ処理する
+        if d == d.to_integral():
+            return str(d.quantize(Decimal('1')))
+        else:
+            return str(d.normalize())
+    except (InvalidOperation, TypeError, ValueError):
+        return '0'
+
+@register.filter
 def format_year(value):
     try:
         value = int(value)
@@ -67,7 +79,7 @@ def format_pitching_stats(earned_average, win, lose, save, hold, strike_out):
     hold = format_integer(hold)
     strike_out = format_integer(strike_out)
 
-    return f"{earned_average_str} {win}勝{lose}敗{save}S{hold}H {strike_out}奪"
+    return f"{earned_average_str} {win}勝 {lose}敗 {save}S {hold}H {strike_out}奪"
 
 @register.filter
 def format_salary(salary):

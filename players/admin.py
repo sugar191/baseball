@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from .models import Place, Currency, ExchangeRate, Position, PositionCategory, Player, League, Team, HandThrowing, HandBatting, PlayerCommonRecord, PlayerPitchingRecord, PlayerBattingRecord, PlayerFieldingRecord
+from .models import Place, Currency, ExchangeRate, Position, PositionCategory, Player, League, Team, HandThrowing, HandBatting, PlayerCommonRecord, PlayerPitchingRecord, PlayerBattingRecord, PlayerFieldingRecord, Organization
 
 # places
 class PlaceResource(resources.ModelResource):
@@ -46,6 +46,14 @@ class HandThrowingAdmin(admin.ModelAdmin):
 # hands_batting
 class HandBattingAdmin(admin.ModelAdmin):
     list_display = ('name',)
+
+# organizations
+class OrganizationResource(resources.ModelResource):
+    class Meta:
+        model = Organization
+
+class OrganizationAdmin(ImportExportModelAdmin):
+    resource_class = OrganizationResource
 
 # leagues
 class LeagueResource(resources.ModelResource):
@@ -105,6 +113,7 @@ admin.site.register(PositionCategory, PositionCategoryAdmin)
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(HandThrowing, HandThrowingAdmin)
 admin.site.register(HandBatting, HandBattingAdmin)
+admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(League, LeagueAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(PlayerCommonRecord, PlayerCommonRecordAdmin)

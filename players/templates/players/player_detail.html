@@ -9,97 +9,95 @@
     <div>通称: {{ player.nickname }}</div>
     <div>ポジション: {{player.main_position_category }}</div>
     <div>誕生日: {{ player.birthday }}</div>
-    <div>年齢: {{ player.age }}</div>
+    <div>年齢: {{ player.age }} 歳</div>
     <div>出身地: {{ player.place }}</div>
-    <div>身長: {{ player.height }} cm</div>
-    <div>体重: {{ player.weight }} kg</div>
+    <div>身長: {{ player.height|format_decimal_trim }} cm</div>
+    <div>体重: {{ player.weight|format_decimal_trim }} kg</div>
     <div>投打: {{ player.throw_bat }}</div>
     <div>ファン球団: {{ player.favorite_team }}</div>
     <div>趣味: {{ player.hobby }}</div>
     <div>特技: {{ player.specialty }}</div>
     <div>婚姻: {{ player.marriage }}</div>
-    <table>
-        <thead>
-            <tr>
-                <th>年</th>
-                <th>球団</th>
-                <th>背番号</th>
-                <th>年俸</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for common in commons %}
+    {% if commons %}
+        <h3>共通情報</h3>
+        <table>
+            <thead>
                 <tr>
-                    <td align="center">{{ common.year }}</td>
-                    <td align="center">
-                        <div class="team-logo">
-                            {% if common.team.logo %}
-                                <img src="{{ common.team.logo.url }}" alt="Team Logo" height="25">
-                            {% else %}
-                                -
-                            {% endif %}
-                        </div>
-                    </td>
-                    <td align="center">{{ common.number }}</td>
-                    <td align="right">{{ common.salary|format_salary }}{{ common.currency }}</td>
+                    <th>年</th>
+                    <th>球団</th>
+                    <th>年俸</th>
                 </tr>
-            {% empty %}
+            </thead>
+            <tbody>
+                {% for common in commons %}
+                    <tr>
+                        <td align="center"><a href="{% url 'player_year_detail' player.id common.year %}">{{ common.year }}</a></td>
+                        <td align="center">
+                            <div class="team-logo">
+                                {% if common.team.logo %}
+                                    <img src="{{ common.team.logo.url }}" alt="Team Logo" height="25">
+                                {% else %}
+                                    {{ common.team.league.organization }}
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td align="right">{{ common.salary|format_salary }}{{ common.currency }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if pitchings %}
+        <h3>投手成績</h3>
+        <table>
+            <thead>
                 <tr>
-                    <td colspan="5">データがありません</td>
+                    <th>年</th>
+                    <th colspan=6>成績</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
-                <th>年</th>
-                <th colspan=6>成績</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pitching in pitchings %}
+            </thead>
+            <tbody>
+                {% for pitching in pitchings %}
+                    <tr>
+                        <td align="center"><a href="{% url 'player_year_detail' player.id pitching.year %}">{{ pitching.year|format_year }}</a></td>
+                        <td align="right">{{ pitching.earned_run_average|format_pitching_average }}</td>
+                        <td align="right">{{ pitching.wins|format_integer }}勝</td>
+                        <td align="right">{{ pitching.loses|format_integer }}敗</td>
+                        <td align="right">{{ pitching.saves|format_integer }}S</td>
+                        <td align="right">{{ pitching.holds|format_integer }}H</td>
+                        <td align="right">{{ pitching.strike_outs|format_integer }}奪</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if battings %}
+        <h3>打者成績</h3>
+        <table>
+            <thead>
                 <tr>
-                    <td align="center">{{ pitching.year|format_year }}</td>
-                    <td align="right">{{ pitching.earned_run_average|format_pitching_average }}</td>
-                    <td align="right">{{ pitching.wins|format_integer }}勝</td>
-                    <td align="right">{{ pitching.loses|format_integer }}敗</td>
-                    <td align="right">{{ pitching.saves|format_integer }}S</td>
-                    <td align="right">{{ pitching.holds|format_integer }}H</td>
-                    <td align="right">{{ pitching.strike_outs|format_integer }}奪</td>
+                    <th>年</th>
+                    <th colspan=5>成績</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5">データがありません</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <table>
-        <thead>
-            <tr>
-                <th>年</th>
-                <th colspan=5>成績</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for batting in battings %}
-                <tr>
-                    <td align="center">{{ batting.year|format_year }}</td>
-                    <td align="right">{{ batting.batting_average|format_batting_average }}</td>
-                    <td align="right">{{ batting.home_runs|format_integer }}本</td>
-                    <td align="right">{{ batting.runs_batted_in|format_integer }}点</td>
-                    <td align="right">{{ batting.stolen_bases|format_integer }}盗</td>
-                    <td align="right">{{ batting.hits|format_integer }}安打</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5">データがありません</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for batting in battings %}
+                    <tr>
+                        <td align="center"><a href="{% url 'player_year_detail' player.id batting.year %}">{{ batting.year|format_year }}</a></td>
+                        <td align="right">{{ batting.batting_average|format_batting_average }}</td>
+                        <td align="right">{{ batting.home_runs|format_integer }}本</td>
+                        <td align="right">{{ batting.runs_batted_in|format_integer }}点</td>
+                        <td align="right">{{ batting.stolen_bases|format_integer }}盗</td>
+                        <td align="right">{{ batting.hits|format_integer }}安打</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">データがありません</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
     <a href="{% url 'player_list' %}">戻る</a>
     {% if user.is_authenticated and user.is_superuser %}
         <a href="{% url 'admin:players_player_change' player.id %}" target="_blank">[編集]</a>

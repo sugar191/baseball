@@ -39,12 +39,12 @@
                     {% else %}
                         <div><strong>成績({{ player.batting_year }}年):</strong> {% format_batting_stats player.average player.homerun player.rbi player.steal %}</div>
                     {% endif %}
-                    <div><strong>年俸({{ player.common_year }}年):</strong> {{ player.salary|format_salary }}</div>
+                    <div><strong>年俸({{ player.common_year }}年):</strong> {{ player.salary|format_salary }}{{ player.currency }}</div>
                     <div><strong>誕生日:</strong> {{ player.birthday }}</div>
-                    <div><strong>年齢:</strong> {{ player.age }}</div>
+                    <div><strong>年齢:</strong> {{ player.age }} 歳</div>
                     <div><strong>投打:</strong> {{ player.throw_bat }}</div>
-                    <div><strong>身長:</strong> {{ player.height }}</div>
-                    <div><strong>体重:</strong> {{ player.weight }}</div>
+                    <div><strong>身長:</strong> {{ player.height|format_decimal_trim }} cm</div>
+                    <div><strong>体重:</strong> {{ player.weight|format_decimal_trim }} kg</div>
                     <div><strong>出身地:</strong> 
                         {% if player.place %}
                             {{ player.place.name }}

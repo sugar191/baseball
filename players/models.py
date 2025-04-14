@@ -81,10 +81,21 @@ class Position(models.Model):
     def __str__(self):
         return self.name
 
+# 組織テーブル
+class Organization(models.Model):
+    name = models.CharField(max_length=20, null=False, blank=False)
+
+    class Meta:
+        db_table = 'organizations'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return self.name
+
 # リーグテーブル
 class League(models.Model):
     name = models.CharField(max_length=10, null=False, blank=False)
     sort_order = models.IntegerField(default=0)  # 表示順を決めるフィールド
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)  # リーグとの関連
 
     class Meta:
         db_table = 'leagues'  # 使用するテーブル名を指定
@@ -187,6 +198,13 @@ class PlayerCommonRecord(models.Model):
 
     def __str__(self):
         return f"{self.player.name} ({self.year})"
+
+    # 年齢を計算するプロパティ
+    @property
+    def age(self):
+        if self.player.birthday:
+            return self.year - self.player.birthday.year
+        return None
 
 # 選手投手記録
 class PlayerPitchingRecord(models.Model):
