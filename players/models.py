@@ -222,7 +222,7 @@ class Player(models.Model):
     def marriage(self):
         if self.is_married == 1:
             marriage = '既婚'
-            if self.partner != '':
+            if self.partner and self.partner != '':
                 marriage = marriage + ' (' + self.partner + ')'
         elif self.is_married == 0:
             marriage = '独身'
