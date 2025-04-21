@@ -1,6 +1,6 @@
 from django.db.models import OuterRef, Subquery, Exists, Q
 from django.shortcuts import render, get_object_or_404
-from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerCareer, PlayerDraft
+from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerCareer, PlayerDraft, PlayerTitle
 
 # 選手一覧を表示するビュー
 def player_list(request):
@@ -67,6 +67,7 @@ def player_detail(request, player_id):
     pitching_records = PlayerPitchingRecord.objects.filter(player=player).order_by('year')
     careers = PlayerCareer.objects.filter(player=player).order_by('sort_order')
     drafts = PlayerDraft.objects.filter(player=player).order_by('draft')
+    titles = PlayerTitle.objects.filter(player=player).order_by('year', 'title')
     return render(request, 'players/player_detail.html', {
         'player': player, 
         'commons': common_records, 
@@ -74,6 +75,7 @@ def player_detail(request, player_id):
         'pitchings': pitching_records,
         'careers': careers,
         'drafts': drafts,
+        'titles': titles,
     })
 
 def player_year_detail(request, player_id, year):

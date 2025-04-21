@@ -41,13 +41,17 @@
                     <td>{{ draft|join_mark }}</td>
                 </tr>
             {% endfor %}
-            <div class="draft-teams" style="display: flex; gap: 10px; align-items: center;">
-                {% for draft in draft_teams %}
-                    <div class="team-logo" style="{% if draft.is_hit %}border: 2px solid gold;{% endif %}">
-                        <img src="{{ draft.team.logo.url }}" alt="{{ draft.team.name }}" height="40" title="{{ draft.team.name }}">
-                    </div>
-                {% endfor %}
-            </div>
+        </tbody>
+    </table>
+    <h3>タイトル</h3>
+    <table>
+        <tbody>
+            {% for title in titles %}
+                <tr>
+                    <td>{{ title.year }}年</td>
+                    <td>{{ title.title }}{% if title.position %}({{ title.position }}){% endif %}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
     {% if commons %}
