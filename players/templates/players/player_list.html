@@ -11,64 +11,66 @@
     </form>
     <div class="player-list">
         {% for player in players %}
-            <div class="player-card" style="background-color: rgba({{ player.color }}, 0.2);">
+            <div class="player-card" style="background-color: rgba({{ player.common_record.team.color|hex_to_rgb }}, 0.2);">
                 <div class="player-header">
                     <div class="team-logo">
-                        {% if player.team_logo %}
-                            <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
+                        {% if player.common_record.team.logo %}
+                            <img src="{{ player.common_record.team.logo.url }}" alt="Team Logo" height="25">
                         {% else %}
                             -
                         {% endif %}
                     </div>
-                    <div class="player-name"><a href="{% url 'player_detail' player.id %}"><strong>{{ player.name }}</strong></a></div>
+                    <div class="player-name"><a href="{% url 'player_detail' player.player.id %}"><strong>{{ player.player.name }}</strong></a></div>
                 </div>
                 <div class="player-details">
-                    {% if player.nickname %}
-                        <div class="player-name"><strong>「{{ player.nickname }}」</strong></div>
+                    {% if player.player.nickname %}
+                        <div class="player-name"><strong>「{{ player.player.nickname }}」</strong></div>
                     {% endif %}
-                    <div><strong>背番号:</strong> {{ player.number }}</div>
+                    <div><strong>背番号:</strong> {{ player.common_record.number }}</div>
                     <div><strong>ポジション:</strong> 
-                        {% if player.position %}
-                            {{ player.position.name }}
+                        {% if player.player.main_position_category %}
+                            {{ player.player.main_position_category }}
                         {% else %}
                             未登録
                         {% endif %}
                     </div>
-                    {% if player.position.id == 1 %}
-                        <div><strong>成績({{ player.pitching_year }}年):</strong> {% format_pitching_stats player.earned_average player.win player.lose player.save player.hold player.strike_out %}</div>
+                    {% if player.player.main_position_category and player.player.main_position_category.id == 1 %}
+                        <div><strong>成績({{ player.pitching_record.year }}年):</strong> {{ player.pitching_record|format_pitching_stats }}</div>
                     {% else %}
-                        <div><strong>成績({{ player.batting_year }}年):</strong> {% format_batting_stats player.average player.homerun player.rbi player.steal %}</div>
+                        <div><strong>成績({{ player.batting_record.year }}年):</strong> {{ player.batting_record|format_batting_stats }}</div>
                     {% endif %}
-                    <div><strong>年俸({{ player.common_year }}年):</strong> {{ player.salary|format_salary }}{{ player.currency }}</div>
-                    <div><strong>誕生日:</strong> {{ player.birthday }}</div>
-                    <div><strong>年齢:</strong> {{ player.age }} 歳</div>
-                    <div><strong>投打:</strong> {{ player.throw_bat }}</div>
-                    <div><strong>身長:</strong> {{ player.height|format_decimal_trim }} cm</div>
-                    <div><strong>体重:</strong> {{ player.weight|format_decimal_trim }} kg</div>
+                    <div><strong>年俸({{ player.common_record.year }}年):</strong> {{ player.common_record.salary|format_salary }}{{ player.common_record.currency }}</div>
+                    <div><strong>ドラフト:</strong> {{ player.draft.draft.year }}年{{ player.draft.draft.draft_category }}{{ player.draft.rank }}位</div>
+                    <div><strong>誕生日:</strong> {{ player.player.birthday }}</div>
+                    <div><strong>年齢:</strong> {{ player.player.age }} 歳</div>
+                    <div><strong>経歴:</strong> {{ player.career.career_version.career.career_category.label }}</div>
+                    <div><strong>投打:</strong> {{ player.player.throw_bat }}</div>
+                    <div><strong>身長:</strong> {{ player.player.height|format_decimal_trim }} cm</div>
+                    <div><strong>体重:</strong> {{ player.player.weight|format_decimal_trim }} kg</div>
                     <div><strong>出身地:</strong> 
-                        {% if player.place %}
-                            {{ player.place.name }}
+                        {% if player.player.place %}
+                            {{ player.player.place.name }}
                         {% else %}
                             未登録
                         {% endif %}
                     </div>
-                    <div><strong>婚姻:</strong> {{ player.marriage }}</div>
-                    <div><strong>趣味:</strong> {{ player.hobby }}</div>
-                    <div><strong>特技:</strong> {{ player.specialty }}</div>
+                    <div><strong>婚姻:</strong> {{ player.player.marriage }}</div>
+                    <div><strong>趣味:</strong> {{ player.player.hobby }}</div>
+                    <div><strong>特技:</strong> {{ player.player.specialty }}</div>
                     <div>
                         <strong>関連リンク:</strong> 
-                        {% if player.wikipedia %}
-                            <a href="{{ player.wikipedia }}" target="_blank" title="Wikipedia">
+                        {% if player.player.wikipedia %}
+                            <a href="{{ player.player.wikipedia }}" target="_blank" title="Wikipedia">
                                 <i class="fa-brands fa-wikipedia-w"></i>
                             </a>
                         {% endif %}
-                        {% if player.youtube %}
-                            <a href="{{ player.youtube }}" target="_blank" title="YouTube">
+                        {% if player.player.youtube %}
+                            <a href="{{ player.player.youtube }}" target="_blank" title="YouTube">
                                 <i class="fa-brands fa-youtube"></i>
                             </a>
                         {% endif %}
                         {% if user.is_authenticated and user.is_superuser %}
-                            <a href="{% url 'admin:players_player_change' player.id %}" target="_blank">[編集]</a>
+                            <a href="{% url 'admin:players_player_change' player.player.id %}" target="_blank">[編集]</a>
                         {% endif %}
                     </div>
                 </div>

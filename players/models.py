@@ -38,6 +38,45 @@ class ExchangeRate(models.Model):
     def __str__(self):
         return self.year
 
+# 経歴カテゴリ
+class CareerCategory(models.Model):
+    name = models.CharField(max_length=10)
+    label = models.CharField(max_length=10, null=True, blank=True)
+    sort_order = models.IntegerField()
+
+    class Meta:
+        db_table = 'career_category'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return self.name
+
+# 経歴
+class Career(models.Model):
+    name = models.CharField(max_length=50)
+    career_category = models.ForeignKey(CareerCategory, on_delete=models.RESTRICT, null=True, blank=True)
+    is_private = models.BooleanField(null=True)
+    place = models.ForeignKey(Place, on_delete=models.RESTRICT, null=True, blank=True)
+    wikipedia_parameter1 = models.CharField(max_length=500, null=True, blank=True) #  WikipediaURLパラメータ
+    wikipedia_parameter2 = models.CharField(max_length=500, null=True, blank=True) #  WikipediaURLパラメータ
+
+    class Meta:
+        db_table = 'career'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return self.name
+
+# 経歴バージョン
+class CareerVersion(models.Model):
+    name = models.CharField(max_length=50)
+    career = models.ForeignKey(Career, on_delete=models.RESTRICT, null=True, blank=True)
+    version = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'career_version'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return self.name
+
 # 投手手のマスターテーブル
 class HandThrowing(models.Model):
     name = models.CharField(max_length=10)
@@ -72,11 +111,22 @@ class PositionCategory(models.Model):
 # ポジション
 class Position(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)  # 名前
-    position_category = models.ForeignKey(PositionCategory, on_delete=models.CASCADE)
+    position_category = models.ForeignKey(PositionCategory, on_delete=models.CASCADE, null=True, blank=True)
     sort_order = models.IntegerField(default=0)  # 表示順
 
     class Meta:
         db_table = 'position'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return self.name
+
+# タイトル
+class Title(models.Model):
+    name = models.CharField(max_length=50, null=False, blank=False)  # 名前
+    sort_order = models.IntegerField(default=0)  # 表示順
+
+    class Meta:
+        db_table = 'titles'  # 使用するテーブル名を指定
 
     def __str__(self):
         return self.name
@@ -303,3 +353,69 @@ class PlayerFieldingRecord(models.Model):
 
     def __str__(self):
         return f"{self.player.name} ({self.year})"
+
+# 経歴
+class PlayerCareer(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    career_version = models.ForeignKey(CareerVersion, on_delete=models.RESTRICT, null=True, blank=True)
+    sort_order = models.IntegerField()
+    remarks = models.CharField(max_length=50, null=True, blank=True)
+
+    class Meta:
+        db_table = 'player_career'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return f"{self.player.name} ({self.career.name})"
+
+# 選手タイトル
+class PlayerTitle(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    year = models.IntegerField()  # 年度（シーズン）
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        db_table = 'player_titles'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return f"{self.player.name}"
+
+# ドラフト種別
+class DraftCategory(models.Model):
+    name = models.CharField(max_length=50, null=False, blank=False)  # 名前
+    sort_order = models.IntegerField(default=0)  # 表示順
+
+    class Meta:
+        db_table = 'draft_categories'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return self.name
+
+# ドラフト
+class Draft(models.Model):
+    year = models.IntegerField()  # 年度（シーズン）
+    draft_category = models.ForeignKey(DraftCategory, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'drafts'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return f"{self.year}"
+
+# 選手ドラフト
+class PlayerDraft(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    draft = models.ForeignKey(Draft, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)  # 所属球団
+    rank = models.IntegerField()
+    position_category = models.ForeignKey(PositionCategory, on_delete=models.RESTRICT, null=True, blank=True)
+    is_reverse_nomination = models.BooleanField(null=True, blank=True)
+    is_hit = models.BooleanField(null=True, blank=True)
+    miss_count = models.IntegerField()
+    is_joined = models.BooleanField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'player_drafts'  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return f"{self.player.name} ({self.draft})"

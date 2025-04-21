@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from .models import Place, Currency, ExchangeRate, Position, PositionCategory, Player, League, Team, HandThrowing, HandBatting, PlayerCommonRecord, PlayerPitchingRecord, PlayerBattingRecord, PlayerFieldingRecord, Organization
+from .models import Place, Currency, ExchangeRate, Position, PositionCategory, Player, League, Team, HandThrowing, HandBatting, PlayerCommonRecord, PlayerPitchingRecord, PlayerBattingRecord, PlayerFieldingRecord, Organization, CareerCategory, Career, PlayerCareer, CareerVersion, Title, PlayerTitle, DraftCategory, Draft, PlayerDraft
 
 # places
 class PlaceResource(resources.ModelResource):
@@ -105,6 +105,78 @@ class PlayerFieldingRecordResource(resources.ModelResource):
 class PlayerFieldingRecordAdmin(ImportExportModelAdmin):
     resource_class = PlayerFieldingRecordResource
 
+# career_category
+class CareerCategoryResource(resources.ModelResource):
+    class Meta:
+        model = CareerCategory
+
+class CareerCategoryAdmin(ImportExportModelAdmin):
+    resource_class = CareerCategoryResource
+
+# career
+class CareerResource(resources.ModelResource):
+    class Meta:
+        model = Career
+
+class CareerAdmin(ImportExportModelAdmin):
+    resource_class = CareerResource
+
+# career
+class CareerVersionResource(resources.ModelResource):
+    class Meta:
+        model = CareerVersion
+
+class CareerVersionAdmin(ImportExportModelAdmin):
+    resource_class = CareerVersionResource
+
+# player_career
+class PlayerCareerResource(resources.ModelResource):
+    class Meta:
+        model = PlayerCareer
+
+class PlayerCareerAdmin(ImportExportModelAdmin):
+    resource_class = PlayerCareerResource
+
+# title
+class TitleResource(resources.ModelResource):
+    class Meta:
+        model = Title
+
+class TitleAdmin(ImportExportModelAdmin):
+    resource_class = TitleResource
+
+# player_title
+class PlayerTitleResource(resources.ModelResource):
+    class Meta:
+        model = PlayerTitle
+
+class PlayerTitleAdmin(ImportExportModelAdmin):
+    resource_class = PlayerTitleResource
+
+# draft_category
+class DraftCategoryResource(resources.ModelResource):
+    class Meta:
+        model = DraftCategory
+
+class DraftCategoryAdmin(ImportExportModelAdmin):
+    resource_class = DraftCategoryResource
+
+# draft
+class DraftResource(resources.ModelResource):
+    class Meta:
+        model = Draft
+
+class DraftAdmin(ImportExportModelAdmin):
+    resource_class = DraftResource
+
+# player_draft
+class PlayerDraftResource(resources.ModelResource):
+    class Meta:
+        model = PlayerDraft
+
+class PlayerDraftAdmin(ImportExportModelAdmin):
+    resource_class = PlayerDraftResource
+
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(Currency, CurrencyAdmin)
 admin.site.register(ExchangeRate, ExchangeRateAdmin)
@@ -120,3 +192,12 @@ admin.site.register(PlayerCommonRecord, PlayerCommonRecordAdmin)
 admin.site.register(PlayerPitchingRecord, PlayerPitchingRecordAdmin)
 admin.site.register(PlayerBattingRecord, PlayerBattingRecordAdmin)
 admin.site.register(PlayerFieldingRecord, PlayerFieldingRecordAdmin)
+admin.site.register(CareerCategory, CareerCategoryAdmin)
+admin.site.register(Career, CareerAdmin)
+admin.site.register(CareerVersion, CareerVersionAdmin)
+admin.site.register(PlayerCareer, PlayerCareerAdmin)
+admin.site.register(Title, TitleAdmin)
+admin.site.register(PlayerTitle, PlayerTitleAdmin)
+admin.site.register(DraftCategory, DraftCategoryAdmin)
+admin.site.register(Draft, DraftAdmin)
+admin.site.register(PlayerDraft, PlayerDraftAdmin)

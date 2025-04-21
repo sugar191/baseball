@@ -18,6 +18,38 @@
     <div>趣味: {{ player.hobby }}</div>
     <div>特技: {{ player.specialty }}</div>
     <div>婚姻: {{ player.marriage }}</div>
+    <h3>経歴</h3>
+    <table>
+        <tbody>
+            {% for career in careers %}
+                <tr>
+                    <td>{{ career.career_version.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>ドラフト</h3>
+    <table>
+        <tbody>
+            {% for draft in drafts %}
+                <tr>
+                    <td>{{ draft.draft.year }}年</td>
+                    <td><img src="{{ draft.team.logo.url }}" alt="Team Logo" height="25"></td>
+                    <td>{{ draft.draft.draft_category }}</td>
+                    <td>{{ draft.rank }}位</td>
+                    <td>{{ draft.is_hit|hit_mark }}</td>
+                    <td>{{ draft|join_mark }}</td>
+                </tr>
+            {% endfor %}
+            <div class="draft-teams" style="display: flex; gap: 10px; align-items: center;">
+                {% for draft in draft_teams %}
+                    <div class="team-logo" style="{% if draft.is_hit %}border: 2px solid gold;{% endif %}">
+                        <img src="{{ draft.team.logo.url }}" alt="{{ draft.team.name }}" height="40" title="{{ draft.team.name }}">
+                    </div>
+                {% endfor %}
+            </div>
+        </tbody>
+    </table>
     {% if commons %}
         <h3>共通情報</h3>
         <table>

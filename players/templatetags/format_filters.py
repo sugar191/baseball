@@ -4,6 +4,20 @@ from decimal import Decimal, InvalidOperation
 register = template.Library()
 
 @register.filter
+def format_wikipedia_url(parameter):
+    return "https://ja.wikipedia.org/wiki/" + parameter if parameter else ''
+
+@register.filter
+def format_youtube_url(parameter):
+    return "https://www.youtube.com/watch?v=" + parameter if parameter else ''
+
+# 16進カラーコードをRGB形式に変換
+@register.filter
+def hex_to_rgb(hex_color):
+    hex_color = hex_color.lstrip('#')
+    return ', '.join(str(int(hex_color[i:i+2], 16)) for i in (0, 2, 4))
+
+@register.filter
 def format_decimal_trim(value):
     try:
         d = Decimal(value)
@@ -16,6 +30,23 @@ def format_decimal_trim(value):
         return '0'
 
 @register.filter
+def hit_mark(is_hit):
+    if is_hit is True:
+        return "○"
+    elif is_hit is False:
+        return "×"
+    return ""  # Noneやnullのときは空文字
+
+@register.filter
+def join_mark(draft):
+    if draft.is_joined is True:
+        return "入団"
+    elif draft.is_hit is False:
+        return ""
+    else:
+        return "入団拒否"
+
+@register.filter
 def format_year(value):
     try:
         value = int(value)
@@ -25,7 +56,7 @@ def format_year(value):
             value = "MLB"
     except (TypeError, ValueError, InvalidOperation):
         return '0'
-    
+
     return value
 
 @register.filter
@@ -47,7 +78,7 @@ def format_pitching_average(value):
         value = Decimal(value)
     except (TypeError, ValueError, InvalidOperation):
         return '0.00'
-    
+
     return f"{value:.2f}"
 
 @register.filter
@@ -56,30 +87,32 @@ def format_integer(value):
         value = int(value)
     except (TypeError, ValueError, InvalidOperation):
         return '0'
-    
+
     return value
 
-@register.simple_tag
-def format_batting_stats(average, homeruns, rbi, steals):
-    # 各値のフォーマット
-    avg_str = format_batting_average(average)
-    hr = format_integer(homeruns)
-    rbi = format_integer(rbi)
-    sb = format_integer(steals)
+@register.filter
+def format_batting_stats(batting_record):
+    if batting_record and batting_record.plate_appearances != 0:
+        avg_str = format_batting_average(batting_record.batting_average)
+        hr = format_integer(batting_record.home_runs)
+        rbi = format_integer(batting_record.runs_batted_in)
+        sb = format_integer(batting_record.stolen_bases)
+        return f"{avg_str} {hr}本 {rbi}点 {sb}盗塁"
+    else:
+        return "出場無し"
 
-    return f"{avg_str} {hr}本 {rbi}点 {sb}盗塁"
-
-@register.simple_tag
-def format_pitching_stats(earned_average, win, lose, save, hold, strike_out):
-    # 各値のフォーマット
-    earned_average_str = format_pitching_average(earned_average)
-    win = format_integer(win)
-    lose = format_integer(lose)
-    save = format_integer(save)
-    hold = format_integer(hold)
-    strike_out = format_integer(strike_out)
-
-    return f"{earned_average_str} {win}勝 {lose}敗 {save}S {hold}H {strike_out}奪"
+@register.filter
+def format_pitching_stats(pitching_record):
+    if pitching_record and pitching_record.games != 0:
+        earned_average_str = format_pitching_average(pitching_record.earned_run_average)
+        win = format_integer(pitching_record.wins)
+        lose = format_integer(pitching_record.loses)
+        save = format_integer(pitching_record.saves)
+        hold = format_integer(pitching_record.holds)
+        strike_out = format_integer(pitching_record.strike_outs)
+        return f"{earned_average_str} {win}勝 {lose}敗 {save}S {hold}H {strike_out}奪"
+    else:
+        return "登板無し"
 
 @register.filter
 def format_salary(salary):
