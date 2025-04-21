@@ -172,29 +172,27 @@ class Team(models.Model):
 
 # 選手テーブル
 class Player(models.Model):
-    name = models.CharField(max_length=50, null=False, blank=False)  # 選手名
-    furigana = models.CharField(max_length=50, null=True, blank=True)  # 選手名(ふりがな)
-    nickname = models.CharField(max_length=50, null=True, blank=True)  # 通称
-    birthday = models.DateField(null=True, blank=True)  # 生年月日
-    birth_year = models.IntegerField(null=True, blank=True)  # 年のみを保存
-    birth_month = models.IntegerField(null=True, blank=True)  # 月のみを保存
-    place = models.ForeignKey(Place, on_delete=models.RESTRICT, null=True, blank=True)  # 出身地をForeignKeyで参照
-    height = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 身長（cm）
-    weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 体重（kg）
-    is_married = models.BooleanField(null=True, blank=True) #  結婚しているかどうか
-    partner = models.CharField(max_length=50, null=True, blank=True) #  結婚相手
-    hobby = models.CharField(max_length=50, null=True, blank=True) #  趣味
-    specialty = models.CharField(max_length=50, null=True, blank=True) #  特技
-    throwing_hand = models.ForeignKey(HandThrowing, on_delete=models.RESTRICT, null=True, blank=True)  # 投手の手をForeignKeyで参照
-    batting_hand = models.ForeignKey(HandBatting, on_delete=models.RESTRICT, null=True, blank=True)  # 打者の手をForeignKeyで参照
-    main_position_category = models.ForeignKey(PositionCategory, on_delete=models.RESTRICT, null=True, blank=True)  # ポジションをForeignKeyで参照
-    favorite_team = models.ForeignKey(Team, on_delete=models.RESTRICT, null=True, blank=True)  # ファン球団をForeignKeyで参照
-    wikipedia_parameter = models.CharField(max_length=250, null=True, blank=True) #  WikipediaURLパラメータ
-    usukoi_parameter = models.IntegerField(null=True, blank=True)  # 日本プロ野球記録サイトのパラメータ
-    youtube_parameter = models.CharField(max_length=250, null=True, blank=True) #  Youtubeパラメータ
-    remarks = models.CharField(max_length=250, null=True, blank=True) #  備考
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(default=timezone.now)
+    name = models.CharField("氏名", max_length=50, null=False, blank=False)  # 選手名
+    furigana = models.CharField("ふりがな", max_length=50, null=True, blank=True)  # 選手名(ふりがな)
+    nickname = models.CharField("通称", max_length=50, null=True, blank=True)  # 通称
+    birthday = models.DateField("誕生日", null=True, blank=True)  # 生年月日
+    place = models.ForeignKey(Place, verbose_name="出身地", on_delete=models.RESTRICT, null=True, blank=True)  # 出身地をForeignKeyで参照
+    height = models.DecimalField("身長", max_digits=5, decimal_places=2, null=True, blank=True)  # 身長（cm）
+    weight = models.DecimalField("体重", max_digits=5, decimal_places=2, null=True, blank=True)  # 体重（kg）
+    is_married = models.BooleanField("結婚", null=True, blank=True) #  結婚しているかどうか
+    partner = models.CharField("結婚相手", max_length=50, null=True, blank=True) #  結婚相手
+    hobby = models.CharField("趣味", max_length=50, null=True, blank=True) #  趣味
+    specialty = models.CharField("特技", max_length=50, null=True, blank=True) #  特技
+    throwing_hand = models.ForeignKey(HandThrowing, verbose_name="利腕", on_delete=models.RESTRICT, null=True, blank=True)  # 投手の手をForeignKeyで参照
+    batting_hand = models.ForeignKey(HandBatting, verbose_name="利腕", on_delete=models.RESTRICT, null=True, blank=True)  # 打者の手をForeignKeyで参照
+    main_position_category = models.ForeignKey(PositionCategory, verbose_name="ポジション", on_delete=models.RESTRICT, null=True, blank=True)  # ポジションをForeignKeyで参照
+    favorite_team = models.ForeignKey(Team, verbose_name="ファン球団", on_delete=models.RESTRICT, null=True, blank=True)  # ファン球団をForeignKeyで参照
+    wikipedia_parameter = models.CharField("Wikipedia", max_length=250, null=True, blank=True) #  WikipediaURLパラメータ
+    usukoi_parameter = models.IntegerField("日本プロ野球記録", null=True, blank=True)  # 日本プロ野球記録サイトのパラメータ
+    youtube_parameter = models.CharField("YouTube", max_length=250, null=True, blank=True) #  Youtubeパラメータ
+    remarks = models.CharField("備考", max_length=250, null=True, blank=True) #  備考
+    created_at = models.DateTimeField("作成日時", default=timezone.now)
+    updated_at = models.DateTimeField("更新日時", auto_now=True)
 
     class Meta:
         db_table = 'players'  # 使用するテーブル名を指定
@@ -207,28 +205,24 @@ class Player(models.Model):
     def age(self):
         from datetime import date
         if self.birthday:
-            return date.today().year - self.birthday.year
+            today = date.today()
+            return today.year - self.birthday.year - ((today.month, today.day) < (self.birthday.month, self.birthday.day))
         return None
 
     # 利腕を表示するプロパティ
     @property
     def throw_bat(self):
-        throwing = f"{self.throwing_hand.name}投" if self.throwing_hand else None
-        batting = f"{self.batting_hand.name}打" if self.batting_hand else None
-        return f"{throwing}{batting}"
+        return f"{self.throwing_hand.name}{self.batting_hand.name}"
 
     # 婚姻を表示するプロパティ
     @property
     def marriage(self):
-        if self.is_married == 1:
-            marriage = '既婚'
-            if self.partner and self.partner != '':
-                marriage = marriage + ' (' + self.partner + ')'
-        elif self.is_married == 0:
-            marriage = '独身'
-        else:
-            marriage = None
-        return marriage  # これが抜けていると None が返る
+        if self.is_married is True:
+            return f"既婚 ({self.partner})" if self.partner else "既婚"
+        elif self.is_married is False:
+            return "独身"
+        return "不明"
+
 
 # 選手共通記録
 class PlayerCommonRecord(models.Model):
@@ -245,6 +239,7 @@ class PlayerCommonRecord(models.Model):
     class Meta:
         db_table = 'player_common_records'  # 使用するテーブル名を指定
         unique_together = ('player', 'year')  # 選手と年度の組み合わせは一意
+        ordering = ['year']  # yearでソート
 
     def __str__(self):
         return f"{self.player.name} ({self.year})"
@@ -365,7 +360,7 @@ class PlayerCareer(models.Model):
         db_table = 'player_career'  # 使用するテーブル名を指定
 
     def __str__(self):
-        return f"{self.player.name} ({self.career.name})"
+        return f"{self.player.name} ({self.career_version.name})"
 
 # 選手タイトル
 class PlayerTitle(models.Model):

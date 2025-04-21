@@ -1,6 +1,7 @@
-from django.db.models import OuterRef, Subquery, Exists, Q
-from django.shortcuts import render, get_object_or_404
+from django.db.models import OuterRef, Subquery, Q
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerCareer, PlayerDraft, PlayerTitle
+from .forms import PlayerForm, PlayerCommonRecordFormSet
 
 # 選手一覧を表示するビュー
 def player_list(request):
@@ -93,3 +94,17 @@ def player_year_detail(request, player_id, year):
         'pitching_record': pitching_record,
         # 必要な変数を追加
     })
+
+def player_edit(request, pk):
+    player = get_object_or_404(Player, pk=pk)
+    if request.method == 'POST':
+        form = PlayerForm(request.POST, instance=player)
+        formset = PlayerCommonRecordFormSet(request.POST, instance=player)
+        if form.is_valid():
+            form.save()
+            formset.save()
+            return redirect('player_detail', pk=player.pk)  # 詳細ページへリダイレクト
+    else:
+        form = PlayerForm(instance=player)
+        formset = PlayerCommonRecordFormSet(instance=player)
+    return render(request, 'players/player_edit.html', {'form': form, 'formset': formset, 'player': player})

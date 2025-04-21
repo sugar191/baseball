@@ -70,7 +70,7 @@
                             </a>
                         {% endif %}
                         {% if user.is_authenticated and user.is_superuser %}
-                            <a href="{% url 'admin:players_player_change' player.player.id %}" target="_blank">[編集]</a>
+                            <a href="{% url 'player_edit' player.player.id %}">[編集]</a>
                         {% endif %}
                     </div>
                 </div>
