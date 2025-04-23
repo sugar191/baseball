@@ -90,26 +90,26 @@ def format_integer(value):
 
     return value
 
-@register.filter
-def format_batting_stats(batting_record):
-    if batting_record and batting_record.plate_appearances != 0:
-        avg_str = format_batting_average(batting_record.batting_average)
-        hr = format_integer(batting_record.home_runs)
-        rbi = format_integer(batting_record.runs_batted_in)
-        sb = format_integer(batting_record.stolen_bases)
+@register.simple_tag
+def format_batting_stats(plate_appearances, batting_average, home_runs, runs_batted_in, stolen_bases):
+    if plate_appearances and plate_appearances != 0:
+        avg_str = format_batting_average(batting_average)
+        hr = format_integer(home_runs)
+        rbi = format_integer(runs_batted_in)
+        sb = format_integer(stolen_bases)
         return f"{avg_str} {hr}本 {rbi}点 {sb}盗塁"
     else:
         return "出場無し"
 
-@register.filter
-def format_pitching_stats(pitching_record):
-    if pitching_record and pitching_record.games != 0:
-        earned_average_str = format_pitching_average(pitching_record.earned_run_average)
-        win = format_integer(pitching_record.wins)
-        lose = format_integer(pitching_record.loses)
-        save = format_integer(pitching_record.saves)
-        hold = format_integer(pitching_record.holds)
-        strike_out = format_integer(pitching_record.strike_outs)
+@register.simple_tag
+def format_pitching_stats(games, earned_run_average, wins, loses, saves, holds, strike_outs):
+    if games and games != 0:
+        earned_average_str = format_pitching_average(earned_run_average)
+        win = format_integer(wins)
+        lose = format_integer(loses)
+        save = format_integer(saves)
+        hold = format_integer(holds)
+        strike_out = format_integer(strike_outs)
         return f"{earned_average_str} {win}勝 {lose}敗 {save}S {hold}H {strike_out}奪"
     else:
         return "登板無し"
