@@ -1,3 +1,7 @@
+body {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* 固定メニューバー */
 .navbar {
     position: fixed;
