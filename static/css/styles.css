@@ -102,10 +102,6 @@ body {
     font-weight: bold;
 }
 
-.player-details div {
-    margin-bottom: 5px;
-}
-
 .player-details strong {
     font-weight: bold;
 }
@@ -169,4 +165,27 @@ tbody tr:hover {
 
 tbody tr:nth-child(even) {
     background-color: #fafafa;
+}
+
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: white;
+    padding: 2em;
+    border-radius: 10px;
+}
+
+.hidden {
+    display: none;
 }

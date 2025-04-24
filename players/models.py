@@ -164,7 +164,7 @@ class Team(models.Model):
     updated_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.name} ({self.league.name})"
+        return f"{self.name}"
 
     class Meta:
         db_table = 'teams'  # 使用するテーブル名を指定
@@ -424,20 +424,20 @@ class PlayerDraft(models.Model):
 # 検索ビュー
 class PlayerLatestSummary(models.Model):
     player_id = models.IntegerField(primary_key=True)  # 必ず主キーを指定
-    player_name = models.CharField("氏名", max_length=50, null=False, blank=False)  # 選手名
-    player_furigana = models.CharField("ふりがな", max_length=50, null=True, blank=True)  # 選手名(ふりがな)
-    player_nickname = models.CharField("通称", max_length=50, null=True, blank=True)  # 通称
-    player_birthday = models.DateField("誕生日", null=True, blank=True)  # 生年月日
-    player_height = models.DecimalField("身長", max_digits=5, decimal_places=2, null=True, blank=True)  # 身長（cm）
-    player_weight = models.DecimalField("体重", max_digits=5, decimal_places=2, null=True, blank=True)  # 体重（kg）
-    player_is_married = models.BooleanField("結婚", null=True, blank=True) #  結婚しているかどうか
-    player_partner = models.CharField("結婚相手", max_length=50, null=True, blank=True) #  結婚相手
-    player_hobby = models.CharField("趣味", max_length=50, null=True, blank=True) #  趣味
-    player_specialty = models.CharField("特技", max_length=50, null=True, blank=True) #  特技
-    player_wikipedia_parameter = models.CharField("Wikipedia", max_length=250, null=True, blank=True) #  WikipediaURLパラメータ
-    player_usukoi_parameter = models.IntegerField("日本プロ野球記録", null=True, blank=True)  # 日本プロ野球記録サイトのパラメータ
-    player_youtube_parameter = models.CharField("YouTube", max_length=250, null=True, blank=True) #  Youtubeパラメータ
-    player_remarks = models.CharField("備考", max_length=250, null=True, blank=True) #  備考
+    player_name = models.CharField(max_length=50, null=False, blank=False)  # 選手名
+    player_furigana = models.CharField(max_length=50, null=True, blank=True)  # 選手名(ふりがな)
+    player_nickname = models.CharField(max_length=50, null=True, blank=True)  # 通称
+    player_birthday = models.DateField(null=True, blank=True)  # 生年月日
+    player_height = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 身長（cm）
+    player_weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # 体重（kg）
+    player_is_married = models.BooleanField(null=True, blank=True) #  結婚しているかどうか
+    player_partner = models.CharField(max_length=50, null=True, blank=True) #  結婚相手
+    player_hobby = models.CharField(max_length=50, null=True, blank=True) #  趣味
+    player_specialty = models.CharField(max_length=50, null=True, blank=True) #  特技
+    player_wikipedia_parameter = models.CharField(max_length=250, null=True, blank=True) #  WikipediaURLパラメータ
+    player_usukoi_parameter = models.IntegerField(null=True, blank=True)  # 日本プロ野球記録サイトのパラメータ
+    player_youtube_parameter = models.CharField(max_length=250, null=True, blank=True) #  Youtubeパラメータ
+    player_remarks = models.CharField(max_length=250, null=True, blank=True) #  備考
     place_id = models.IntegerField()
     place_name = models.CharField(max_length=10)  # 場所名
     throwing_id = models.IntegerField()
@@ -450,6 +450,7 @@ class PlayerLatestSummary(models.Model):
     player_career_remarks = models.CharField(max_length=50, null=True, blank=True)
     career_version_id = models.IntegerField()
     career_version_name = models.CharField(max_length=50)
+    career_id = models.IntegerField()
     career_category_id = models.IntegerField()
     career_category_label = models.CharField(max_length=10)
     player_draft_rank = models.IntegerField()
@@ -461,6 +462,8 @@ class PlayerLatestSummary(models.Model):
     common_record_registered_name = models.CharField(max_length=50, null=True, blank=True)  # 登録名
     common_record_salary = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)  # 最大12桁、2桁小数点
     currency_name = models.CharField(max_length=30, null=False, blank=False)  # 通貨
+    team_id = models.IntegerField()
+    team_name = models.CharField(max_length=50)
     team_logo = models.ImageField(upload_to='team_logos/', null=True, blank=True)  # 球団ロゴ画像
     team_order = models.IntegerField(default=0)  # 表示順（順位に基づく）
     team_color = models.CharField(max_length=50, null=True, blank=True) # 球団カラーのカラーコード
@@ -508,4 +511,4 @@ class PlayerLatestSummary(models.Model):
             return f"既婚 ({self.player_partner})" if self.player_partner else "既婚"
         elif self.player_is_married is False:
             return "独身"
-        return "不明"
+        return None

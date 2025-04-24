@@ -4,16 +4,23 @@ from .models import Player, PlayerCommonRecord
 
 class PlayerForm(forms.ModelForm):
     MARRIAGE_CHOICES = [
-        ('', '不明'),
-        ('married', '既婚'),
-        ('single', '独身'),
+        (None, '不明'),
+        (True, '既婚'),
+        (False, '独身'),
     ]
 
-    is_married = forms.ChoiceField(
+    is_married = forms.TypedChoiceField(
         choices=MARRIAGE_CHOICES,
+        coerce=lambda x: {
+            'True': True,
+            'False': False,
+            'None': None,
+            '': None,
+        }.get(x, None),
         widget=forms.Select,
         required=False,
-        label='婚姻状況'
+        label='婚姻状況',
+        empty_value=None
     )
 
     class Meta:
@@ -22,9 +29,18 @@ class PlayerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # 現在の選手の婚姻状況をフォームに反映
+
+        # instanceの値（0, 1, None）を文字列に変換して初期値に設定
         if self.instance.is_married is not None:
-            self.fields['is_married'].initial = 'married' if self.instance.is_married else 'single'
+            self.fields['is_married'].initial = str(int(self.instance.is_married))
+        else:
+            self.fields['is_married'].initial = ''
+
+    def clean_is_married(self):
+        value = self.cleaned_data.get('is_married')
+        if value == '':
+            return None
+        return bool(int(value))
 
 PlayerCommonRecordFormSet = inlineformset_factory(
     Player,

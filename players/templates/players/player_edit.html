@@ -97,42 +97,42 @@
     <a href="{% url 'player_detail' player.pk %}">戻る</a>
 {% endblock %}
 {% block extra_js %}
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const marriedSelect = document.getElementById("id_is_married");
-        const partnerInput = document.getElementById("id_partner");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const marriedSelect = document.getElementById("id_is_married");
+            const partnerInput = document.getElementById("id_partner");
 
-        function togglePartner() {
-        if (marriedSelect.value === "married") {
-            partnerInput.disabled = false;
-        } else {
-            partnerInput.disabled = true;
-            partnerInput.value = "";
-        }
-        }
-
-        togglePartner();
-        marriedSelect.addEventListener("change", togglePartner);
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const birthdayInput = document.getElementById("id_birthday");
-        const yearInput = document.getElementById("id_birth_year");
-        const monthInput = document.getElementById("id_birth_month");
-
-        function updateYearAndMonth() {
-            const dateValue = birthdayInput.value;
-            if (dateValue) {
-                const date = new Date(dateValue);
-                if (!isNaN(date)) {
-                yearInput.value = date.getFullYear();
-                monthInput.value = date.getMonth() + 1;  // 月は0始まりなので+1
+            function togglePartner() {
+                if (marriedSelect.value === "True") {
+                    partnerInput.disabled = false;
+                } else {
+                    partnerInput.disabled = true;
+                    partnerInput.value = "";
                 }
             }
-        }
 
-        // 日付が変更されたときに発火
-        birthdayInput.addEventListener("change", updateYearAndMonth);
-    });
-</script>
+            togglePartner();  // 初期状態でも実行
+            marriedSelect.addEventListener("change", togglePartner);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const birthdayInput = document.getElementById("id_birthday");
+            const yearInput = document.getElementById("id_birth_year");
+            const monthInput = document.getElementById("id_birth_month");
+
+            function updateYearAndMonth() {
+                const dateValue = birthdayInput.value;
+                if (dateValue) {
+                    const date = new Date(dateValue);
+                    if (!isNaN(date)) {
+                    yearInput.value = date.getFullYear();
+                    monthInput.value = date.getMonth() + 1;  // 月は0始まりなので+1
+                    }
+                }
+            }
+
+            // 日付が変更されたときに発火
+            birthdayInput.addEventListener("change", updateYearAndMonth);
+        });
+    </script>
 {% endblock %}

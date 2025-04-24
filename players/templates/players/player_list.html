@@ -6,8 +6,9 @@
 {% block content %}
     <div class="page_title">選手一覧</div>
     <form method="GET" action="{% url 'player_list' %}">
-        <input type="text" name="q" placeholder="選手名・ふりがな・登録名で検索" value="{{ request.GET.q }}">
+        <input type="text" name="q" placeholder="全文検索" value="{{ request.GET.q }}">
         <button type="submit">検索</button>
+        <button type="button" id="open-search-popup">詳細検索</button>
     </form>
     <div class="player-list">
         {% for player in players %}
@@ -26,45 +27,62 @@
                     {% if player.player_nickname %}
                         <div class="player-name"><strong>「{{ player.player_nickname }}」</strong></div>
                     {% endif %}
-                    <div><strong>背番号:</strong> {{ player.common_record_number }}</div>
-                    <div><strong>ポジション:</strong> 
-                        {% if player.position_category_name %}
-                            {{ player.position_category_name }}
-                        {% else %}
-                            未登録
-                        {% endif %}
-                    </div>
-                    {% if player.position_category_name and player.position_category_id == 1 %}
-                        <div><strong>成績({{ player.pitching_year }}年):</strong> {% format_pitching_stats player.pitching_games player.pitching_earned_run_average player.pitching_wins player.pitching_loses player.pitching_saves player.pitching_holds player.pitching_strike_outs %}</div>
-                    {% else %}
-                        <div><strong>成績({{ player.batting_year }}年):</strong> {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}</div>
+                    {% if player.common_record_number %}
+                        <div><strong>背番号:</strong> {{ player.common_record_number }}</div>
                     {% endif %}
-                    <div><strong>年俸({{ player.common_record_year }}年):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
-                    <div><strong>入団:</strong> {{ player.draft_year }}年{{ player.draft_category_name }}{{ player.player_draft_rank }}位</div>
-                    <div><strong>誕生日:</strong> {{ player.player_birthday }}</div>
-                    <div><strong>年齢:</strong> {{ player.age }} 歳</div>
-                    <div><strong>経歴:</strong> {{ player.career_version_name }}</div>
-                    <div><strong>投打:</strong> {{ player.throw_bat }}</div>
-                    <div><strong>身長:</strong> {{ player.player_height|format_decimal_trim }} cm</div>
-                    <div><strong>体重:</strong> {{ player.player_weight|format_decimal_trim }} kg</div>
-                    <div><strong>出身地:</strong> 
-                        {% if player.place_name %}
-                            {{ player.place_name }}
-                        {% else %}
-                            未登録
+                    {% if player.position_category_name %}
+                        <div><strong>ポジション:</strong> {{ player.position_category_name }}</div>
+                    {% endif %}
+                    {% if player.position_category_id == 1 %}
+                        {% if player.pitching_year %}
+                            <div><strong>成績({{ player.pitching_year }}年):</strong> {% format_pitching_stats player.pitching_games player.pitching_earned_run_average player.pitching_wins player.pitching_loses player.pitching_saves player.pitching_holds player.pitching_strike_outs %}</div>
                         {% endif %}
-                    </div>
-                    <div><strong>婚姻:</strong> {{ player.marriage }}</div>
-                    <div><strong>趣味:</strong> {{ player.player_hobby }}</div>
-                    <div><strong>特技:</strong> {{ player.player_specialty }}</div>
+                    {% else %}
+                        {% if player.batting_year %}
+                            <div><strong>成績({{ player.batting_year }}年):</strong> {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}</div>
+                        {% endif %}
+                    {% endif %}
+                    {% if player.common_record_year %}
+                        <div><strong>年俸({{ player.common_record_year }}年):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
+                    {% endif %}
+                    {% if player.draft_year %}
+                        <div><strong>入団:</strong> {{ player.draft_year }}年{{ player.draft_category_name }}{{ player.player_draft_rank }}位</div>
+                    {% endif %}
+                    {% if player.player_birthday %}
+                        <div><strong>誕生日:</strong> {{ player.player_birthday }}</div>
+                    {% endif %}
+                    {% if player.age %}
+                        <div><strong>年齢:</strong> {{ player.age }} 歳</div>
+                    {% endif %}
+                    {% if player.career_version_name %}
+                        <div><strong>経歴:</strong> {{ player.career_version_name }}</div>
+                    {% endif %}
+                    {% if player.throw_bat %}
+                        <div><strong>投打:</strong> {{ player.throw_bat }}</div>
+                    {% endif %}
+                    {% if player.player_height and player_weight %}
+                        <div><strong>身長 / 体重:</strong> {{ player.player_height|format_decimal_trim }} cm / {{ player.player_weight|format_decimal_trim }} kg</div>
+                    {% endif %}
+                    {% if player.place_name %}
+                        <div><strong>出身地:</strong> {{ player.place_name }}</div>
+                    {% endif %}
+                    {% if player.marriage %}
+                        <div><strong>婚姻:</strong> {{ player.marriage }}</div>
+                    {% endif %}
+                    {% if player.player_hobby %}
+                        <div><strong>趣味:</strong> {{ player.player_hobby }}</div>
+                    {% endif %}
+                    {% if player.player_specialty %}
+                        <div><strong>特技:</strong> {{ player.player_specialty }}</div>
+                    {% endif %}
                     <div>
                         <strong>関連リンク:</strong> 
-                        {% if player.player.wikipedia %}
+                        {% if player.player_wikipedia %}
                             <a href="{{ player.player_wikipedia }}" target="_blank" title="Wikipedia">
                                 <i class="fa-brands fa-wikipedia-w"></i>
                             </a>
                         {% endif %}
-                        {% if player.player.youtube %}
+                        {% if player.player_youtube %}
                             <a href="{{ player.player_youtube }}" target="_blank" title="YouTube">
                                 <i class="fa-brands fa-youtube"></i>
                             </a>
@@ -76,7 +94,107 @@
                 </div>
             </div>
         {% empty %}
-            <div class="no-players">登録された選手はまだいません。</div>
+            <div class="no-players">検索結果は0件です。</div>
         {% endfor %}
     </div>
+    <div id="search-modal" class="modal hidden">
+        <div class="modal-content">
+            <form method="get" action="">
+                <div>
+                    <label>名前</label>
+                    <input type="text" name="name" value="{{ request.GET.name }}">
+                </div>
+                <div>
+                    <label>球団</label>
+                    <select name="team">
+                        <option value="">すべて</option>
+                        {% for team in teams %}
+                            <option value="{{ team.id }}" {% if request.GET.team == team.id|stringformat:"s" %}selected{% endif %}>{{ team.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>通称</label>
+                    <input type="text" name="nickname" value="{{ request.GET.nickname }}">
+                </div>
+                <div>
+                    <label>背番号</label>
+                    <input type="number" name="number" value="{{ request.GET.number }}">
+                </div>
+                <div>
+                    <label>ポジション</label>
+                    <select name="position_category">
+                        <option value="">すべて</option>
+                        {% for position_category in position_categories %}
+                            <option value="{{ position_category.id }}" {% if request.GET.position_category == position_category.id|stringformat:"s" %}selected{% endif %}>{{ position_category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>年俸</label>
+                    <input type="number" name="salary_min" value="{{ request.GET.salary_min }}">~<input type="number" name="salary_max" value="{{ request.GET.salary_max }}">万円
+                </div>
+                <div>
+                    <label>入団</label>
+                    <input type="number" name="year" value="{{ request.GET.year }}">年
+                </div>
+                <div>
+                    <label>ドラフト順位</label>
+                    <input type="number" name="rank" value="{{ request.GET.rank }}">位
+                </div>
+                <div>
+                    <label>誕生年</label>
+                    <input type="number" name="birth_year" value="{{ request.GET.birth_year }}">年
+                </div>
+                <div>
+                    <label>経歴</label>
+                    <select name="career">
+                        <option value="">すべて</option>
+                        {% for career in careers %}
+                            <option value="{{ career.id }}" {% if request.GET.career == career.id|stringformat:"s" %}selected{% endif %}>{{ career.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>利腕</label>
+                    <select name="pitching">
+                        <option value="">すべて</option>
+                        {% for throwing in throwings %}
+                            <option value="{{ throwing.id }}" {% if request.GET.pitching == throwing.id|stringformat:"s" %}selected{% endif %}>{{ throwing.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="batting">
+                        <option value="">すべて</option>
+                        {% for batting in battings %}
+                            <option value="{{ batting.id }}" {% if request.GET.batting == batting.id|stringformat:"s" %}selected{% endif %}>{{ batting.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>出身地</label>
+                    <select name="birthplace">
+                        <option value="">すべて</option>
+                        {% for place in places %}
+                            <option value="{{ place.id }}" {% if request.GET.birthplace == place.id|stringformat:"s" %}selected{% endif %}>{{ place.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">検索</button>
+                    <button type="button" id="close-search-popup">閉じる</button>
+                </div>
+            </form>
+        </div>
+      </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        document.getElementById('open-search-popup').addEventListener('click', () => {
+            document.getElementById('search-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('close-search-popup').addEventListener('click', () => {
+            document.getElementById('search-modal').classList.add('hidden');
+        });
+    </script>
 {% endblock %}

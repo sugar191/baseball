@@ -37,7 +37,9 @@
 
     <div class="content">
         {% block content %}{% endblock %}
-        {% block extra_js %}{% endblock %}
     </div>
+
+    <!-- JSはbodyの最後で読み込むべき！ -->
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
