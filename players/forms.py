@@ -2,6 +2,16 @@ from django import forms
 from django.forms import inlineformset_factory
 from .models import Player, PlayerCommonRecord
 
+class PlayerCommonRecordForm(forms.ModelForm):
+    class Meta:
+        model = PlayerCommonRecord
+        fields = ('year', 'salary', 'currency')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['year'].widget.attrs.update({'style': 'width: 50px;'})
+        self.fields['salary'].widget.attrs.update({'style': 'width: 100px;'})
+
 class PlayerForm(forms.ModelForm):
     MARRIAGE_CHOICES = [
         (None, '不明'),
@@ -45,6 +55,7 @@ class PlayerForm(forms.ModelForm):
 PlayerCommonRecordFormSet = inlineformset_factory(
     Player,
     PlayerCommonRecord,
+    form=PlayerCommonRecordForm,  # ← ここで指定
     fields=('year', 'salary', 'currency'),  # 編集したいフィールド名
     extra=0, 
     can_delete=False

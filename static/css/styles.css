@@ -204,7 +204,7 @@ tbody tr:nth-child(even) {
 }
 
 select {
-    max-width: 100%;          /* 最大幅も制限 */
+    max-width: 90%;          /* 最大幅も制限 */
     box-sizing: border-box;  /* パディング込みで幅を計算 */
 }
 
@@ -223,6 +223,14 @@ option {
     white-space: nowrap;  /* 改行を防ぐ */
 }
 
-.salary td:second-child {
+.salary_year {
     width: 50px; 
+}
+
+td input[type="text"] {
+    max-width: 90%;
+}
+
+td input[type="number"] {
+    max-width: 100px;
 }
