@@ -49,9 +49,19 @@ body {
     text-decoration: underline;
 }
 
+@media screen and (max-width: 600px) {
+    .content {
+        padding: 1em;
+    }
+}
+
 .content {
-    margin-top: 60px; /* メニューバーの高さ分スペースを空ける */
+    margin-top: 60px;  /* メニューバーの高さ分スペースを空ける */
     padding: 10px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box; /* パディング込みで幅を計算 */
 }
 
 .page_title {
@@ -184,6 +194,9 @@ tbody tr:nth-child(even) {
     background: white;
     padding: 2em;
     border-radius: 10px;
+    width: 90%;             /* 全体の90%に制限 */
+    max-width: 500px;       /* 最大幅を指定（お好みで調整） */
+    box-sizing: border-box; /* パディング含めた幅で計算 */
 }
 
 .hidden {
