@@ -81,17 +81,17 @@
             </tr>
         </table>
         {{ formset.management_form }}
-        {% for record_form in formset %}
-            <div>
-                {{ record_form.id }}
-                {{ record_form.year }}年
-                {{ record_form.salary }}
-                {{ record_form.currency }}
-                {% if record_form.DELETE %}
-                    削除: {{ record_form.DELETE }}
-                {% endif %}
-            </div>
-        {% endfor %}
+        <table>
+            {% for record_form in formset %}
+                <tr>
+                    <td>{{ record_form.id }}</td>
+                    <td>{{ record_form.year }}年</td>
+                    <td>{{ record_form.salary }}</td>
+                    <td>{{ record_form.currency }}</td>
+                    <td>{% if record_form.DELETE %}削除: {{ record_form.DELETE }}{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </table>
         <button type="submit">保存</button>
     </form>
     <a href="{% url 'player_detail' player.pk %}">戻る</a>
