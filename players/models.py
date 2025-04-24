@@ -160,6 +160,7 @@ class Team(models.Model):
     league = models.ForeignKey(League, on_delete=models.CASCADE)  # リーグとの関連
     sort_order = models.IntegerField(default=0)  # 表示順（順位に基づく）
     color = models.CharField(max_length=50, null=True, blank=True) # 球団カラーのカラーコード
+    is_select = models.BooleanField(null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 

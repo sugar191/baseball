@@ -204,7 +204,6 @@ tbody tr:nth-child(even) {
 }
 
 select {
-    width: 100%;              /* プルダウン全体の幅を制限 */
     max-width: 100%;          /* 最大幅も制限 */
     box-sizing: border-box;  /* パディング込みで幅を計算 */
 }
@@ -213,4 +212,17 @@ option {
     white-space: nowrap;     /* 選択肢のテキストが折り返さないように */
     text-overflow: ellipsis; /* 長すぎるテキストを省略表示（...）にする */
     overflow: hidden;        /* 溢れたテキストは隠す */
+}
+
+.search {
+    table-layout: fixed; /* ← これも重要 */
+}
+
+.search td:first-child {
+    width: 100px;         /* ラベル列の幅を固定 */
+    white-space: nowrap;  /* 改行を防ぐ */
+}
+
+.salary td:second-child {
+    width: 50px; 
 }

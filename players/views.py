@@ -122,7 +122,7 @@ def player_list(request):
         'common_record_number'
     )
 
-    teams = Team.objects.all()
+    teams = Team.objects.filter(is_select = True)
     places = Place.objects.all()
     position_categories = PositionCategory.objects.all()
     careers = Career.objects.all()
