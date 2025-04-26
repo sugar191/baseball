@@ -77,13 +77,13 @@
                     {% endif %}
                     <div>
                         <strong>関連リンク:</strong> 
-                        {% if player.player_wikipedia %}
-                            <a href="{{ player.player_wikipedia }}" target="_blank" title="Wikipedia">
+                        {% if player.player_wikipedia_parameter %}
+                            <a href={{ player.player_wikipedia_parameter|format_wikipedia_url }} target="_blank" title="Wikipedia">
                                 <i class="fa-brands fa-wikipedia-w"></i>
                             </a>
                         {% endif %}
-                        {% if player.player_youtube %}
-                            <a href="{{ player.player_youtube }}" target="_blank" title="YouTube">
+                        {% if player.player_youtube_parameter %}
+                            <a href={{ player.player_youtube_parameter|format_youtube_url }} target="_blank" title="YouTube">
                                 <i class="fa-brands fa-youtube"></i>
                             </a>
                         {% endif %}

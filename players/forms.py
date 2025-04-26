@@ -48,7 +48,7 @@ class PlayerForm(forms.ModelForm):
 
     def clean_is_married(self):
         value = self.cleaned_data.get('is_married')
-        if value == '':
+        if value is None:
             return None
         return bool(int(value))
 

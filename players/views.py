@@ -116,6 +116,7 @@ def player_list(request):
         filters &= Q(batting_id=batting)
 
     player_data = qs.filter(filters).order_by(
+        'organization_order',
         'league_order',
         'team_order',
         'position_order',
@@ -182,7 +183,7 @@ def player_edit(request, pk):
         if form.is_valid():
             form.save()
             formset.save()
-            return redirect('player_detail', pk=player.pk)  # 詳細ページへリダイレクト
+            return redirect('player_detail', player_id=player.pk)  # 詳細ページへリダイレクト
     else:
         form = PlayerForm(instance=player)
         formset = PlayerCommonRecordFormSet(instance=player)

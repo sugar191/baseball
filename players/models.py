@@ -469,6 +469,7 @@ class PlayerLatestSummary(models.Model):
     team_order = models.IntegerField(default=0)  # 表示順（順位に基づく）
     team_color = models.CharField(max_length=50, null=True, blank=True) # 球団カラーのカラーコード
     league_order = models.IntegerField()
+    organization_order = models.IntegerField()
     pitching_year = models.IntegerField()
     pitching_games = models.IntegerField(null=True, blank=True)  # 登板
     pitching_wins = models.IntegerField(null=True, blank=True)  # 勝利
