@@ -96,12 +96,16 @@
                 {% for pitching in pitchings %}
                     <tr>
                         <td align="center"><a href="{% url 'player_year_detail' player.id pitching.year %}">{{ pitching.year|format_year }}</a></td>
-                        <td align="right">{{ pitching.earned_run_average|format_pitching_average }}</td>
-                        <td align="right">{{ pitching.wins|format_integer }}勝</td>
-                        <td align="right">{{ pitching.loses|format_integer }}敗</td>
-                        <td align="right">{{ pitching.saves|format_integer }}S</td>
-                        <td align="right">{{ pitching.holds|format_integer }}H</td>
-                        <td align="right">{{ pitching.strike_outs|format_integer }}奪</td>
+                        {% if pitching.games != 0 %}
+                            <td align="right">{{ pitching.earned_run_average|format_pitching_average }}</td>
+                            <td align="right">{{ pitching.wins|format_integer }}勝</td>
+                            <td align="right">{{ pitching.loses|format_integer }}敗</td>
+                            <td align="right">{{ pitching.saves|format_integer }}S</td>
+                            <td align="right">{{ pitching.holds|format_integer }}H</td>
+                            <td align="right">{{ pitching.strike_outs|format_integer }}奪</td>
+                        {% else %}
+                            <td colspan=6>記録無し</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -120,11 +124,15 @@
                 {% for batting in battings %}
                     <tr>
                         <td align="center"><a href="{% url 'player_year_detail' player.id batting.year %}">{{ batting.year|format_year }}</a></td>
-                        <td align="right">{{ batting.batting_average|format_batting_average }}</td>
-                        <td align="right">{{ batting.home_runs|format_integer }}本</td>
-                        <td align="right">{{ batting.runs_batted_in|format_integer }}点</td>
-                        <td align="right">{{ batting.stolen_bases|format_integer }}盗</td>
-                        <td align="right">{{ batting.hits|format_integer }}安打</td>
+                        {% if batting.plate_appearances != 0 %}
+                            <td align="right">{{ batting.batting_average|format_batting_average }}</td>
+                            <td align="right">{{ batting.home_runs|format_integer }}本</td>
+                            <td align="right">{{ batting.runs_batted_in|format_integer }}点</td>
+                            <td align="right">{{ batting.stolen_bases|format_integer }}盗</td>
+                            <td align="right">{{ batting.hits|format_integer }}安打</td>
+                        {% else %}
+                            <td colspan=5>記録無し</td>
+                        {% endif %}
                     </tr>
                 {% empty %}
                     <tr>
