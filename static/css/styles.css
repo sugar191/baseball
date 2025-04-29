@@ -234,3 +234,25 @@ td input[type="text"] {
 td input[type="number"] {
     max-width: 100px;
 }
+
+.position-badge {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 0.85em;
+    padding: 2px 6px;
+    margin: 2px 4px;
+    border-radius: 8px;
+    color: #333;
+}
+.position-pitcher {
+    background-color: #ffb5da; /* ピンク */
+}
+.position-catcher {
+    background-color: #99ccff; /* 水色 */
+}
+.position-infielder {
+    background-color: #ffffcc; /* クリーム */
+}
+.position-outfielder {
+    background-color: #ccff99; /* 黄緑 */
+}

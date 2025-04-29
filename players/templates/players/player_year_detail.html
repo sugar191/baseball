@@ -75,4 +75,22 @@
             </tbody>
         </table>
     {% endif %}
+    {% if fielding_record %}
+        <h3>守備成績</h3>
+        <table>
+            <tbody>
+                {% for fielding in fielding_record %}
+                    <tr><td>試合数({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.games }}</td></tr>
+                    <tr><td>刺殺({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.put_outs }}</td></tr>
+                    <tr><td>補殺({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.assists }}</td></tr>
+                    <tr><td>失策({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.errors }}</td></tr>
+                    <tr><td>併殺({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.double_plays }}</td></tr>
+                    <tr><td>守備率({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.fielding_percentage|format_batting_average }}</td></tr>
+                    {% if fielding.position.name == '捕手' %}
+                        <tr><td>捕逸</td><td align="right">{{ fielding.passed_balls }}</td></tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

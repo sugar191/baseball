@@ -137,3 +137,16 @@ def format_salary(salary):
             formatted_num %= value
 
     return "".join(result)
+
+@register.filter
+def get_dynamic_field(record, field_name):
+    """フィールド名を動的に受け取って値を取り出す（モデルにも辞書にも対応）"""
+    if not record or not field_name:
+        return None
+    if isinstance(record, dict):
+        return record.get(field_name)
+    return getattr(record, field_name, None)
+
+@register.filter
+def get_position_short_name(position_name):
+    return position_name[0]

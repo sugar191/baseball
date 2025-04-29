@@ -161,6 +161,7 @@ class Team(models.Model):
     sort_order = models.IntegerField(default=0)  # 表示順（順位に基づく）
     color = models.CharField(max_length=50, null=True, blank=True) # 球団カラーのカラーコード
     is_select = models.BooleanField(null=True)
+    usukoi_parameter = models.CharField("日本プロ野球記録", max_length=50, null=True, blank=True)  # 日本プロ野球記録サイトのパラメータ
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 

@@ -1,9 +1,9 @@
 import re
 from datetime import date
-from django.db.models import Q, Value
+from django.db.models import Q, Value, Sum, Case, When, IntegerField
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Replace
-from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerCareer, PlayerDraft, PlayerTitle, PlayerLatestSummary, Team, Place, PositionCategory, Career, HandBatting, HandThrowing
+from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerFieldingRecord, PlayerCareer, PlayerDraft, PlayerTitle, PlayerLatestSummary, Team, Place, PositionCategory, Career, HandBatting, HandThrowing
 from .forms import PlayerForm, PlayerCommonRecordFormSet
 
 # 選手一覧を表示するビュー
@@ -141,19 +141,65 @@ def player_list(request):
         'query': query
     })
 
+def get_fielding_summary(player_id):
+    qs = (
+        PlayerFieldingRecord.objects
+        .filter(player_id=player_id)
+        .values('year')
+        .annotate(
+            position_1_games=Sum(Case(When(position_id=1, then='games'), output_field=IntegerField())),
+            position_2_games=Sum(Case(When(position_id=2, then='games'), output_field=IntegerField())),
+            position_3_games=Sum(Case(When(position_id=3, then='games'), output_field=IntegerField())),
+            position_4_games=Sum(Case(When(position_id=4, then='games'), output_field=IntegerField())),
+            position_5_games=Sum(Case(When(position_id=5, then='games'), output_field=IntegerField())),
+            position_6_games=Sum(Case(When(position_id=6, then='games'), output_field=IntegerField())),
+            position_7_games=Sum(Case(When(position_id=7, then='games'), output_field=IntegerField())),
+        )
+        .order_by('year')
+    )
+    return qs
+
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     common_records = PlayerCommonRecord.objects.filter(player=player).order_by('year')
     batting_records = PlayerBattingRecord.objects.filter(player=player).order_by('year')
     pitching_records = PlayerPitchingRecord.objects.filter(player=player).order_by('year')
+    fielding_records = get_fielding_summary(player_id)
     careers = PlayerCareer.objects.filter(player=player).order_by('sort_order')
     drafts = PlayerDraft.objects.filter(player=player).order_by('draft')
     titles = PlayerTitle.objects.filter(player=player).order_by('year', 'title')
+
+    POSITION_LABELS = {
+        1: ('投', 'position-pitcher'),
+        2: ('捕', 'position-catcher'),
+        3: ('一', 'position-infielder'),
+        4: ('二', 'position-infielder'),
+        5: ('三', 'position-infielder'),
+        6: ('遊', 'position-infielder'),
+        7: ('外', 'position-outfielder'),
+    }
+
+    for record in fielding_records:
+        record['total_games'] = sum(
+            record.get(f'position_{i}_games') or 0 for i in range(1, 8)
+        )
+    
+        position_display = []
+        for i in range(1, 8):
+            games = record.get(f'position_{i}_games')
+            if games:
+                label, css_class = POSITION_LABELS[i]
+                html = f'<span class="position-badge {css_class}">{label}</span> {games}'
+                position_display.append(html)
+
+        record['position_summary_html'] = ' '.join(position_display) if position_display else '出場無し'
+
     return render(request, 'players/player_detail.html', {
         'player': player, 
         'commons': common_records, 
         'battings': batting_records, 
         'pitchings': pitching_records,
+        'fieldings': fielding_records,
         'careers': careers,
         'drafts': drafts,
         'titles': titles,
@@ -164,6 +210,7 @@ def player_year_detail(request, player_id, year):
     common_record = PlayerCommonRecord.objects.filter(player=player, year=year).first()
     batting_record = PlayerBattingRecord.objects.filter(player=player, year=year).first()
     pitching_record = PlayerPitchingRecord.objects.filter(player=player, year=year).first()
+    fielding_record = PlayerFieldingRecord.objects.filter(player=player, year=year)
     # 他の必要なデータもここで取得
 
     return render(request, 'players/player_year_detail.html', {
@@ -172,19 +219,19 @@ def player_year_detail(request, player_id, year):
         'common_record': common_record,
         'batting_record': batting_record,
         'pitching_record': pitching_record,
-        # 必要な変数を追加
+        'fielding_record': fielding_record,
     })
 
 def player_edit(request, pk):
     player = get_object_or_404(Player, pk=pk)
     if request.method == 'POST':
         form = PlayerForm(request.POST, instance=player)
-        formset = PlayerCommonRecordFormSet(request.POST, instance=player)
+        common_record_formset = PlayerCommonRecordFormSet(request.POST, instance=player)
         if form.is_valid():
             form.save()
-            formset.save()
+            common_record_formset.save()
             return redirect('player_detail', player_id=player.pk)  # 詳細ページへリダイレクト
     else:
         form = PlayerForm(instance=player)
-        formset = PlayerCommonRecordFormSet(instance=player)
-    return render(request, 'players/player_edit.html', {'form': form, 'formset': formset, 'player': player})
+        common_record_formset = PlayerCommonRecordFormSet(instance=player)
+    return render(request, 'players/player_edit.html', {'form': form, 'formset': common_record_formset, 'player': player})

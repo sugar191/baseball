@@ -134,6 +134,35 @@
             </tbody>
         </table>
     {% endif %}
+    {% if fieldings %}
+        <h3>守備成績</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>年</th>
+                    <th colspan=5>成績</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fielding in fieldings %}
+                    <tr>
+                        <td align="center"><a href="{% url 'player_year_detail' player.id fielding.year %}">{{ fielding.year|format_year }}</a></td>
+                        <td>
+                            {% if fielding.total_games != 0 %}
+                                {{ fielding.position_summary_html|safe }}
+                            {% else %}
+                                記録無し
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">データがありません</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
     <a href="{% url 'player_list' %}">戻る</a>
     {% if user.is_authenticated and user.is_superuser %}
         <a href="{% url 'player_edit' player.id %}">[編集]</a>

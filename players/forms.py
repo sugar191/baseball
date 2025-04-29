@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Player, PlayerCommonRecord
+from .models import Player, PlayerCommonRecord, PlayerDraft
 
 class PlayerCommonRecordForm(forms.ModelForm):
     class Meta:
