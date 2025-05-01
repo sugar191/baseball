@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Player, PlayerCommonRecord, PlayerDraft
+from .models import Player, PlayerCommonRecord, Team
 
 class PlayerCommonRecordForm(forms.ModelForm):
     class Meta:
@@ -19,11 +19,19 @@ class PlayerForm(forms.ModelForm):
         (False, '独身'),
     ]
 
+    favorite_team = forms.ModelChoiceField(
+        label='ファン球団',
+        empty_label="選択してください",
+        queryset=Team.objects.filter(is_select=True)  # ここでquerysetを指定
+    )
+
     is_married = forms.TypedChoiceField(
         choices=MARRIAGE_CHOICES,
         coerce=lambda x: {
             'True': True,
+            '1': True,
             'False': False,
+            '0': False,
             'None': None,
             '': None,
         }.get(x, None),
@@ -39,18 +47,12 @@ class PlayerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # instanceの値（0, 1, None）を文字列に変換して初期値に設定
+        # すでにModelChoiceFieldでquerysetを設定しているので、ここで再設定する必要はありません
+        # もし別の動的な処理が必要ならば、__init__内で変更することもできます。
         if self.instance.is_married is not None:
             self.fields['is_married'].initial = str(int(self.instance.is_married))
         else:
             self.fields['is_married'].initial = ''
-
-    def clean_is_married(self):
-        value = self.cleaned_data.get('is_married')
-        if value is None:
-            return None
-        return bool(int(value))
 
 PlayerCommonRecordFormSet = inlineformset_factory(
     Player,

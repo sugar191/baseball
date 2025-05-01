@@ -3,12 +3,16 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from .models import Place, Currency, ExchangeRate, Position, PositionCategory, Player, League, Team, HandThrowing, HandBatting, PlayerCommonRecord, PlayerPitchingRecord, PlayerBattingRecord, PlayerFieldingRecord, Organization, CareerCategory, Career, PlayerCareer, CareerVersion, Title, PlayerTitle, DraftCategory, Draft, PlayerDraft
 
-# places
+# 共通のベース管理クラス
+class BaseResourceAdmin(ImportExportModelAdmin):
+    pass
+
+# place
 class PlaceResource(resources.ModelResource):
     class Meta:
         model = Place
 
-class PlaceAdmin(ImportExportModelAdmin):
+class PlaceAdmin(BaseResourceAdmin):
     resource_class = PlaceResource
 
 # currency
@@ -24,7 +28,7 @@ class PositionResource(resources.ModelResource):
     class Meta:
         model = Position
 
-class PositionAdmin(ImportExportModelAdmin):
+class PositionAdmin(BaseResourceAdmin):
     resource_class = PositionResource
 
 # position_categories
@@ -36,7 +40,7 @@ class PlayerResource(resources.ModelResource):
     class Meta:
         model = Player
 
-class PlayerAdmin(ImportExportModelAdmin):
+class PlayerAdmin(BaseResourceAdmin):
     resource_class = PlayerResource
 
 # hands_throwing
@@ -52,7 +56,7 @@ class OrganizationResource(resources.ModelResource):
     class Meta:
         model = Organization
 
-class OrganizationAdmin(ImportExportModelAdmin):
+class OrganizationAdmin(BaseResourceAdmin):
     resource_class = OrganizationResource
 
 # leagues
@@ -60,9 +64,9 @@ class LeagueResource(resources.ModelResource):
     class Meta:
         model = League
 
-class LeagueAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'sort_order')  # sort_orderも表示
-    list_editable = ('sort_order',)  # 管理画面でsort_orderを編集可能にする
+class LeagueAdmin(BaseResourceAdmin):
+    list_display = ('name', 'sort_order')
+    list_editable = ('sort_order',)
     resource_class = LeagueResource
 
 # teams
@@ -70,7 +74,7 @@ class TeamResource(resources.ModelResource):
     class Meta:
         model = Team
 
-class TeamAdmin(ImportExportModelAdmin):
+class TeamAdmin(BaseResourceAdmin):
     resource_class = TeamResource
 
 # player_common_records
@@ -78,7 +82,7 @@ class PlayerCommonRecordResource(resources.ModelResource):
     class Meta:
         model = PlayerCommonRecord
 
-class PlayerCommonRecordAdmin(ImportExportModelAdmin):
+class PlayerCommonRecordAdmin(BaseResourceAdmin):
     resource_class = PlayerCommonRecordResource
 
 # player_pitching_records
@@ -86,7 +90,7 @@ class PlayerPitchingRecordResource(resources.ModelResource):
     class Meta:
         model = PlayerPitchingRecord
 
-class PlayerPitchingRecordAdmin(ImportExportModelAdmin):
+class PlayerPitchingRecordAdmin(BaseResourceAdmin):
     resource_class = PlayerPitchingRecordResource
 
 # player_batting_records
@@ -94,7 +98,7 @@ class PlayerBattingRecordResource(resources.ModelResource):
     class Meta:
         model = PlayerBattingRecord
 
-class PlayerBattingRecordAdmin(ImportExportModelAdmin):
+class PlayerBattingRecordAdmin(BaseResourceAdmin):
     resource_class = PlayerBattingRecordResource
 
 # player_fielding_records
@@ -102,7 +106,7 @@ class PlayerFieldingRecordResource(resources.ModelResource):
     class Meta:
         model = PlayerFieldingRecord
 
-class PlayerFieldingRecordAdmin(ImportExportModelAdmin):
+class PlayerFieldingRecordAdmin(BaseResourceAdmin):
     resource_class = PlayerFieldingRecordResource
 
 # career_category
@@ -110,7 +114,7 @@ class CareerCategoryResource(resources.ModelResource):
     class Meta:
         model = CareerCategory
 
-class CareerCategoryAdmin(ImportExportModelAdmin):
+class CareerCategoryAdmin(BaseResourceAdmin):
     resource_class = CareerCategoryResource
 
 # career
@@ -118,15 +122,15 @@ class CareerResource(resources.ModelResource):
     class Meta:
         model = Career
 
-class CareerAdmin(ImportExportModelAdmin):
+class CareerAdmin(BaseResourceAdmin):
     resource_class = CareerResource
 
-# career
+# career_version
 class CareerVersionResource(resources.ModelResource):
     class Meta:
         model = CareerVersion
 
-class CareerVersionAdmin(ImportExportModelAdmin):
+class CareerVersionAdmin(BaseResourceAdmin):
     resource_class = CareerVersionResource
 
 # player_career
@@ -134,7 +138,7 @@ class PlayerCareerResource(resources.ModelResource):
     class Meta:
         model = PlayerCareer
 
-class PlayerCareerAdmin(ImportExportModelAdmin):
+class PlayerCareerAdmin(BaseResourceAdmin):
     resource_class = PlayerCareerResource
 
 # title
@@ -142,7 +146,7 @@ class TitleResource(resources.ModelResource):
     class Meta:
         model = Title
 
-class TitleAdmin(ImportExportModelAdmin):
+class TitleAdmin(BaseResourceAdmin):
     resource_class = TitleResource
 
 # player_title
@@ -150,7 +154,8 @@ class PlayerTitleResource(resources.ModelResource):
     class Meta:
         model = PlayerTitle
 
-class PlayerTitleAdmin(ImportExportModelAdmin):
+class PlayerTitleAdmin(BaseResourceAdmin):
+    list_display = ('player', 'title')
     resource_class = PlayerTitleResource
 
 # draft_category
@@ -158,7 +163,7 @@ class DraftCategoryResource(resources.ModelResource):
     class Meta:
         model = DraftCategory
 
-class DraftCategoryAdmin(ImportExportModelAdmin):
+class DraftCategoryAdmin(BaseResourceAdmin):
     resource_class = DraftCategoryResource
 
 # draft
@@ -166,7 +171,8 @@ class DraftResource(resources.ModelResource):
     class Meta:
         model = Draft
 
-class DraftAdmin(ImportExportModelAdmin):
+class DraftAdmin(BaseResourceAdmin):
+    list_display = ('year', 'draft_category')
     resource_class = DraftResource
 
 # player_draft
@@ -174,7 +180,7 @@ class PlayerDraftResource(resources.ModelResource):
     class Meta:
         model = PlayerDraft
 
-class PlayerDraftAdmin(ImportExportModelAdmin):
+class PlayerDraftAdmin(BaseResourceAdmin):
     resource_class = PlayerDraftResource
 
 admin.site.register(Place, PlaceAdmin)

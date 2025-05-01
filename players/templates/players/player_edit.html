@@ -9,75 +9,78 @@
         <table>
             <tr>
                 <td>{{ form.name.label_tag }}</td>
-                <td>{{ form.name }}</td>
+                <td>{{ form.name }}{% if form.name.errors %}<ul>{% for error in form.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.furigana.label_tag }}</td>
-                <td>{{ form.furigana }}</td>
+                <td>{{ form.furigana }}{% if form.furigana.errors %}<ul>{% for error in form.furigana.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.nickname.label_tag }}</td>
-                <td>{{ form.nickname }}</td>
+                <td>{{ form.nickname }}{% if form.nickname.errors %}<ul>{% for error in form.nickname.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.birthday.label_tag }}</td>
-                <td>{{ form.birthday }}</td>
+                <td>{{ form.birthday }}{% if form.birthday.errors %}<ul>{% for error in form.birthday.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.place.label_tag }}</td>
-                <td>{{ form.place }}</td>
+                <td>{{ form.place }}{% if form.place.errors %}<ul>{% for error in form.place.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.height.label_tag }}</td>
-                <td>{{ form.height }}cm</td>
+                <td>{{ form.height }}cm{% if form.height.errors %}<ul>{% for error in form.height.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.weight.label_tag }}</td>
-                <td>{{ form.weight }}kg</td>
+                <td>{{ form.weight }}kg{% if form.weight.errors %}<ul>{% for error in form.weight.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.is_married.label_tag }}</td>
-                <td>{{ form.is_married }}</td>
+                <td>{{ form.is_married }}{% if form.is_married.errors %}<ul>{% for error in form.is_married.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.partner.label_tag }}</td>
-                <td>{{ form.partner }}</td>
+                <td>{{ form.partner }}{% if form.partner.errors %}<ul>{% for error in form.partner.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.hobby.label_tag }}</td>
-                <td>{{ form.hobby }}</td>
+                <td>{{ form.hobby }}{% if form.hobby.errors %}<ul>{% for error in form.hobby.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.specialty.label_tag }}</td>
-                <td>{{ form.specialty }}</td>
+                <td>{{ form.specialty }}{% if form.specialty.errors %}<ul>{% for error in form.specialty.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.throwing_hand.label_tag }}</td>
-                <td>{{ form.throwing_hand }}{{ form.batting_hand }}</td>
+                <td>
+                    {{ form.throwing_hand }}{% if form.throwing_hand.errors %}<ul>{% for error in form.throwing_hand.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    {{ form.batting_hand }}{% if form.batting_hand.errors %}<ul>{% for error in form.batting_hand.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                </td>
             </tr>
             <tr>
                 <td>{{ form.main_position_category.label_tag }}</td>
-                <td>{{ form.main_position_category }}</td>
+                <td>{{ form.main_position_category }}{% if form.main_position_category.errors %}<ul>{% for error in form.main_position_category.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.favorite_team.label_tag }}</td>
-                <td>{{ form.favorite_team }}</td>
+                <td>{{ form.favorite_team }}{% if form.favorite_team.errors %}<ul>{% for error in form.favorite_team.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.wikipedia_parameter.label_tag }}</td>
-                <td>{{ form.wikipedia_parameter }}</td>
+                <td>{{ form.wikipedia_parameter }}{% if form.wikipedia_parameter.errors %}<ul>{% for error in form.wikipedia_parameter.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.usukoi_parameter.label_tag }}</td>
-                <td>{{ form.usukoi_parameter }}</td>
+                <td>{{ form.usukoi_parameter }}{% if form.usukoi_parameter.errors %}<ul>{% for error in form.usukoi_parameter.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.youtube_parameter.label_tag }}</td>
-                <td>{{ form.youtube_parameter }}</td>
+                <td>{{ form.youtube_parameter }}{% if form.youtube_parameter.errors %}<ul>{% for error in form.youtube_parameter.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
                 <td>{{ form.remarks.label_tag }}</td>
-                <td>{{ form.remarks }}</td>
+                <td>{{ form.remarks }}{% if form.remarks.errors %}<ul>{% for error in form.remarks.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
         </table>
         {{ formset.management_form }}
@@ -85,10 +88,9 @@
             {% for record_form in formset %}
                 <tr>
                     <td>{{ record_form.id }}</td>
-                    <td>{{ record_form.year }}年</td>
-                    <td>{{ record_form.salary }}</td>
-                    <td>{{ record_form.currency }}</td>
-                    <td>{% if record_form.DELETE %}削除: {{ record_form.DELETE }}{% endif %}</td>
+                    <td>{{ record_form.year }}年{% if record_form.year.errors %}<ul>{% for error in record_form.year.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                    <td>{{ record_form.salary }}{% if record_form.errors %}<ul>{% for error in record_form.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                    <td>{{ record_form.currency }}{% if record_form.currency.errors %}<ul>{% for error in record_form.currency.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -111,28 +113,11 @@
                 }
             }
 
-            togglePartner();  // 初期状態でも実行
-            marriedSelect.addEventListener("change", togglePartner);
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const birthdayInput = document.getElementById("id_birthday");
-            const yearInput = document.getElementById("id_birth_year");
-            const monthInput = document.getElementById("id_birth_month");
-
-            function updateYearAndMonth() {
-                const dateValue = birthdayInput.value;
-                if (dateValue) {
-                    const date = new Date(dateValue);
-                    if (!isNaN(date)) {
-                    yearInput.value = date.getFullYear();
-                    monthInput.value = date.getMonth() + 1;  // 月は0始まりなので+1
-                    }
-                }
-            }
+            // 初期状態でも実行
+            togglePartner();
 
             // 日付が変更されたときに発火
-            birthdayInput.addEventListener("change", updateYearAndMonth);
+            marriedSelect.addEventListener("change", togglePartner);
         });
     </script>
 {% endblock %}

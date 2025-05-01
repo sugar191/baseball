@@ -150,3 +150,7 @@ def get_dynamic_field(record, field_name):
 @register.filter
 def get_position_short_name(position_name):
     return position_name[0]
+
+@register.filter
+def dict_get(d, key):
+    return d.get(key)

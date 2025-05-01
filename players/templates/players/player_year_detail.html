@@ -6,89 +6,99 @@
 {% block content %}
     <div class="page_title">{{ player.name }} ({{ year }})</div>
     {% if common_record %}
-        <h3>共通情報</h3>
+        <div class = "custom-heading">共通情報</div>
         <table>
             <tbody>
-                <tr><td>年齢</td><td align="right">{{ common_record.age }}</td></tr>
-                <tr><td>所属</td><td align="right">{{ common_record.team.name }}</td></tr>
-                <tr><td>背番号</td><td align="right">{{ common_record.number }}</td></tr>
-                <tr><td>年俸</td><td align="right">{{ common_record.salary|format_salary }}{{ common_record.currency }}</td></tr>
+                {% if common_record.age != 0 %}
+                    <tr><td>年齢</td><td class="numeric">{{ common_record.age }}</td></tr>
+                {% endif %}
+                {% if common_record.team.name %}
+                    <tr><td>所属</td><td class="numeric">{{ common_record.team.name }}</td></tr>
+                {% endif %}
+                {% if common_record.number %}
+                    <tr><td>背番号</td><td class="numeric">{{ common_record.number }}</td></tr>
+                {% endif %}
+                {% if common_record.salary %}
+                    <tr><td>年俸</td><td class="numeric">{{ common_record.salary|format_salary }}{{ common_record.currency }}</td></tr>
+                {% endif %}
             </tbody>
         </table>
     {% endif %}
     {% if pitching_record %}
-        <h3>投手成績</h3>
+        <div class = "custom-heading">投手成績</div>
         <table>
             <tbody>
-                <tr><td>試合数</td><td align="right">{{ pitching_record.games }}</td></tr>
-                <tr><td>先発</td><td align="right">{{ pitching_record.games_started }}</td></tr>
-                <tr><td>完投</td><td align="right">{{ pitching_record.complete_games }}</td></tr>
-                <tr><td>完封</td><td align="right">{{ pitching_record.shutouts }}</td></tr>
-                <tr><td>無四球</td><td align="right">{{ pitching_record.no_base_on_balls_games }}</td></tr>
-                <tr><td>勝利</td><td align="right">{{ pitching_record.wins }}</td></tr>
-                <tr><td>敗戦</td><td align="right">{{ pitching_record.loses }}</td></tr>
-                <tr><td>セーブ</td><td align="right">{{ pitching_record.saves }}</td></tr>
-                <tr><td>ホールド</td><td align="right">{{ pitching_record.holds }}</td></tr>
-                <tr><td>投球回</td><td align="right">{{ pitching_record.innings_pitched }}</td></tr>
-                <tr><td>打者</td><td align="right">{{ pitching_record.plate_appearances }}</td></tr>
-                <tr><td>打数</td><td align="right">{{ pitching_record.at_bats }}</td></tr>
-                <tr><td>被安打</td><td align="right">{{ pitching_record.hits }}</td></tr>
-                <tr><td>被本塁打</td><td align="right">{{ pitching_record.home_runs }}</td></tr>
-                <tr><td>与四球</td><td align="right">{{ pitching_record.walks }}</td></tr>
-                <tr><td>与死球</td><td align="right">{{ pitching_record.hit_batsmen }}</td></tr>
-                <tr><td>奪三振</td><td align="right">{{ pitching_record.strike_outs }}</td></tr>
-                <tr><td>暴投</td><td align="right">{{ pitching_record.wild_pitches }}</td></tr>
-                <tr><td>ボーク</td><td align="right">{{ pitching_record.balk }}</td></tr>
-                <tr><td>失点</td><td align="right">{{ pitching_record.runs }}</td></tr>
-                <tr><td>自責点</td><td align="right">{{ pitching_record.earned_runs }}</td></tr>
-                <tr><td>防御率</td><td align="right">{{ pitching_record.earned_run_average }}</td></tr>
-                <tr><td>WHIP</td><td align="right">{{ pitching_record.whip }}</td></tr>
+                <tr><td>試合数</td><td class="numeric">{{ pitching_record.games }}</td></tr>
+                <tr><td>先発</td><td class="numeric">{{ pitching_record.games_started }}</td></tr>
+                <tr><td>完投</td><td class="numeric">{{ pitching_record.complete_games }}</td></tr>
+                <tr><td>完封</td><td class="numeric">{{ pitching_record.shutouts }}</td></tr>
+                <tr><td>無四球</td><td class="numeric">{{ pitching_record.no_base_on_balls_games }}</td></tr>
+                <tr><td>勝利</td><td class="numeric">{{ pitching_record.wins }}</td></tr>
+                <tr><td>敗戦</td><td class="numeric">{{ pitching_record.loses }}</td></tr>
+                <tr><td>セーブ</td><td class="numeric">{{ pitching_record.saves }}</td></tr>
+                <tr><td>ホールド</td><td class="numeric">{{ pitching_record.holds }}</td></tr>
+                <tr><td>投球回</td><td class="numeric">{{ pitching_record.innings_pitched }}</td></tr>
+                <tr><td>打者</td><td class="numeric">{{ pitching_record.plate_appearances }}</td></tr>
+                <tr><td>打数</td><td class="numeric">{{ pitching_record.at_bats }}</td></tr>
+                <tr><td>被安打</td><td class="numeric">{{ pitching_record.hits }}</td></tr>
+                <tr><td>被本塁打</td><td class="numeric">{{ pitching_record.home_runs }}</td></tr>
+                <tr><td>与四球</td><td class="numeric">{{ pitching_record.walks }}</td></tr>
+                <tr><td>与死球</td><td class="numeric">{{ pitching_record.hit_batsmen }}</td></tr>
+                <tr><td>奪三振</td><td class="numeric">{{ pitching_record.strike_outs }}</td></tr>
+                <tr><td>暴投</td><td class="numeric">{{ pitching_record.wild_pitches }}</td></tr>
+                <tr><td>ボーク</td><td class="numeric">{{ pitching_record.balk }}</td></tr>
+                <tr><td>失点</td><td class="numeric">{{ pitching_record.runs }}</td></tr>
+                <tr><td>自責点</td><td class="numeric">{{ pitching_record.earned_runs }}</td></tr>
+                <tr><td>防御率</td><td class="numeric">{{ pitching_record.earned_run_average }}</td></tr>
+                <tr><td>WHIP</td><td class="numeric">{{ pitching_record.whip }}</td></tr>
             </tbody>
         </table>
     {% endif %}
     {% if batting_record %}
-        <h3>打者成績</h3>
+        <div class = "custom-heading">打者成績</div>
         <table>
             <tbody>
-                <tr><td>試合数</td><td align="right">{{ batting_record.games }}</td></tr>
-                <tr><td>打席</td><td align="right">{{ batting_record.plate_appearances }}</td></tr>
-                <tr><td>打数</td><td align="right">{{ batting_record.at_bats }}</td></tr>
-                <tr><td>得点</td><td align="right">{{ batting_record.runs }}</td></tr>
-                <tr><td>安打</td><td align="right">{{ batting_record.hits }}</td></tr>
-                <tr><td>二塁打</td><td align="right">{{ batting_record.doubles }}</td></tr>
-                <tr><td>三塁打</td><td align="right">{{ batting_record.triples }}</td></tr>
-                <tr><td>本塁打</td><td align="right">{{ batting_record.home_runs }}</td></tr>
-                <tr><td>塁打</td><td align="right">{{ batting_record.total_bases }}</td></tr>
-                <tr><td>打点</td><td align="right">{{ batting_record.runs_batted_in }}</td></tr>
-                <tr><td>盗塁</td><td align="right">{{ batting_record.stolen_bases }}</td></tr>
-                <tr><td>犠打</td><td align="right">{{ batting_record.sacrifice_bunts }}</td></tr>
-                <tr><td>犠飛</td><td align="right">{{ batting_record.sacrifice_flys }}</td></tr>
-                <tr><td>四球</td><td align="right">{{ batting_record.bases_on_balls }}</td></tr>
-                <tr><td>敬遠</td><td align="right">{{ batting_record.intentional_walks }}</td></tr>
-                <tr><td>死球</td><td align="right">{{ batting_record.hit_by_pitch }}</td></tr>
-                <tr><td>三振</td><td align="right">{{ batting_record.strike_outs }}</td></tr>
-                <tr><td>併殺</td><td align="right">{{ batting_record.grounded_into_double_plays }}</td></tr>
-                <tr><td>打率</td><td align="right">{{ batting_record.batting_average|format_batting_average }}</td></tr>
-                <tr><td>出塁率</td><td align="right">{{ batting_record.on_base_percentage|format_batting_average }}</td></tr>
-                <tr><td>長打率</td><td align="right">{{ batting_record.slugging_percentage|format_batting_average }}</td></tr>
-                <tr><td>OPS</td><td align="right">{{ batting_record.ops|format_batting_average }}</td></tr>
+                <tr><td>試合数</td><td class="numeric">{{ batting_record.games }}</td></tr>
+                <tr><td>打席</td><td class="numeric">{{ batting_record.plate_appearances }}</td></tr>
+                <tr><td>打数</td><td class="numeric">{{ batting_record.at_bats }}</td></tr>
+                <tr><td>得点</td><td class="numeric">{{ batting_record.runs }}</td></tr>
+                <tr><td>安打</td><td class="numeric">{{ batting_record.hits }}</td></tr>
+                <tr><td>二塁打</td><td class="numeric">{{ batting_record.doubles }}</td></tr>
+                <tr><td>三塁打</td><td class="numeric">{{ batting_record.triples }}</td></tr>
+                <tr><td>本塁打</td><td class="numeric">{{ batting_record.home_runs }}</td></tr>
+                <tr><td>塁打</td><td class="numeric">{{ batting_record.total_bases }}</td></tr>
+                <tr><td>打点</td><td class="numeric">{{ batting_record.runs_batted_in }}</td></tr>
+                <tr><td>盗塁</td><td class="numeric">{{ batting_record.stolen_bases }}</td></tr>
+                <tr><td>犠打</td><td class="numeric">{{ batting_record.sacrifice_bunts }}</td></tr>
+                <tr><td>犠飛</td><td class="numeric">{{ batting_record.sacrifice_flys }}</td></tr>
+                <tr><td>四球</td><td class="numeric">{{ batting_record.bases_on_balls }}</td></tr>
+                <tr><td>敬遠</td><td class="numeric">{{ batting_record.intentional_walks }}</td></tr>
+                <tr><td>死球</td><td class="numeric">{{ batting_record.hit_by_pitch }}</td></tr>
+                <tr><td>三振</td><td class="numeric">{{ batting_record.strike_outs }}</td></tr>
+                <tr><td>併殺</td><td class="numeric">{{ batting_record.grounded_into_double_plays }}</td></tr>
+                <tr><td>打率</td><td class="numeric">{{ batting_record.batting_average|format_batting_average }}</td></tr>
+                <tr><td>出塁率</td><td class="numeric">{{ batting_record.on_base_percentage|format_batting_average }}</td></tr>
+                <tr><td>長打率</td><td class="numeric">{{ batting_record.slugging_percentage|format_batting_average }}</td></tr>
+                <tr><td>OPS</td><td class="numeric">{{ batting_record.ops|format_batting_average }}</td></tr>
             </tbody>
         </table>
     {% endif %}
     {% if fielding_record %}
-        <h3>守備成績</h3>
+        <div class = "custom-heading">守備成績</div>
         <table>
             <tbody>
                 {% for fielding in fielding_record %}
-                    <tr><td>試合数({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.games }}</td></tr>
-                    <tr><td>刺殺({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.put_outs }}</td></tr>
-                    <tr><td>補殺({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.assists }}</td></tr>
-                    <tr><td>失策({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.errors }}</td></tr>
-                    <tr><td>併殺({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.double_plays }}</td></tr>
-                    <tr><td>守備率({{ fielding.position.name|get_position_short_name }})</td><td align="right">{{ fielding.fielding_percentage|format_batting_average }}</td></tr>
-                    {% if fielding.position.name == '捕手' %}
-                        <tr><td>捕逸</td><td align="right">{{ fielding.passed_balls }}</td></tr>
-                    {% endif %}
+                    {% with label_list=position_labels|dict_get:fielding.position.id %}
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>試合数</td><td class="numeric">{{ fielding.games }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>刺殺</td><td class="numeric">{{ fielding.put_outs }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>補殺</td><td class="numeric">{{ fielding.assists }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>失策</td><td class="numeric">{{ fielding.errors }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>併殺</td><td class="numeric">{{ fielding.double_plays }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>守備率</td><td class="numeric">{{ fielding.fielding_percentage|format_batting_average }}</td></tr>
+                        {% if fielding.position.name == '捕手' %}
+                            <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>捕逸</td><td class="numeric">{{ fielding.passed_balls }}</td></tr>
+                        {% endif %}
+                    {% endwith %}
                 {% endfor %}
             </tbody>
         </table>

@@ -2,18 +2,22 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-# settings/base.py から見て3つ上がルート
+# 基本となるフォルダ。settings/base.py から見て3つ上がルート
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # ← このように3階層上を指す
 
 # .envファイルのパスをBASE_DIRを基準に設定
-load_dotenv(dotenv_path=BASE_DIR / '.env')
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+try:
+    load_dotenv(dotenv_path=BASE_DIR / '.env')
+except Exception as e:
+    print(f".env の読み込みに失敗しました: {e}")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'dummy_dev_key')
+
+if not os.getenv('SECRET_KEY'):
+    raise RuntimeError("環境変数 'SECRET_KEY' が設定されていません。")
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
 
 # Application definition
 
@@ -102,7 +106,7 @@ USE_I18N = True
 USE_TZ = True
 
 # 静的ファイルのURL設定
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # 静的ファイルの収集先ディレクトリを設定
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -123,3 +127,32 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/players/'  # ログイン後のリダイレクト先URL
 LOGOUT_REDIRECT_URL = '/players/'  # ログアウト後のリダイレクト先
+
+# ログ設定
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+    
+}

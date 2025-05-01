@@ -36,7 +36,7 @@ class ExchangeRate(models.Model):
         unique_together = ('year', 'currency')  # 同じ年と通貨の組み合わせを一意に
 
     def __str__(self):
-        return self.year
+        return f"{self.year} - {self.currency.code if self.currency else '不明'}"
 
 # 経歴カテゴリ
 class CareerCategory(models.Model):

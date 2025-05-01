@@ -66,7 +66,7 @@ body {
 
 .page_title {
     display: block;
-    font-size: 2em;
+    font-size: 1.5em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     font-weight: bold;
@@ -89,10 +89,6 @@ body {
     padding: 10px;
     box-sizing: border-box;
     transition: transform 0.3s;
-}
-
-.player-card:hover {
-    transform: translateY(-5px); /* ホバー時に少し上に動くエフェクト */
 }
 
 /* チームロゴと名前を1行で表示 */
@@ -255,4 +251,27 @@ td input[type="number"] {
 }
 .position-outfielder {
     background-color: #ccff99; /* 黄緑 */
+}
+
+.center {
+    text-align: center;
+}
+
+.numeric {
+    text-align: right;
+}
+
+.custom-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 12px 0 6px;  /* 狭い行間 */
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 2px;
+}
+
+.year-input {
+    width: 50px;
+}
+.salary-input {
+    width: 100px;
 }
