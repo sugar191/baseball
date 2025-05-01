@@ -4,7 +4,7 @@ log_dir = BASE_DIR / 'logs'
 log_dir.mkdir(exist_ok=True)  # dev.py / staging.py の先頭に追加
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['sugar191.pythonanywhere.com', 'localhost', '127.0.0.1',]
 
