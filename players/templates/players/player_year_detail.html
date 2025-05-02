@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load format_filters %}
 
-{% block title %}{{ common_record.registered_name }}{{ year }}{% endblock %}
+{% block title %}{{ player.name }} ({{ year|format_year }}){% endblock %}
 
 {% block content %}
-    <div class="page_title">{{ player.name }} ({{ year }})</div>
+    <div class="page_title">{{ player.name }} ({{ year|format_year }})</div>
     {% if common_record %}
         <div class = "custom-heading">共通情報</div>
         <table>

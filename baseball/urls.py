@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='registration/login.html'), name='login'),  # ログインページ
     path('logout/', LogoutView.as_view(), name='logout'),   # ログアウトページ
     path('', include('players.urls')),  # playersアプリのURL設定をインクルード
+    path('admin-tool/', include('admin_panel.urls')),
     # path('api/', include('api.urls')),  # 未使用でもコメントで残しておくと便利
 ]
 

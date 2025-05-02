@@ -4,9 +4,8 @@ from datetime import date
 from django.core.paginator import Paginator
 from django.db.models import Q, Value
 from django.db.models.functions import Replace
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerFieldingRecord, PlayerCareer, PlayerDraft, PlayerTitle, PlayerLatestSummary, Team, Place, PositionCategory, Career, HandBatting, HandThrowing
-from .forms import PlayerForm, PlayerCommonRecordFormSet
 from .utils.constants import POSITION_LABELS
 
 # 選手一覧を表示するビュー
@@ -125,7 +124,7 @@ def player_list(request):
         'position_order',
         'common_record_number'
     )
-    
+
     paginator = Paginator(player_data, 20)  # 20件ずつ
     page_number = request.GET.get('page')  # URLの?page=2などを取得
     page_obj = paginator.get_page(page_number)
@@ -158,6 +157,7 @@ def player_list(request):
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     common_records = PlayerCommonRecord.objects.filter(player=player).order_by('year')
+    mlb_exists = PlayerBattingRecord.objects.filter(player=player, year=9001).exists()
     batting_records = PlayerBattingRecord.objects.filter(player=player).order_by('year')
     pitching_records = PlayerPitchingRecord.objects.filter(player=player).order_by('year')
     fielding_records = PlayerFieldingRecord.objects.filter(player=player).order_by('year', 'position_id')
@@ -177,18 +177,15 @@ def player_detail(request, player_id):
     fielding_summary = {}
     for year, positions in yearly_fielding.items():
         total_games = sum(p['games'] for p in positions)
-        if total_games == 0:
-            summary_html = '出場無し'
-        else:
-            summary_parts = []
-            for p in positions:
-                pos_id = p['position_id']
-                games = p['games']
-                if pos_id in POSITION_LABELS:
-                    label, css_class = POSITION_LABELS[pos_id]
-                    html = f'<span class="position-badge {css_class}">{label}</span> {games}'
-                    summary_parts.append(html)
-            summary_html = ' '.join(summary_parts)
+        summary_parts = []
+        for p in positions:
+            pos_id = p['position_id']
+            games = p['games']
+            if pos_id in POSITION_LABELS and games > 0:
+                label, css_class = POSITION_LABELS[pos_id]
+                html = f'<span class="position-badge {css_class}">{label}</span>{games}'
+                summary_parts.append(html)
+        summary_html = ' '.join(summary_parts)
         fielding_summary[year] = {
             'total_games': total_games,
             'html': summary_html
@@ -198,14 +195,16 @@ def player_detail(request, player_id):
     fielding_summary_ordered = OrderedDict(sorted(fielding_summary.items()))  # OrderedDictに変換
 
     return render(request, 'players/player_detail.html', {
-        'player': player, 
-        'commons': common_records, 
-        'battings': batting_records, 
+        'player': player,
+        'commons': common_records,
+        'mlb_exists': mlb_exists,
+        'battings': batting_records,
         'pitchings': pitching_records,
         'fieldings': fielding_summary_ordered,  # そのままリストで渡す
         'careers': careers,
         'drafts': drafts,
         'titles': titles,
+        'position_labels': POSITION_LABELS,  # 追加
     })
 
 def player_year_detail(request, player_id, year):
@@ -224,23 +223,4 @@ def player_year_detail(request, player_id, year):
         'pitching_record': pitching_record,
         'fielding_record': fielding_record,
         'position_labels': POSITION_LABELS,  # 追加
-    })
-
-def player_edit(request, player_id):
-    player = get_object_or_404(Player, pk=player_id)
-    if request.method == 'POST':
-        form = PlayerForm(request.POST, instance=player)
-        common_record_formset = PlayerCommonRecordFormSet(request.POST, instance=player)
-        if form.is_valid() and common_record_formset.is_valid():
-            form.save()
-            common_record_formset.save()
-            return redirect('player_detail', player_id=player.pk)  # 詳細ページへリダイレクト
-    else:
-        form = PlayerForm(instance=player)
-        common_record_formset = PlayerCommonRecordFormSet(instance=player)
-
-    return render(request, 'players/player_edit.html', {
-        'form': form,
-        'formset': common_record_formset,
-        'player': player
     })

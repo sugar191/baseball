@@ -49,13 +49,15 @@ def join_mark(draft):
         return "入団拒否"
 
 @register.filter
-def format_year(value):
+def format_year(value, mlb_exists=True):
     try:
         value = int(value)
         if value == 9000:
-            value = "NPB"
+            value = "NPB通算" if mlb_exists else "通算"
         elif value == 9001:
-            value = "MLB"
+            value = "MLB通算" if mlb_exists else "通算"
+        else:
+            value = f"{value}年"
     except (TypeError, ValueError, InvalidOperation):
         return '0'
 

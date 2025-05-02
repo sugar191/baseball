@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'import_export',
     'players',  # 自分のアプリ追加
+    'admin_panel',
 ]
 
 MIDDLEWARE = [

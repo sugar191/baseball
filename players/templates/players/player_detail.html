@@ -58,13 +58,13 @@
             </tbody>
         </table>
     {% endif %}
-    {% if player.drafts %}
+    {% if drafts %}
         <div class = "custom-heading">ドラフト</div>
         <table>
             <tbody>
                 {% for draft in drafts %}
                     <tr>
-                        <td class="center">{{ draft.draft.year }}年</td>
+                        <td>{{ draft.draft.year }}年</td>
                         <td class="center"><img src="{{ draft.team.logo.url }}" alt="Team Logo" height="25"></td>
                         <td>{{ draft.draft.draft_category }}</td>
                         <td class="numeric">{{ draft.rank }}位</td>
@@ -80,12 +80,19 @@
         <tbody>
             {% for title in titles %}
                 <tr>
-                    <td class="center">{{ title.year }}年</td>
-                    <td>{{ title.title }}{% if title.position %}({{ title.position }}){% endif %}</td>
+                    <td>{{ title.year }}年</td>
+                    <td class="center">
+                        {% if title.position.id %}
+                            {% with label_list=position_labels|dict_get:title.position.id %}
+                                <span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>
+                            {% endwith %}
+                        {% endif %}
+                    </td>
+                    <td>{{ title.title }}</td>
                 </tr>
-                {% empty %}
+            {% empty %}
                 <tr>
-                    <td colspan="2">無し</td>
+                    <td colspan="3">無し</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -104,7 +111,7 @@
             <tbody>
                 {% for common in commons %}
                     <tr>
-                        <td class="center"><a href="{% url 'player_year_detail' player.id common.year %}">{{ common.year }}</a></td>
+                        <td><a href="{% url 'player_year_detail' player.id common.year %}">{{ common.year|format_year:mlb_exists }}</a></td>
                         <td class="center">
                             <div class="team-logo">
                                 {% if common.team.logo %}
@@ -115,7 +122,13 @@
                             </div>
                         </td>
                         <td class="center">{{ common.number }}</td>
-                        <td class="numeric">{{ common.salary|format_salary }}{{ common.currency }}</td>
+                        <td class="numeric">
+                            {% if common.salary %}
+                                {{ common.salary|format_salary }}{{ common.currency }}
+                            {% else %}
+                                未登録
+                            {% endif %}
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>
@@ -128,16 +141,10 @@
     {% if pitchings %}
         <div class = "custom-heading">投手成績</div>
         <table>
-            <thead>
-                <tr>
-                    <th>年</th>
-                    <th colspan=6>成績</th>
-                </tr>
-            </thead>
             <tbody>
                 {% for pitching in pitchings %}
                     <tr>
-                        <td class="center"><a href="{% url 'player_year_detail' player.id pitching.year %}">{{ pitching.year|format_year }}</a></td>
+                        <td><a href="{% url 'player_year_detail' player.id pitching.year %}">{{ pitching.year|format_year:mlb_exists }}</a></td>
                         {% if pitching.games != 0 %}
                             <td class="numeric">{{ pitching.earned_run_average|format_pitching_average }}</td>
                             <td class="numeric">{{ pitching.wins|format_integer }}勝</td>
@@ -146,12 +153,12 @@
                             <td class="numeric">{{ pitching.holds|format_integer }}H</td>
                             <td class="numeric">{{ pitching.strike_outs|format_integer }}奪</td>
                         {% else %}
-                            <td colspan=6>記録無し</td>
+                            <td colspan=6 class="center">記録無し</td>
                         {% endif %}
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="6">データがありません</td>
+                        <td colspan="6" class="center">データがありません</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -160,16 +167,10 @@
     {% if battings %}
         <div class = "custom-heading">打者成績</div>
         <table>
-            <thead>
-                <tr>
-                    <th>年</th>
-                    <th colspan=5>成績</th>
-                </tr>
-            </thead>
             <tbody>
                 {% for batting in battings %}
                     <tr>
-                        <td class="center"><a href="{% url 'player_year_detail' player.id batting.year %}">{{ batting.year|format_year }}</a></td>
+                        <td><a href="{% url 'player_year_detail' player.id batting.year %}">{{ batting.year|format_year:mlb_exists }}</a></td>
                         {% if batting.plate_appearances != 0 %}
                             <td class="numeric">{{ batting.batting_average|format_batting_average }}</td>
                             <td class="numeric">{{ batting.home_runs|format_integer }}本</td>
@@ -177,12 +178,12 @@
                             <td class="numeric">{{ batting.stolen_bases|format_integer }}盗</td>
                             <td class="numeric">{{ batting.hits|format_integer }}安打</td>
                         {% else %}
-                            <td colspan=5>記録無し</td>
+                            <td colspan=5 class="center">記録無し</td>
                         {% endif %}
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5">無し</td>
+                        <td colspan="6" class="center">データがありません</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -191,31 +192,19 @@
     {% if fieldings %}
         <div class = "custom-heading">守備成績</div>
         <table>
-            <thead>
-                <tr>
-                    <th>年</th>
-                    <th>成績</th>
-                </tr>
-            </thead>
             <tbody>
                 {% for year, data in fieldings.items %}
                     <tr>
-                        <td class="center">
-                            <a href="{% url 'player_year_detail' player.id year %}">
-                                {{ year|format_year }}
-                            </a>
-                        </td>
-                        <td>
-                            {% if data.total_games != 0 %}
-                                {{ data.html|safe }}
-                            {% else %}
-                                記録無し
-                            {% endif %}
-                        </td>
+                        <td><a href="{% url 'player_year_detail' player.id year %}">{{ year|format_year:mlb_exists }}</a></td>
+                        {% if data.total_games != 0 %}
+                            <td>{{ data.html|safe }}</td>
+                        {% else %}
+                            <td class="center">記録無し</td>
+                        {% endif %}
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="2">無し</td>
+                        <td colspan="6" class="center">データがありません</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -158,6 +158,8 @@ table {
 th, td {
     border-bottom: 1px solid #ccc;
     vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 thead {

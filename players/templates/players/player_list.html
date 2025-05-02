@@ -39,7 +39,7 @@
                     {% elif player.batting_year %}
                         <div><strong>成績({{ player.batting_year }}年):</strong> {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}</div>
                     {% endif %}
-                    {% if player.common_record_year %}
+                    {% if player.common_record_salary %}
                         <div><strong>年俸({{ player.common_record_year }}年):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
                     {% endif %}
                     {% if player.draft_year %}
