@@ -1,6 +1,8 @@
 from django import forms
 from django.forms import inlineformset_factory
-from players.models import Player, PlayerCommonRecord, Team
+from players.models import Player
+from records.models import PlayerCommonRecord
+from teams.models import Team
 
 class PlayerForm(forms.ModelForm):
     MARRIAGE_CHOICES = [

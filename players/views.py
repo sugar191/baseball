@@ -5,8 +5,15 @@ from django.core.paginator import Paginator
 from django.db.models import Q, Value
 from django.db.models.functions import Replace
 from django.shortcuts import render, get_object_or_404
-from .models import Player, PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerFieldingRecord, PlayerCareer, PlayerDraft, PlayerTitle, PlayerLatestSummary, Team, Place, PositionCategory, Career, HandBatting, HandThrowing
-from .utils.constants import POSITION_LABELS
+from .models import Player, PlayerLatestSummary, HandBatting, HandThrowing
+from records.models import PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerFieldingRecord
+from careers.models import Career, PlayerCareer
+from drafts.models import PlayerDraft
+from titles.models import PlayerTitle
+from teams.models import Team
+from commons.models import Place
+from positions.models import PositionCategory
+from positions.utils.constants import POSITION_LABELS
 
 # 選手一覧を表示するビュー
 def player_list(request):

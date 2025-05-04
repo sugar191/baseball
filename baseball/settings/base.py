@@ -31,6 +31,13 @@ INSTALLED_APPS = [
     'django_extensions',
     'import_export',
     'players',  # 自分のアプリ追加
+    'teams',
+    'careers',
+    'commons',
+    'records',
+    'positions',
+    'titles',
+    'drafts',
     'admin_panel',
 ]
 
