@@ -45,7 +45,7 @@ class CareerCategory(models.Model):
     sort_order = models.IntegerField()
 
     class Meta:
-        db_table = 'career_category'  # 使用するテーブル名を指定
+        db_table = 'career_categories'  # 使用するテーブル名を指定
 
     def __str__(self):
         return self.name
@@ -60,7 +60,7 @@ class Career(models.Model):
     wikipedia_parameter2 = models.CharField(max_length=500, null=True, blank=True) #  WikipediaURLパラメータ
 
     class Meta:
-        db_table = 'career'  # 使用するテーブル名を指定
+        db_table = 'careers'  # 使用するテーブル名を指定
 
     def __str__(self):
         return self.name
@@ -72,7 +72,7 @@ class CareerVersion(models.Model):
     version = models.IntegerField(default=0)
 
     class Meta:
-        db_table = 'career_version'  # 使用するテーブル名を指定
+        db_table = 'career_versions'  # 使用するテーブル名を指定
 
     def __str__(self):
         return self.name
@@ -115,7 +115,7 @@ class Position(models.Model):
     sort_order = models.IntegerField(default=0)  # 表示順
 
     class Meta:
-        db_table = 'position'  # 使用するテーブル名を指定
+        db_table = 'positions'  # 使用するテーブル名を指定
 
     def __str__(self):
         return self.name
@@ -362,7 +362,7 @@ class PlayerCareer(models.Model):
     remarks = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
-        db_table = 'player_career'  # 使用するテーブル名を指定
+        db_table = 'player_careers'  # 使用するテーブル名を指定
         indexes = [
             models.Index(fields=['player', 'sort_order']),
         ]
