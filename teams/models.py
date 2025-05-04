@@ -14,7 +14,7 @@ class Organization(models.Model):
 
 # リーグテーブル
 class League(models.Model):
-    name = models.CharField(max_length=10, null=False, blank=False)
+    name = models.CharField(max_length=50, null=False, blank=False)
     sort_order = models.IntegerField(default=0)  # 表示順を決めるフィールド
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)  # リーグとの関連
 
