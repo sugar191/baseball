@@ -2,10 +2,50 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* ヘッダー */
+.site-header {
+    position: fixed;
+    overflow: hidden; /* はみ出し防止 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f5f5f5;
+    height: 40px;
+    line-height: 40px; /* 縦中央寄せ */
+    z-index: 1100; /* メニューより前に */
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between; /* 左右に分ける */
+    align-items: center;            /* 垂直中央揃え */
+}
+
+.header_title {
+    display: block;
+    font-size: 2em;
+    margin-inline-start: 10px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+.header_title a {
+    color: #000;
+}
+
+.header-auth a {
+    color: #333;
+    font-size: 20px;
+    display: inline-block;
+}
+
+.header-auth a:hover {
+    color: #000;
+}
+
 /* 固定メニューバー */
 .navbar {
     position: fixed;
-    top: 0;
+    top: 60px; /* ヘッダーの高さ分 */
     left: 0;
     width: 100%;
     background-color: #333;
@@ -18,7 +58,6 @@ body {
     list-style: none;
     margin: 0;
     padding: 0;
-    text-align: center;
 }
 
 .navbar ul li {
@@ -49,6 +88,14 @@ body {
     text-decoration: underline;
 }
 
+/* フッター */
+.site-footer {
+    background-color: #f0f0f0;
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+}
+
 @media screen and (max-width: 600px) {
     .content {
         padding: 1em;
@@ -56,7 +103,7 @@ body {
 }
 
 .content {
-    margin-top: 60px;  /* メニューバーの高さ分スペースを空ける */
+    margin-top: 120px;  /* メニューバーの高さ分スペースを空ける */
     padding: 10px;
     width: 100%;
     margin-left: auto;
@@ -112,10 +159,25 @@ body {
     font-weight: bold;
 }
 
+.team-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.team-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 /* モバイル画面向けのレスポンシブデザイン */
 @media (max-width: 768px) {
     .player-card {
         width: 100%; /* スマホ画面では1列で表示 */
+    }
+
+    .team-grid {
+        grid-template-columns: repeat(6, 1fr); /* スマホ向け: 6個/行 */
     }
 }
 
@@ -123,6 +185,10 @@ body {
 @media (min-width: 769px) {
     .player-card {
         width: calc(50% - 20px); /* PCでは2列に表示 */
+    }
+
+    .team-grid {
+        grid-template-columns: repeat(12, 1fr); /* PC向け: 12個/行 */
     }
 }
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="site-header">
+        <div class="header_title"><a href="/">プロ野球記録</a></div>
+        <div class="header-auth">
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    {% if user.is_superuser %}
+                        <!-- スーパーユーザー用の管理画面アイコン -->
+                        <a href="{% url 'admin:index' %}" title="管理画面">
+                            <i class="fas fa-cogs"></i> <!-- ギアアイコン -->
+                        </a>
+                    {% endif %}
+                    <button type="submit" title="ログアウト" style="background:none;border:none;padding:8px;cursor:pointer;">
+                        <i class="fas fa-sign-out-alt" style="font-size: 20px; color: #333;"></i>
+                    </button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" title="ログイン">
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
+                <!-- 新規ユーザー登録アイコン -->
+                <a href="{% url 'signup' %}" title="新規登録"><i class="fas fa-user-plus"></i></a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- 固定メニューバー -->
+    <div class="navbar">
+        <ul>
+            <li><a href="/players/">選手</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- フッター -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 My Baseball Site</p>
+        </div>
+    </footer>
+
+    <!-- JSはbodyの最後で読み込むべき！ -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

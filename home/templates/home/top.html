@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}トップページ{% endblock %}
+
+{% block content %}
+    <div class="team-grid">
+        {% for team in teams %}
+            <div class="team-item">
+                {% if team.logo %}
+                    <img src="{{ team.logo.url }}" alt="Team Logo">
+                {% else %}
+                    {{ team.name }}
+                {% endif %}
+            </div>
+        {% empty %}
+            <div>球団が未登録です。</div>
+        {% endfor %}
+    </div>
+    <div class = "custom-heading">今日が誕生日の選手</div>
+    <table>
+        {% for player in players %}
+            <tr>
+                <td>
+                    {% if player.team_logo %}
+                        <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
+                    {% else %}
+                        -
+                    {% endif %}
+                    <span>{{player.player_name}}</span>
+                </td>
+                <td>{{player.age}} 歳</td>
+            </tr>
+        {% empty %}
+            <div>今日が誕生日の選手はいません。</div>
+        {% endfor %}
+    </table>
+{% endblock %}

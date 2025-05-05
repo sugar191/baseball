@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'import_export',
+    'home',  # 自分のアプリ追加
+    'accounts',
     'players',  # 自分のアプリ追加
     'teams',
     'careers',
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'baseball.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'accounts' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,8 +135,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/players/'  # ログイン後のリダイレクト先URL
-LOGOUT_REDIRECT_URL = '/players/'  # ログアウト後のリダイレクト先
+LOGIN_REDIRECT_URL = '/'  # ログイン後のリダイレクト先URL
+LOGOUT_REDIRECT_URL = '/'  # ログアウト後のリダイレクト先
 
 # ログ設定
 LOGGING = {
