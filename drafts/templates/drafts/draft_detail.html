@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load format_filters %}
+
+{% block title %}{{ year }}年ドラフト{% endblock %}
+
+{% block content %}
+    <h2>{{ year }}年ドラフト</h2>
+    {% for league_order, teams in grouped_drafts.items %}
+        {% for team_name, categories in teams.items %}
+            <p>{{ team_name }}</p>
+            {% for draft_category_order, drafts in categories.items %}
+                {% if drafts %}
+                    <div>{{ drafts.0.draft_category_name }}</div>
+                    <table>
+                        {% for player_draft in drafts %}
+                            <tr>
+                                <td>
+                                    {{ player_draft.player_draft_miss_count | get_miss_text }}
+                                    {{ player_draft.player_draft_rank }}位
+                                </td>
+                                <td><a href="{% url 'player_detail' player_draft.player_id %}">{{ player_draft.player_name }}</a></td>
+                                <td>{{ player_draft.player_draft_is_hit | hit_mark }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>→ drafts が空です。</p>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

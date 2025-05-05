@@ -110,6 +110,7 @@ class PlayerLatestSummary(models.Model):
     career_category_id = models.IntegerField()
     career_category_label = models.CharField(max_length=10)
     player_draft_rank = models.IntegerField()
+    player_draft_team = models.IntegerField()
     player_draft_miss_count = models.IntegerField()
     draft_year = models.IntegerField()
     draft_category_name = models.CharField(max_length=50, null=False, blank=False)  # 名前

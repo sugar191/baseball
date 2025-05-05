@@ -30,9 +30,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'import_export',
-    'home',  # 自分のアプリ追加
+    # 自分のアプリ追加
+    'home',
     'accounts',
-    'players',  # 自分のアプリ追加
+    'players',
     'teams',
     'careers',
     'commons',
@@ -58,7 +59,10 @@ ROOT_URLCONF = 'baseball.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'accounts' / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',              # 共通テンプレート用
+            BASE_DIR / 'accounts' / 'templates', # アプリ固有テンプレート用（必要なら）
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,5 +168,4 @@ LOGGING = {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
-    
 }

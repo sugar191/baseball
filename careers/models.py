@@ -57,3 +57,22 @@ class PlayerCareer(models.Model):
 
     def __str__(self):
         return f"{self.player.name} ({self.career_version.name})"
+
+class PlayerCareerView(models.Model):
+    player_career_id = models.IntegerField(primary_key=True)
+    career_id = models.IntegerField()
+    player_id = models.IntegerField()
+    player_name = models.CharField(max_length=50, null=False, blank=False)
+    player_furigana = models.CharField(max_length=50, null=True, blank=True)
+    player_birthday = models.DateField(null=True, blank=True)
+    after_career_id = models.IntegerField()
+    after_career_name = models.CharField(max_length=50)
+    draft_year = models.IntegerField()
+    team_logo = models.ImageField(upload_to='team_logos/', null=True, blank=True)
+    draft_category_name = models.CharField(max_length=50, null=False, blank=False)
+    player_draft_rank = models.IntegerField()
+    player_draft_miss_count = models.IntegerField()
+
+    class Meta:
+        managed = False  # Djangoにマイグレーションさせない
+        db_table = 'player_careers_view'

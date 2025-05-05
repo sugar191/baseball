@@ -44,3 +44,26 @@ class PlayerDraft(models.Model):
 
     def __str__(self):
         return f"{self.player.name} ({self.draft})"
+
+class PlayerDraftView(models.Model):
+    player_draft_id = models.IntegerField(primary_key=True)
+    player_draft_rank = models.IntegerField()
+    player_draft_is_reverse_nomination = models.BooleanField(null=True)
+    player_draft_is_hit = models.BooleanField(null=True)
+    player_draft_miss_count = models.IntegerField()
+    player_draft_is_joined = models.BooleanField(null=True)
+    draft_id = models.IntegerField()
+    draft_year = models.IntegerField()
+    draft_category_name = models.CharField(max_length=50, null=False, blank=False)
+    draft_category_order = models.IntegerField()
+    player_id = models.IntegerField()
+    player_name = models.CharField(max_length=50, null=False, blank=False)
+    position_name = models.CharField(max_length=50, null=False, blank=False)
+    team_name = models.CharField(max_length=50, null=False, blank=False)
+    team_logo = models.ImageField(upload_to='team_logos/', null=True, blank=True)
+    team_order = models.IntegerField()
+    league_order = models.IntegerField()
+
+    class Meta:
+        managed = False  # Djangoにマイグレーションさせない
+        db_table = 'player_drafts_view'

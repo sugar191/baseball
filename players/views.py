@@ -2,8 +2,8 @@ import re
 from collections import defaultdict, OrderedDict
 from datetime import date
 from django.core.paginator import Paginator
-from django.db.models import Q, Value
-from django.db.models.functions import Replace
+from django.db.models import Q, Value, Count, F, ExpressionWrapper, IntegerField, Case, When
+from django.db.models.functions import Replace, ExtractYear, ExtractMonth, ExtractDay
 from django.shortcuts import render, get_object_or_404
 from .models import Player, PlayerLatestSummary, HandBatting, HandThrowing
 from records.models import PlayerCommonRecord, PlayerBattingRecord, PlayerPitchingRecord, PlayerFieldingRecord
@@ -201,6 +201,30 @@ def player_detail(request, player_id):
     # 年順にソート
     fielding_summary_ordered = OrderedDict(sorted(fielding_summary.items()))  # OrderedDictに変換
 
+    # 誕生日を基準に学年の範囲を決定（4月2日始まり〜翌年4月1日）
+    birthday = player.birthday
+
+    if birthday.month >= 4:
+        # 例えば 1990年4月10日 → 1990年4月2日〜1991年4月1日
+        start_date = date(birthday.year, 4, 2)
+        end_date = date(birthday.year + 1, 4, 1)
+    else:
+        # 例えば 1991年1月10日 → 1990年4月2日〜1991年4月1日
+        start_date = date(birthday.year - 1, 4, 2)
+        end_date = date(birthday.year, 4, 1)
+
+    classmates = PlayerLatestSummary.objects.filter(
+        player_birthday__gte=start_date,
+        player_birthday__lte=end_date
+    ).exclude(pk=player.pk)
+
+    draft_joined = get_object_or_404(PlayerDraft, player_id=player_id, is_joined=True)
+
+    same_time_joined = PlayerLatestSummary.objects.filter(
+        draft_year=draft_joined.draft.year,
+        player_draft_team=draft_joined.team_id
+    ).exclude(pk=player.pk)
+
     return render(request, 'players/player_detail.html', {
         'player': player,
         'commons': common_records,
@@ -212,6 +236,8 @@ def player_detail(request, player_id):
         'drafts': drafts,
         'titles': titles,
         'position_labels': POSITION_LABELS,  # 追加
+        'classmates': classmates,
+        'same_time_joined': same_time_joined,
     })
 
 def player_year_detail(request, player_id, year):
@@ -230,4 +256,45 @@ def player_year_detail(request, player_id, year):
         'pitching_record': pitching_record,
         'fielding_record': fielding_record,
         'position_labels': POSITION_LABELS,  # 追加
+    })
+
+def generation_list(request):
+    players = Player.objects.annotate(
+        birth_year=ExtractYear('birthday'),
+        birth_month=ExtractMonth('birthday'),
+        birth_day=ExtractDay('birthday'),
+    ).annotate(
+        school_year=Case(
+            # 4月2日以降生まれなら birth_year を学年として扱う
+            When(
+                birth_month__gt=4,
+                then=F('birth_year')
+            ),
+            When(
+                birth_month=4,
+                birth_day__gte=2,
+                then=F('birth_year')
+            ),
+            # それ以前は前の年を学年として扱う
+            default=ExpressionWrapper(F('birth_year') - 1, output_field=IntegerField())
+        )
+    ).values('school_year').annotate(
+        count=Count('id')
+    ).order_by('school_year')
+
+    return render(request, 'players/generation_list.html', {'generations': players})
+
+def generation_players(request, year):
+    """
+    指定された「学年」に属する選手一覧を表示するビュー
+    例: year=1990 の場合、1990/4/2 ～ 1991/4/1 生まれの選手を抽出
+    """
+    start_date = date(year, 4, 2)
+    end_date = date(year + 1, 4, 1)
+
+    players = Player.objects.filter(birthday__gte=start_date, birthday__lte=end_date).order_by('birthday')
+
+    return render(request, 'players/generation_players.html', {
+        'year': year,
+        'players': players,
     })

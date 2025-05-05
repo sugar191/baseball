@@ -65,8 +65,8 @@
                 {% for draft in drafts %}
                     <tr>
                         <td>{{ draft.draft.year }}年</td>
-                        <td class="center"><img src="{{ draft.team.logo.url }}" alt="Team Logo" height="25"></td>
                         <td>{{ draft.draft.draft_category }}</td>
+                        <td class="center"><img src="{{ draft.team.logo.url }}" alt="Team Logo" height="25"></td>
                         <td class="numeric">{{ draft.rank }}位</td>
                         <td class="center">{{ draft.is_hit|hit_mark }}</td>
                         <td class="center">{{ draft|join_mark }}</td>
@@ -201,6 +201,68 @@
                         {% else %}
                             <td class="center">記録無し</td>
                         {% endif %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="center">データがありません</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if classmates %}
+        <div class = "custom-heading">同学年</div>
+        <table>
+            <tbody>
+                {% for classmate in classmates %}
+                    <tr>
+                        <td>
+                            {% if classmate.team_logo %}
+                                <img src="{{ classmate.team_logo.url }}" alt="Team Logo" height="25">
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if classmate.common_record_registered_name %}
+                                {{classmate.common_record_registered_name}}
+                            {% else %}
+                                {{classmate.player_name}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if classmate.player_draft_rank %}
+                                {{classmate.draft_year}}年 {{classmate.draft_category_name}} {{classmate.player_draft_rank}}位
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="center">データがありません</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if same_time_joined %}
+        <div class = "custom-heading">同期入団</div>
+        <table>
+            <tbody>
+                {% for player in same_time_joined %}
+                    <tr>
+                        <td>
+                            {% if player.team_logo %}
+                                <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{player.common_record_registered_name}}</td>
+                        <td>
+                            {% if player.player_draft_rank %}
+                                {{player.draft_year}}年 {{player.draft_category_name}} {{player.player_draft_rank}}位
+                            {% endif %}
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>

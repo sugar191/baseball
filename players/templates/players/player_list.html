@@ -11,9 +11,9 @@
         <button type="submit">検索</button>
         <button type="button" id="open-search-popup">詳細検索</button>
     </form>
-    <div class="player-list">
+    <div class="card-list">
         {% for player in players %}
-            <div class="player-card" style="background-color: rgba({{ player.team_color|hex_to_rgb }}, 0.2);">
+            <div class="card" style="background-color: rgba({{ player.team_color|hex_to_rgb }}, 0.2);">
                 <div class="player-header">
                     <div class="team-logo">
                         {% if player.team_logo %}

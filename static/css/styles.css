@@ -61,11 +61,13 @@ body {
 }
 
 .navbar ul li {
-    display: inline;
+    display: inline-block;
+    position: relative;
     margin: 0 20px;
 }
 
 .navbar ul li a {
+    display: block;
     color: white;
     text-decoration: none;
     font-size: 18px;
@@ -86,6 +88,30 @@ body {
 
 .navbar button:hover {
     text-decoration: underline;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1001;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #555;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 /* フッター */
@@ -121,14 +147,14 @@ body {
 }
 
 /* リスト */
-.player-list {
+.card-list {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-/* player-card */
-.player-card {
+/* card */
+.card {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -136,6 +162,30 @@ body {
     padding: 10px;
     box-sizing: border-box;
     transition: transform 0.3s;
+    align-items: center; /* 垂直方向にセンタリング */
+}
+
+.card.team-card {
+    display: flex; /* Flexboxを使用 */
+}
+
+/* 画像部分 */
+.card img {
+    max-width: 50px; /* 画像の最大サイズ */
+    margin-right: 15px; /* 画像と情報の間隔 */
+}
+
+/* 情報部分 */
+.card .card-info {
+    display: flex;
+    flex-direction: column; /* 情報を縦に並べる */
+}
+
+/* 球団名などのスタイル */
+.card .card-info .team-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 /* チームロゴと名前を1行で表示 */

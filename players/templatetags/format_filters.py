@@ -156,3 +156,11 @@ def get_position_short_name(position_name):
 @register.filter
 def dict_get(d, key):
     return d.get(key)
+
+@register.filter
+def get_miss_text(value):
+    miss_text = ""
+    for i in range(value):
+        miss_text += "外れ"
+    
+    return miss_text

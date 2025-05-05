@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}球団一覧{% endblock %}
+
+{% block content %}
+    <form method="GET" action="{% url 'team_list' %}">
+        {% csrf_token %}
+        <select name="organization">
+            <option value="">すべて</option>
+            {% for organization in organizations %}
+                <option value="{{ organization.id }}" {% if request.GET.organization == organization.id|stringformat:"s" %}selected{% endif %}>{{ organization.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">検索</button>
+    </form>
+    {% for team in teams %}
+        <div class="card team-card">
+            {% if team.logo %}<img src="{{ team.logo.url }}" alt="Team Logo" height="50">{% endif %}
+            <div class="card-info">
+                <div class="team-name">{{ team.name }}</div>
+                <div class="other-info">{{ team.league }}</div>
+            </div>
+        </div>
+    {% empty %}
+        <div>球団が未登録です。</div>
+    {% endfor %}
+{% endblock %}

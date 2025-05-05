@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ place.name }}出身の選手{% endblock %}
+
+{% block content %}
+    <h2>{{ place.name }}出身の選手</h2>
+    {% for player in players %}
+        <div class="card">
+            <div class="card-info">
+                <div class="team-name"><a href="{% url 'player_detail' player.id %}">{{ player.name }}</a></div>
+            </div>
+        </div>
+    {% empty %}
+        <div>該当する選手がいません。</div>
+    {% endfor %}
+{% endblock %}
