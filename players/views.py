@@ -218,12 +218,14 @@ def player_detail(request, player_id):
         player_birthday__lte=end_date
     ).exclude(pk=player.pk)
 
-    draft_joined = get_object_or_404(PlayerDraft, player_id=player_id, is_joined=True)
+    draft_joined = PlayerDraft.objects.filter(player_id=player_id, is_joined=True).first()
 
-    same_time_joined = PlayerLatestSummary.objects.filter(
-        draft_year=draft_joined.draft.year,
-        player_draft_team=draft_joined.team_id
-    ).exclude(pk=player.pk)
+    same_time_joined = []
+    if draft_joined:
+        same_time_joined = PlayerLatestSummary.objects.filter(
+            draft_year=draft_joined.draft.year,
+            player_draft_team=draft_joined.team_id
+        ).exclude(pk=player.pk)
 
     return render(request, 'players/player_detail.html', {
         'player': player,

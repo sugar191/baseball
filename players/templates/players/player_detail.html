@@ -225,14 +225,9 @@
                         </td>
                         <td>
                             {% if classmate.common_record_registered_name %}
-                                {{classmate.common_record_registered_name}}
+                                {{ classmate.common_record_registered_name }}
                             {% else %}
-                                {{classmate.player_name}}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if classmate.player_draft_rank %}
-                                {{classmate.draft_year}}年 {{classmate.draft_category_name}} {{classmate.player_draft_rank}}位
+                                {{ classmate.player_name }}
                             {% endif %}
                         </td>
                     </tr>

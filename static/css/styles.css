@@ -63,7 +63,7 @@ body {
 .navbar ul li {
     display: inline-block;
     position: relative;
-    margin: 0 20px;
+    margin: 0 10px;
 }
 
 .navbar ul li a {
@@ -274,8 +274,6 @@ table {
 th, td {
     border-bottom: 1px solid #ccc;
     vertical-align: middle;
-    padding-left: 5px;
-    padding-right: 5px;
 }
 
 thead {
