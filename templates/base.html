@@ -12,7 +12,7 @@
 <body>
     <!-- ヘッダー -->
     <header class="site-header">
-        <div class="header_title"><a href="/">プロ野球記録</a></div>
+        <div class="header-title"><a href="/">プロ野球記録</a></div>
         <div class="header-auth">
             {% if user.is_authenticated %}
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
@@ -39,18 +39,14 @@
 
     <!-- 固定メニューバー -->
     <div class="navbar">
-        <ul>
+        <button class="menu-toggle" aria-label="メニュー切り替え">&#9776;</button>
+        <ul class="menu">
             <li><a href="/players/">選手</a></li>
             <li><a href="/teams/">球団</a></li>
             <li><a href="/drafts/">ドラフト</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">その他</a>
-                <div class="dropdown-content">
-                    <a href="/careers/">経歴</a>
-                    <a href="/generations/">年代</a>
-                    <a href="/places/">出身地</a>
-                </div>
-            </li>
+            <li><a href="/careers/">経歴</a></li>
+            <li><a href="/generations/">年代</a></li>
+            <li><a href="/places/">出身地</a></li>
         </ul>
     </div>
 
@@ -66,6 +62,8 @@
     </footer>
 
     <!-- JSはbodyの最後で読み込むべき！ -->
-    {% block extra_js %}{% endblock %}
+    {% block extra_js %}
+        <script src="{% static 'js/common.js' %}"></script>
+    {% endblock %}
 </body>
 </html>

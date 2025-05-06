@@ -1,32 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load format_filters %}
 
 {% block title %}選手一覧{% endblock %}
 
 {% block content %}
-    <div class="page_title">選手一覧</div>
     <form method="GET" action="{% url 'player_list' %}">
         {% csrf_token %}
         <input type="text" name="q" placeholder="全文検索" value="{{ request.GET.q }}">
         <button type="submit">検索</button>
         <button type="button" id="open-search-popup">詳細検索</button>
     </form>
-    <div class="card-list">
+    <div class="grid player-grid">
         {% for player in players %}
             <div class="card" style="background-color: rgba({{ player.team_color|hex_to_rgb }}, 0.2);">
-                <div class="player-header">
-                    <div class="team-logo">
-                        {% if player.team_logo %}
-                            <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
-                        {% else %}
-                            -
-                        {% endif %}
-                    </div>
-                    <div class="player-name"><a href="{% url 'player_detail' player.player_id %}"><strong>{{ player.player_name }}</strong></a></div>
+                <div class="card-header">
+                    {% if player.team_logo %}
+                        <img src="{{ player.team_logo.url }}" alt="Team Logo">
+                    {% endif %}
+                    <a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a>
                 </div>
-                <div class="player-details">
+                <div class="card-info">
                     {% if player.player_nickname %}
-                        <div class="player-name"><strong>「{{ player.player_nickname }}」</strong></div>
+                        <div><strong>「{{ player.player_nickname }}」</strong></div>
                     {% endif %}
                     {% if player.common_record_number %}
                         <div><strong>背番号:</strong> {{ player.common_record_number }}</div>
@@ -91,7 +87,7 @@
                 </div>
             </div>
         {% empty %}
-            <div class="no-players">検索結果は0件です。</div>
+            <div class="no-result">検索結果は0件です。</div>
         {% endfor %}
     </div>
     <!-- ページネーションUI -->
@@ -99,9 +95,7 @@
         {% if players.has_previous %}
             <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ players.previous_page_number }}">&laquo; 前</a>
         {% endif %}
-
         <span>ページ {{ players.number }} / {{ players.paginator.num_pages }}</span>
-
         {% if players.has_next %}
             <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ players.next_page_number }}">次 &raquo;</a>
         {% endif %}
@@ -209,13 +203,6 @@
     </div>
 {% endblock %}
 {% block extra_js %}
-    <script>
-        document.querySelector('#open-search-popup').addEventListener('click', () => {
-            document.querySelector('#search-modal').classList.remove('hidden');
-        });
-        
-        document.querySelector('#close-search-popup').addEventListener('click', () => {
-            document.querySelector('#search-modal').classList.add('hidden');
-        });
-    </script>
+    {{ block.super }}
+    <script src="{% static 'js/players.js' %}"></script>
 {% endblock %}

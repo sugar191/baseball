@@ -1,277 +1,16 @@
-body {
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* ヘッダー */
-.site-header {
-    position: fixed;
-    overflow: hidden; /* はみ出し防止 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #f5f5f5;
-    height: 40px;
-    line-height: 40px; /* 縦中央寄せ */
-    z-index: 1100; /* メニューより前に */
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-between; /* 左右に分ける */
-    align-items: center;            /* 垂直中央揃え */
-}
-
-.header_title {
-    display: block;
-    font-size: 2em;
-    margin-inline-start: 10px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
-}
-
-.header_title a {
-    color: #000;
-}
-
-.header-auth a {
-    color: #333;
-    font-size: 20px;
-    display: inline-block;
-}
-
-.header-auth a:hover {
-    color: #000;
-}
-
-/* 固定メニューバー */
-.navbar {
-    position: fixed;
-    top: 60px; /* ヘッダーの高さ分 */
-    left: 0;
-    width: 100%;
-    background-color: #333;
-    color: white;
-    z-index: 1000;
-    padding: 10px 0;
-}
-
-.navbar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.navbar ul li {
-    display: inline-block;
-    position: relative;
-    margin: 0 10px;
-}
-
-.navbar ul li a {
-    display: block;
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-}
-
-.navbar ul li a:hover {
-    text-decoration: underline;
-}
-
-.navbar button {
-    background: none; /* 背景を透明にする */
-    border: none; /* 枠線をなくす */
-    color: white; /* 文字色をリンクと同じに */
-    font-size: 16px; /* 文字サイズ調整 */
-    cursor: pointer; /* ホバー時のカーソル */
-    padding: 0;
-}
-
-.navbar button:hover {
-    text-decoration: underline;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #444;
-    min-width: 160px;
-    z-index: 1001;
-}
-
-.dropdown-content a {
-    color: white;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-}
-
-.dropdown-content a:hover {
-    background-color: #555;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* フッター */
-.site-footer {
-    background-color: #f0f0f0;
-    text-align: center;
-    font-size: 0.9em;
-    color: #666;
-}
-
-@media screen and (max-width: 600px) {
-    .content {
-        padding: 1em;
-    }
-}
-
-.content {
-    margin-top: 120px;  /* メニューバーの高さ分スペースを空ける */
-    padding: 10px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    box-sizing: border-box; /* パディング込みで幅を計算 */
-}
-
-.page_title {
-    display: block;
-    font-size: 1.5em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
-}
-
-/* リスト */
-.card-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-/* card */
-.card {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 100%; /* 初期では1列に表示 */
-    padding: 10px;
-    box-sizing: border-box;
-    transition: transform 0.3s;
-    align-items: center; /* 垂直方向にセンタリング */
-}
-
-.card.team-card {
-    display: flex; /* Flexboxを使用 */
-}
-
-/* 画像部分 */
-.card img {
-    max-width: 50px; /* 画像の最大サイズ */
-    margin-right: 15px; /* 画像と情報の間隔 */
-}
-
-/* 情報部分 */
-.card .card-info {
-    display: flex;
-    flex-direction: column; /* 情報を縦に並べる */
-}
-
-/* 球団名などのスタイル */
-.card .card-info .team-name {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-/* チームロゴと名前を1行で表示 */
-.player-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.team-logo img {
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.player-name {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-.player-details strong {
-    font-weight: bold;
-}
-
-.team-grid {
-    display: grid;
-    gap: 10px;
-}
-
-.team-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* モバイル画面向けのレスポンシブデザイン */
-@media (max-width: 768px) {
-    .player-card {
-        width: 100%; /* スマホ画面では1列で表示 */
-    }
-
-    .team-grid {
-        grid-template-columns: repeat(6, 1fr); /* スマホ向け: 6個/行 */
-    }
-}
-
-/* PCでは2列表示 */
-@media (min-width: 769px) {
-    .player-card {
-        width: calc(50% - 20px); /* PCでは2列に表示 */
-    }
-
-    .team-grid {
-        grid-template-columns: repeat(12, 1fr); /* PC向け: 12個/行 */
-    }
-}
-
-/* プレイヤーがいない場合のメッセージ */
-.no-players {
-    text-align: center;
-    font-size: 1.2em;
-    color: #888;
-}
-
 a {
     text-decoration: none;
-    margin-right: 10px; /* アイコンの間隔 */
-}
-
-.fa-wikipedia-w {
-    color: #000; /* 黒色 */
-    font-size: 18px;
-}
-
-.fa-youtube {
-    color: #FF0000; /* 赤色 */
-    font-size: 18px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
+th,
+td {
     border-bottom: 1px solid #ccc;
     vertical-align: middle;
 }
@@ -289,10 +28,290 @@ tbody tr:nth-child(even) {
     background-color: #fafafa;
 }
 
+td input[type="text"] {
+    max-width: 90%;
+}
+
+td input[type="number"] {
+    max-width: 100px;
+}
+
+select {
+    max-width: 90%;
+    /* 最大幅も制限 */
+    box-sizing: border-box;
+    /* パディング込みで幅を計算 */
+}
+
+option {
+    white-space: nowrap;
+    /* 選択肢のテキストが折り返さないように */
+    text-overflow: ellipsis;
+    /* 長すぎるテキストを省略表示（...）にする */
+    overflow: hidden;
+    /* 溢れたテキストは隠す */
+}
+
+.custom-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 2vh 0 0 0;
+    margin: 2dvh 0 0 0;
+    /* 狭い行間 */
+    border-bottom: 1px solid #ddd;
+}
+
+/* ヘッダー */
+.site-header {
+    position: fixed;
+    /* 位置の固定化 */
+    top: env(safe-area-inset-top);
+    /* 位置の固定化：上のノッチ対策 */
+    left: 0;
+    /* 位置の固定化：画面一番左 */
+    overflow: hidden;
+    /* はみ出し防止 */
+    width: 100vw;
+    height: 3vh;
+    /* フォールバック（古いブラウザ） */
+    height: 3dvh;
+    background-color: #73fbfd;
+    z-index: 1100;
+    /* メニューより前に */
+    padding: 1vh 0;
+    padding: 1dvh 0;
+    display: flex;
+    /* 直下の要素を横並び */
+    justify-content: space-between;
+    /* 左右端に分ける */
+    align-items: center;
+    /* 垂直中央揃え */
+}
+
+.header-title {
+    margin-inline-start: 1vw;
+    font-weight: bold;
+}
+
+.header-auth {
+    margin-inline-end: 1vw;
+}
+
+.header-title a,
+.header-auth a {
+    color: #333;
+    font-size: 1.5rem;
+    display: inline-block;
+}
+
+.header-title a:hover,
+.header-auth a:hover {
+    color: #000;
+}
+
+/* 固定メニューバー */
+.navbar {
+    position: fixed;
+    top: 5dvh;
+    left: 0;
+    width: 100vw;
+    background-color: #333;
+    color: white;
+    z-index: 1000;
+    padding: 1dvh 0;
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    margin: 0 2vw;
+}
+
+.menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.menu li a:hover {
+    text-decoration: underline;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    margin-left: 2vw;
+}
+
+/* フッター */
+.site-footer {
+    background-color: #f0f0f0;
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* メイン内容 */
+.content {
+    margin-top: 10vh;
+    padding: 1vh 1vw;
+    padding: 1dvh 1vw;
+    width: 95vw;
+}
+
+.page_title {
+    display: block;
+    font-size: 1.5em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+/* grid */
+.grid {
+    display: grid;
+    gap: 0.5rem;
+}
+
+/* ページ */
+.pagination {
+    text-align: center;
+}
+
+.team-grid {
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.player-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* ロゴ画像 */
+.team-logo {
+    width: 100%;
+    display: block;
+}
+
+.team-logo-small {
+    height: 1rem;
+}
+
+/* card */
+.card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    /* 初期では1列に表示 */
+    padding: 0.5rem;
+    box-sizing: border-box;
+    align-items: center;
+    /* 垂直方向にセンタリング */
+}
+
+/* チームロゴと名前を1行で表示 */
+.card-header {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-header img {
+    height: 1.2rem;
+}
+
+/* 情報部分 */
+.card-info {
+    display: flex;
+    flex-direction: column;
+    /* 情報を縦に並べる */
+}
+
+.team-card {
+    display: flex;
+    /* Flexboxを使用 */
+}
+
+/* 球団名などのスタイル */
+.card .card-info .team-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* モバイル画面向けのレスポンシブデザイン */
+@media (max-width: 768px) {
+    .menu {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        background-color: #333;
+    }
+
+    .menu li {
+        margin: 1vh 0;
+    }
+
+    .menu.show {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .content {
+        padding: 1vh 1vw;
+        padding: 1dvh 1vw;
+    }
+
+    .player-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .team-grid {
+        grid-template-columns: repeat(6, 1fr);
+        /* スマホ向け: 6個/行 */
+    }
+}
+
+.no-result {
+    text-align: center;
+    font-size: 1.2em;
+    color: #888;
+}
+
+.fa-wikipedia-w {
+    color: #000;
+    /* 黒色 */
+    font-size: 18px;
+}
+
+.fa-youtube {
+    color: #FF0000;
+    /* 赤色 */
+    font-size: 18px;
+}
+
 .modal {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -306,45 +325,32 @@ tbody tr:nth-child(even) {
     background: white;
     padding: 2em;
     border-radius: 10px;
-    width: 90%;             /* 全体の90%に制限 */
-    max-width: 500px;       /* 最大幅を指定（お好みで調整） */
-    box-sizing: border-box; /* パディング含めた幅で計算 */
+    width: 90%;
+    /* 全体の90%に制限 */
+    max-width: 500px;
+    /* 最大幅を指定（お好みで調整） */
+    box-sizing: border-box;
+    /* パディング含めた幅で計算 */
 }
 
 .hidden {
     display: none;
 }
 
-select {
-    max-width: 90%;          /* 最大幅も制限 */
-    box-sizing: border-box;  /* パディング込みで幅を計算 */
-}
-
-option {
-    white-space: nowrap;     /* 選択肢のテキストが折り返さないように */
-    text-overflow: ellipsis; /* 長すぎるテキストを省略表示（...）にする */
-    overflow: hidden;        /* 溢れたテキストは隠す */
-}
-
 .search {
-    table-layout: fixed; /* ← これも重要 */
+    table-layout: fixed;
+    /* ← これも重要 */
 }
 
 .search td:first-child {
-    width: 100px;         /* ラベル列の幅を固定 */
-    white-space: nowrap;  /* 改行を防ぐ */
+    width: 100px;
+    /* ラベル列の幅を固定 */
+    white-space: nowrap;
+    /* 改行を防ぐ */
 }
 
 .salary_year {
-    width: 50px; 
-}
-
-td input[type="text"] {
-    max-width: 90%;
-}
-
-td input[type="number"] {
-    max-width: 100px;
+    width: 50px;
 }
 
 .position-badge {
@@ -356,17 +362,25 @@ td input[type="number"] {
     border-radius: 8px;
     color: #333;
 }
+
 .position-pitcher {
-    background-color: #ffb5da; /* ピンク */
+    background-color: #ffb5da;
+    /* ピンク */
 }
+
 .position-catcher {
-    background-color: #99ccff; /* 水色 */
+    background-color: #99ccff;
+    /* 水色 */
 }
+
 .position-infielder {
-    background-color: #ffffcc; /* クリーム */
+    background-color: #ffffcc;
+    /* クリーム */
 }
+
 .position-outfielder {
-    background-color: #ccff99; /* 黄緑 */
+    background-color: #ccff99;
+    /* 黄緑 */
 }
 
 .center {
@@ -377,17 +391,10 @@ td input[type="number"] {
     text-align: right;
 }
 
-.custom-heading {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 12px 0 6px;  /* 狭い行間 */
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 2px;
-}
-
 .year-input {
     width: 50px;
 }
+
 .salary-input {
     width: 100px;
 }
