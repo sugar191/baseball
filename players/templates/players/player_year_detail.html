@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
 {% load format_filters %}
-
 {% block title %}{{ player.name }} ({{ year|format_year }}){% endblock %}
-
 {% block content %}
-    <div class="page_title">{{ player.name }} ({{ year|format_year }})</div>
+    <div class="page-title">{{ player.name }} ({{ year|format_year }})</div>
     {% if common_record %}
         <div class = "custom-heading">共通情報</div>
         <table>
@@ -21,6 +19,16 @@
                 {% if common_record.salary %}
                     <tr><td>年俸</td><td class="numeric">{{ common_record.salary|format_salary }}{{ common_record.currency }}</td></tr>
                 {% endif %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if titles %}
+        <div class = "custom-heading">タイトル</div>
+        <table>
+            <tbody>
+                {% for title in titles %}
+                    <tr><td>{{title.title}}</td></tr>
+                {% endfor %}
             </tbody>
         </table>
     {% endif %}
@@ -89,14 +97,14 @@
             <tbody>
                 {% for fielding in fielding_record %}
                     {% with label_list=position_labels|dict_get:fielding.position.id %}
-                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>試合数</td><td class="numeric">{{ fielding.games }}</td></tr>
-                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>刺殺</td><td class="numeric">{{ fielding.put_outs }}</td></tr>
-                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>補殺</td><td class="numeric">{{ fielding.assists }}</td></tr>
-                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>失策</td><td class="numeric">{{ fielding.errors }}</td></tr>
-                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>併殺</td><td class="numeric">{{ fielding.double_plays }}</td></tr>
-                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>守備率</td><td class="numeric">{{ fielding.fielding_percentage|format_batting_average }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>試合数</td><td class="numeric">{{ fielding.games }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>刺殺</td><td class="numeric">{{ fielding.put_outs }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>補殺</td><td class="numeric">{{ fielding.assists }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>失策</td><td class="numeric">{{ fielding.errors }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>併殺</td><td class="numeric">{{ fielding.double_plays }}</td></tr>
+                        <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>守備率</td><td class="numeric">{{ fielding.fielding_percentage|format_batting_average }}</td></tr>
                         {% if fielding.position.name == '捕手' %}
-                            <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span></td><td>捕逸</td><td class="numeric">{{ fielding.passed_balls }}</td></tr>
+                            <tr><td><span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>捕逸</td><td class="numeric">{{ fielding.passed_balls }}</td></tr>
                         {% endif %}
                     {% endwith %}
                 {% endfor %}

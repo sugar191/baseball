@@ -1,69 +1,59 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Django App{% endblock %}</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}My Django App{% endblock %}</title>
 
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
-    <!-- ヘッダー -->
-    <header class="site-header">
-        <div class="header-title"><a href="/">プロ野球記録</a></div>
-        <div class="header-auth">
-            {% if user.is_authenticated %}
-                <form method="post" action="{% url 'logout' %}" style="display:inline;">
-                    {% csrf_token %}
-                    {% if user.is_superuser %}
-                        <!-- スーパーユーザー用の管理画面アイコン -->
-                        <a href="{% url 'admin:index' %}" title="管理画面">
-                            <i class="fas fa-cogs"></i> <!-- ギアアイコン -->
-                        </a>
-                    {% endif %}
-                    <button type="submit" title="ログアウト" style="background:none;border:none;padding:8px;cursor:pointer;">
-                        <i class="fas fa-sign-out-alt" style="font-size: 20px; color: #333;"></i>
-                    </button>
-                </form>
-            {% else %}
-                <a href="{% url 'login' %}?next={{ request.path }}" title="ログイン">
-                    <i class="fas fa-sign-in-alt"></i>
-                </a>
-                <!-- 新規ユーザー登録アイコン -->
-                <a href="{% url 'signup' %}" title="新規登録"><i class="fas fa-user-plus"></i></a>
-            {% endif %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    </head>
+    <body>
+        <!-- ヘッダー -->
+        <header class="site-header">
+            <div class="header-title"><a href="/">プロ野球記録</a></div>
+            <div class="header-auth">
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        {% if user.is_superuser %}
+                            <a href="{% url 'admin:index' %}" title="管理画面"><i class="fas fa-cogs"></i></a>
+                        {% endif %}
+                        <button type="submit" title="ログアウト" class="logout-button"><i class="fas fa-sign-out-alt"></i></button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" title="ログイン"><i class="fas fa-sign-in-alt"></i>
+                    <a href="{% url 'signup' %}" title="新規登録"><i class="fas fa-user-plus"></i></a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- 固定メニューバー -->
+        <div class="navbar">
+            <div class="menu-mobile"><button class="menu-toggle" aria-label="メニュー切り替え"><i class="fas fa-bars"></i></button></div>
+            <ul class="menu">
+                <li><a href="/players/">選手</a></li>
+                <li><a href="/teams/">球団</a></li>
+                <li><a href="/drafts/">ドラフト</a></li>
+                <li><a href="/careers/">経歴</a></li>
+                <li><a href="/generations/">年代</a></li>
+                <li><a href="/places/">出身地</a></li>
+            </ul>
         </div>
-    </header>
 
-    <!-- 固定メニューバー -->
-    <div class="navbar">
-        <button class="menu-toggle" aria-label="メニュー切り替え">&#9776;</button>
-        <ul class="menu">
-            <li><a href="/players/">選手</a></li>
-            <li><a href="/teams/">球団</a></li>
-            <li><a href="/drafts/">ドラフト</a></li>
-            <li><a href="/careers/">経歴</a></li>
-            <li><a href="/generations/">年代</a></li>
-            <li><a href="/places/">出身地</a></li>
-        </ul>
-    </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
 
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
-
-    <!-- フッター -->
-    <footer class="site-footer">
-        <div class="container">
+        <!-- フッター -->
+        <footer class="site-footer">
             <p>&copy; 2025 My Baseball Site</p>
-        </div>
-    </footer>
+        </footer>
 
-    <!-- JSはbodyの最後で読み込むべき！ -->
-    {% block extra_js %}
-        <script src="{% static 'js/common.js' %}"></script>
-    {% endblock %}
-</body>
+        <!-- JSはbodyの最後で読み込むべき！ -->
+        {% block extra_js %}
+            <script src="{% static 'js/common.js' %}"></script>
+        {% endblock %}
+    </body>
 </html>

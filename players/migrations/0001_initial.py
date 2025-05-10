@@ -10,129 +10,339 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('commons', '0001_initial'),
-        ('positions', '0001_initial'),
-        ('teams', '0001_initial'),
+        ("places", "0001_initial"),
+        ("positions", "0001_initial"),
+        ("teams", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PlayerLatestSummary',
+            name="PlayerLatestSummary",
             fields=[
-                ('player_id', models.IntegerField(primary_key=True, serialize=False)),
-                ('player_name', models.CharField(max_length=50)),
-                ('player_furigana', models.CharField(blank=True, max_length=50, null=True)),
-                ('player_nickname', models.CharField(blank=True, max_length=50, null=True)),
-                ('player_birthday', models.DateField(blank=True, null=True)),
-                ('player_height', models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)),
-                ('player_weight', models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)),
-                ('player_is_married', models.BooleanField(blank=True, null=True)),
-                ('player_partner', models.CharField(blank=True, max_length=50, null=True)),
-                ('player_hobby', models.CharField(blank=True, max_length=50, null=True)),
-                ('player_specialty', models.CharField(blank=True, max_length=50, null=True)),
-                ('player_wikipedia_parameter', models.CharField(blank=True, max_length=250, null=True)),
-                ('player_usukoi_parameter', models.IntegerField(blank=True, null=True)),
-                ('player_youtube_parameter', models.CharField(blank=True, max_length=250, null=True)),
-                ('player_remarks', models.CharField(blank=True, max_length=250, null=True)),
-                ('place_id', models.IntegerField()),
-                ('place_name', models.CharField(max_length=10)),
-                ('throwing_id', models.IntegerField()),
-                ('throwing_name', models.CharField(max_length=10)),
-                ('batting_id', models.IntegerField()),
-                ('batting_name', models.CharField(max_length=10)),
-                ('position_category_id', models.IntegerField()),
-                ('position_category_name', models.CharField(max_length=50)),
-                ('position_order', models.IntegerField(default=0)),
-                ('player_career_remarks', models.CharField(blank=True, max_length=50, null=True)),
-                ('career_version_id', models.IntegerField()),
-                ('career_version_name', models.CharField(max_length=50)),
-                ('career_id', models.IntegerField()),
-                ('career_category_id', models.IntegerField()),
-                ('career_category_label', models.CharField(max_length=10)),
-                ('player_draft_rank', models.IntegerField()),
-                ('player_draft_miss_count', models.IntegerField()),
-                ('draft_year', models.IntegerField()),
-                ('draft_category_name', models.CharField(max_length=50)),
-                ('common_record_year', models.IntegerField()),
-                ('common_record_number', models.CharField(blank=True, max_length=5, null=True)),
-                ('common_record_registered_name', models.CharField(blank=True, max_length=50, null=True)),
-                ('common_record_salary', models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True)),
-                ('currency_name', models.CharField(max_length=30)),
-                ('team_id', models.IntegerField()),
-                ('team_name', models.CharField(max_length=50)),
-                ('team_logo', models.ImageField(blank=True, null=True, upload_to='team_logos/')),
-                ('team_order', models.IntegerField(default=0)),
-                ('team_color', models.CharField(blank=True, max_length=50, null=True)),
-                ('league_order', models.IntegerField()),
-                ('organization_order', models.IntegerField()),
-                ('pitching_year', models.IntegerField()),
-                ('pitching_games', models.IntegerField(blank=True, null=True)),
-                ('pitching_wins', models.IntegerField(blank=True, null=True)),
-                ('pitching_loses', models.IntegerField(blank=True, null=True)),
-                ('pitching_saves', models.IntegerField(blank=True, null=True)),
-                ('pitching_holds', models.IntegerField(blank=True, null=True)),
-                ('pitching_strike_outs', models.IntegerField(blank=True, null=True)),
-                ('pitching_earned_run_average', models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)),
-                ('batting_year', models.IntegerField()),
-                ('batting_plate_appearances', models.IntegerField(blank=True, null=True)),
-                ('batting_home_runs', models.IntegerField(blank=True, null=True)),
-                ('batting_runs_batted_in', models.IntegerField(blank=True, null=True)),
-                ('batting_stolen_bases', models.IntegerField(blank=True, null=True)),
-                ('batting_average', models.DecimalField(blank=True, decimal_places=3, max_digits=4, null=True)),
+                ("player_id", models.IntegerField(primary_key=True, serialize=False)),
+                ("player_name", models.CharField(max_length=50)),
+                (
+                    "player_furigana",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
+                (
+                    "player_nickname",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
+                ("player_birthday", models.DateField(blank=True, null=True)),
+                (
+                    "player_height",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=5, null=True
+                    ),
+                ),
+                (
+                    "player_weight",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=5, null=True
+                    ),
+                ),
+                ("player_is_married", models.BooleanField(blank=True, null=True)),
+                (
+                    "player_partner",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
+                (
+                    "player_hobby",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
+                (
+                    "player_specialty",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
+                (
+                    "player_wikipedia_parameter",
+                    models.CharField(blank=True, max_length=250, null=True),
+                ),
+                ("player_usukoi_parameter", models.IntegerField(blank=True, null=True)),
+                (
+                    "player_youtube_parameter",
+                    models.CharField(blank=True, max_length=250, null=True),
+                ),
+                (
+                    "player_remarks",
+                    models.CharField(blank=True, max_length=250, null=True),
+                ),
+                ("place_id", models.IntegerField()),
+                ("place_name", models.CharField(max_length=10)),
+                ("throwing_id", models.IntegerField()),
+                ("throwing_name", models.CharField(max_length=10)),
+                ("batting_id", models.IntegerField()),
+                ("batting_name", models.CharField(max_length=10)),
+                ("position_category_id", models.IntegerField()),
+                ("position_category_name", models.CharField(max_length=50)),
+                ("position_order", models.IntegerField(default=0)),
+                (
+                    "player_career_remarks",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
+                ("career_version_id", models.IntegerField()),
+                ("career_version_name", models.CharField(max_length=50)),
+                ("career_id", models.IntegerField()),
+                ("career_category_id", models.IntegerField()),
+                ("career_category_label", models.CharField(max_length=10)),
+                ("player_draft_rank", models.IntegerField()),
+                ("player_draft_miss_count", models.IntegerField()),
+                ("draft_year", models.IntegerField()),
+                ("draft_category_name", models.CharField(max_length=50)),
+                ("common_record_year", models.IntegerField()),
+                (
+                    "common_record_number",
+                    models.CharField(blank=True, max_length=5, null=True),
+                ),
+                (
+                    "common_record_registered_name",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
+                (
+                    "common_record_salary",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=12, null=True
+                    ),
+                ),
+                ("currency_name", models.CharField(max_length=30)),
+                ("team_id", models.IntegerField()),
+                ("team_name", models.CharField(max_length=50)),
+                (
+                    "team_logo",
+                    models.ImageField(blank=True, null=True, upload_to="team_logos/"),
+                ),
+                ("team_order", models.IntegerField(default=0)),
+                ("team_color", models.CharField(blank=True, max_length=50, null=True)),
+                ("league_order", models.IntegerField()),
+                ("organization_order", models.IntegerField()),
+                ("pitching_year", models.IntegerField()),
+                ("pitching_games", models.IntegerField(blank=True, null=True)),
+                ("pitching_wins", models.IntegerField(blank=True, null=True)),
+                ("pitching_loses", models.IntegerField(blank=True, null=True)),
+                ("pitching_saves", models.IntegerField(blank=True, null=True)),
+                ("pitching_holds", models.IntegerField(blank=True, null=True)),
+                ("pitching_strike_outs", models.IntegerField(blank=True, null=True)),
+                (
+                    "pitching_earned_run_average",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=5, null=True
+                    ),
+                ),
+                ("batting_year", models.IntegerField()),
+                (
+                    "batting_plate_appearances",
+                    models.IntegerField(blank=True, null=True),
+                ),
+                ("batting_home_runs", models.IntegerField(blank=True, null=True)),
+                ("batting_runs_batted_in", models.IntegerField(blank=True, null=True)),
+                ("batting_stolen_bases", models.IntegerField(blank=True, null=True)),
+                (
+                    "batting_average",
+                    models.DecimalField(
+                        blank=True, decimal_places=3, max_digits=4, null=True
+                    ),
+                ),
             ],
             options={
-                'db_table': 'player_latest_summary',
-                'managed': False,
+                "db_table": "player_latest_summary",
+                "managed": False,
             },
         ),
         migrations.CreateModel(
-            name='HandBatting',
+            name="HandBatting",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=10)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=10)),
             ],
             options={
-                'db_table': 'hands_batting',
+                "db_table": "hands_batting",
             },
         ),
         migrations.CreateModel(
-            name='HandThrowing',
+            name="HandThrowing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=10)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=10)),
             ],
             options={
-                'db_table': 'hands_throwing',
+                "db_table": "hands_throwing",
             },
         ),
         migrations.CreateModel(
-            name='Player',
+            name="Player",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, verbose_name='氏名')),
-                ('furigana', models.CharField(blank=True, max_length=50, null=True, verbose_name='ふりがな')),
-                ('nickname', models.CharField(blank=True, max_length=50, null=True, verbose_name='通称')),
-                ('birthday', models.DateField(blank=True, null=True, verbose_name='誕生日')),
-                ('height', models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True, verbose_name='身長')),
-                ('weight', models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True, verbose_name='体重')),
-                ('is_married', models.BooleanField(blank=True, null=True, verbose_name='結婚')),
-                ('partner', models.CharField(blank=True, max_length=50, null=True, verbose_name='結婚相手')),
-                ('hobby', models.CharField(blank=True, max_length=50, null=True, verbose_name='趣味')),
-                ('specialty', models.CharField(blank=True, max_length=50, null=True, verbose_name='特技')),
-                ('wikipedia_parameter', models.CharField(blank=True, max_length=250, null=True, verbose_name='Wikipedia')),
-                ('usukoi_parameter', models.IntegerField(blank=True, null=True, verbose_name='日本プロ野球記録')),
-                ('youtube_parameter', models.CharField(blank=True, max_length=250, null=True, verbose_name='YouTube')),
-                ('remarks', models.CharField(blank=True, max_length=250, null=True, verbose_name='備考')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, verbose_name='作成日時')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='更新日時')),
-                ('batting_hand', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='players.handbatting', verbose_name='利腕')),
-                ('favorite_team', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='teams.team', verbose_name='ファン球団')),
-                ('main_position_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='positions.positioncategory', verbose_name='ポジション')),
-                ('place', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='commons.place', verbose_name='出身地')),
-                ('throwing_hand', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='players.handthrowing', verbose_name='利腕')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, verbose_name="氏名")),
+                (
+                    "furigana",
+                    models.CharField(
+                        blank=True, max_length=50, null=True, verbose_name="ふりがな"
+                    ),
+                ),
+                (
+                    "nickname",
+                    models.CharField(
+                        blank=True, max_length=50, null=True, verbose_name="通称"
+                    ),
+                ),
+                (
+                    "birthday",
+                    models.DateField(blank=True, null=True, verbose_name="誕生日"),
+                ),
+                (
+                    "height",
+                    models.DecimalField(
+                        blank=True,
+                        decimal_places=2,
+                        max_digits=5,
+                        null=True,
+                        verbose_name="身長",
+                    ),
+                ),
+                (
+                    "weight",
+                    models.DecimalField(
+                        blank=True,
+                        decimal_places=2,
+                        max_digits=5,
+                        null=True,
+                        verbose_name="体重",
+                    ),
+                ),
+                (
+                    "is_married",
+                    models.BooleanField(blank=True, null=True, verbose_name="結婚"),
+                ),
+                (
+                    "partner",
+                    models.CharField(
+                        blank=True, max_length=50, null=True, verbose_name="結婚相手"
+                    ),
+                ),
+                (
+                    "hobby",
+                    models.CharField(
+                        blank=True, max_length=50, null=True, verbose_name="趣味"
+                    ),
+                ),
+                (
+                    "specialty",
+                    models.CharField(
+                        blank=True, max_length=50, null=True, verbose_name="特技"
+                    ),
+                ),
+                (
+                    "wikipedia_parameter",
+                    models.CharField(
+                        blank=True, max_length=250, null=True, verbose_name="Wikipedia"
+                    ),
+                ),
+                (
+                    "usukoi_parameter",
+                    models.IntegerField(
+                        blank=True, null=True, verbose_name="日本プロ野球記録"
+                    ),
+                ),
+                (
+                    "youtube_parameter",
+                    models.CharField(
+                        blank=True, max_length=250, null=True, verbose_name="YouTube"
+                    ),
+                ),
+                (
+                    "remarks",
+                    models.CharField(
+                        blank=True, max_length=250, null=True, verbose_name="備考"
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="作成日時"
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, verbose_name="更新日時"),
+                ),
+                (
+                    "batting_hand",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="players.handbatting",
+                        verbose_name="利腕",
+                    ),
+                ),
+                (
+                    "favorite_team",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="teams.team",
+                        verbose_name="ファン球団",
+                    ),
+                ),
+                (
+                    "main_position_category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="positions.positioncategory",
+                        verbose_name="ポジション",
+                    ),
+                ),
+                (
+                    "place",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="places.place",
+                        verbose_name="出身地",
+                    ),
+                ),
+                (
+                    "throwing_hand",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="players.handthrowing",
+                        verbose_name="利腕",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'players',
+                "db_table": "players",
             },
         ),
     ]

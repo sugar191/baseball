@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load format_filters %}
-
 {% block title %}選手一覧{% endblock %}
-
 {% block content %}
     <form method="GET" action="{% url 'player_list' %}">
         {% csrf_token %}
@@ -14,7 +12,7 @@
     <div class="grid player-grid">
         {% for player in players %}
             <div class="card" style="background-color: rgba({{ player.team_color|hex_to_rgb }}, 0.2);">
-                <div class="card-header">
+                <div class="card-header player-name-logo">
                     {% if player.team_logo %}
                         <img src="{{ player.team_logo.url }}" alt="Team Logo">
                     {% endif %}
@@ -22,7 +20,7 @@
                 </div>
                 <div class="card-info">
                     {% if player.player_nickname %}
-                        <div><strong>「{{ player.player_nickname }}」</strong></div>
+                        <div><strong>{{ player.player_nickname|with_brackets }}</strong></div>
                     {% endif %}
                     {% if player.common_record_number %}
                         <div><strong>背番号:</strong> {{ player.common_record_number }}</div>
@@ -31,21 +29,21 @@
                         <div><strong>ポジション:</strong> {{ player.position_category_name }}</div>
                     {% endif %}
                     {% if player.position_category_id == 1 and player.pitching_year %}
-                        <div><strong>成績({{ player.pitching_year }}年):</strong> {% format_pitching_stats player.pitching_games player.pitching_earned_run_average player.pitching_wins player.pitching_loses player.pitching_saves player.pitching_holds player.pitching_strike_outs %}</div>
+                        <div><strong>成績({{ player.pitching_year|year_with_suffix }}):</strong> {% format_pitching_stats player.pitching_games player.pitching_earned_run_average player.pitching_wins player.pitching_loses player.pitching_saves player.pitching_holds player.pitching_strike_outs %}</div>
                     {% elif player.batting_year %}
-                        <div><strong>成績({{ player.batting_year }}年):</strong> {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}</div>
+                        <div><strong>成績({{ player.batting_year|year_with_suffix }}):</strong> {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}</div>
                     {% endif %}
                     {% if player.common_record_salary %}
-                        <div><strong>年俸({{ player.common_record_year }}年):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
+                        <div><strong>年俸({{ player.common_record_year|year_with_suffix }}):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
                     {% endif %}
                     {% if player.draft_year %}
-                        <div><strong>入団:</strong> {{ player.draft_year }}年{{ player.draft_category_name }}{{ player.player_draft_rank }}位</div>
+                        <div><strong>入団:</strong> {{ player.draft_year|year_with_suffix }}{{ player.draft_category_name }}{{ player.player_draft_rank|rank_with_suffix }}</div>
                     {% endif %}
                     {% if player.player_birthday %}
                         <div><strong>誕生日:</strong> {{ player.player_birthday }}</div>
                     {% endif %}
                     {% if player.age %}
-                        <div><strong>年齢:</strong> {{ player.age }} 歳</div>
+                        <div><strong>年齢:</strong> {{ player.age|age_with_suffix }}</div>
                     {% endif %}
                     {% if player.career_version_name %}
                         <div><strong>経歴:</strong> {{ player.career_version_name }}</div>
@@ -53,8 +51,11 @@
                     {% if player.throw_bat %}
                         <div><strong>投打:</strong> {{ player.throw_bat }}</div>
                     {% endif %}
-                    {% if player.player_height and player_weight %}
-                        <div><strong>身長 / 体重:</strong> {{ player.player_height|format_decimal_trim }} cm / {{ player.player_weight|format_decimal_trim }} kg</div>
+                    {% if player.player_height %}
+                        <div><strong>身長:</strong> {{ player.player_height|height_with_suffix }}</div>
+                    {% endif %}
+                    {% if player.player_weight %}
+                        <div><strong>体重:</strong> {{ player.player_weight|weight_with_suffix }}</div>
                     {% endif %}
                     {% if player.place_name %}
                         <div><strong>出身地:</strong> {{ player.place_name }}</div>
@@ -103,7 +104,7 @@
     <div id="search-modal" class="modal hidden">
         <div class="modal-content">
             <form method="get" action="">
-                <table class="search">
+                <table class="search-table">
                     <tr>
                         <td><label>名前</label></td>
                         <td><input type="text" name="name" value="{{ request.GET.name }}"></td>

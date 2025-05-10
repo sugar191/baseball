@@ -89,7 +89,7 @@
                 <tr>
                     <td>{{ record_form.id }}</td>
                     <td>{{ record_form.year }}年{% if record_form.year.errors %}<ul>{% for error in record_form.year.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
-                    <td>{{ record_form.salary }}{% if record_form.errors %}<ul>{% for error in record_form.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                    <td class="salary-input">{{ record_form.salary }}{% if record_form.errors %}<ul>{% for error in record_form.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
                     <td>{{ record_form.currency }}{% if record_form.currency.errors %}<ul>{% for error in record_form.currency.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
                 </tr>
             {% endfor %}
@@ -103,6 +103,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const marriedSelect = document.getElementById("id_is_married");
             const partnerInput = document.getElementById("id_partner");
+            const youtubeInput = document.getElementById("id_youtube_parameter");
 
             function togglePartner() {
                 if (marriedSelect.value === "True") {
@@ -118,6 +119,16 @@
 
             // 日付が変更されたときに発火
             marriedSelect.addEventListener("change", togglePartner);
+
+            // Youtubeのパラメータのみ抽出
+            youtubeInput.addEventListener('blur', function () {
+                const url = youtubeInput.value;
+                const match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+
+                if (match && match[1]) {
+                    youtubeInput.value = match[1];
+                }
+            });
         });
     </script>
 {% endblock %}

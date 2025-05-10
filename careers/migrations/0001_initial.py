@@ -9,59 +9,129 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('commons', '0001_initial'),
+        ("places", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CareerCategory',
+            name="CareerCategory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=10)),
-                ('label', models.CharField(blank=True, max_length=10, null=True)),
-                ('sort_order', models.IntegerField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=10)),
+                ("label", models.CharField(blank=True, max_length=10, null=True)),
+                ("sort_order", models.IntegerField()),
             ],
             options={
-                'db_table': 'career_categories',
+                "db_table": "career_categories",
             },
         ),
         migrations.CreateModel(
-            name='Career',
+            name="Career",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('is_private', models.BooleanField(null=True)),
-                ('wikipedia_parameter1', models.CharField(blank=True, max_length=500, null=True)),
-                ('wikipedia_parameter2', models.CharField(blank=True, max_length=500, null=True)),
-                ('place', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='commons.place')),
-                ('career_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='careers.careercategory')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("is_private", models.BooleanField(null=True)),
+                (
+                    "wikipedia_parameter1",
+                    models.CharField(blank=True, max_length=500, null=True),
+                ),
+                (
+                    "wikipedia_parameter2",
+                    models.CharField(blank=True, max_length=500, null=True),
+                ),
+                (
+                    "place",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="places.place",
+                    ),
+                ),
+                (
+                    "career_category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="careers.careercategory",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'careers',
+                "db_table": "careers",
             },
         ),
         migrations.CreateModel(
-            name='CareerVersion',
+            name="CareerVersion",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('version', models.IntegerField(default=0)),
-                ('career', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='careers.career')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("version", models.IntegerField(default=0)),
+                (
+                    "career",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="careers.career",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'career_versions',
+                "db_table": "career_versions",
             },
         ),
         migrations.CreateModel(
-            name='PlayerCareer',
+            name="PlayerCareer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('sort_order', models.IntegerField()),
-                ('remarks', models.CharField(blank=True, max_length=50, null=True)),
-                ('career_version', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, to='careers.careerversion')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("sort_order", models.IntegerField()),
+                ("remarks", models.CharField(blank=True, max_length=50, null=True)),
+                (
+                    "career_version",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        to="careers.careerversion",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'player_careers',
+                "db_table": "player_careers",
             },
         ),
     ]

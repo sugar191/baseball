@@ -1,16 +1,14 @@
 {% extends 'base.html' %}
 {% load format_filters %}
-
 {% block title %}{{ player.name }}{% endblock %}
-
 {% block content %}
-    <div class = "player-card">
-        <div class="page_title">{{ player.name }}</div>
+    <div>
+        <div class="page-title">{{ player.name }}</div>
         {% if player.furigana %}
             <div>ふりがな: {{ player.furigana }}</div>
         {% endif %}
         {% if player.nickname %}
-            <div>通称: {{ player.nickname }}</div>
+            <div>通称: {{ player.nickname|with_brackets }}</div>
         {% endif %}
         {% if player.main_position_category %}
             <div>ポジション: {{player.main_position_category }}</div>
@@ -19,22 +17,25 @@
             <div>誕生日: {{ player.birthday }}</div>
         {% endif %}
         {% if player.age %}
-            <div>年齢: {{ player.age }} 歳</div>
-        {% endif %}
-        {% if player.place %}
-            <div>出身地: {{ player.place }}</div>
-        {% endif %}
-        {% if player.height %}
-            <div>身長: {{ player.height|format_decimal_trim }} cm</div>
-        {% endif %}
-        {% if player.weight %}
-            <div>体重: {{ player.weight|format_decimal_trim }} kg</div>
+            <div>年齢: {{ player.age|age_with_suffix }}</div>
         {% endif %}
         {% if player.throw_bat %}
             <div>投打: {{ player.throw_bat }}</div>
         {% endif %}
+        {% if player.height %}
+            <div>身長: {{ player.height|height_with_suffix }}</div>
+        {% endif %}
+        {% if player.weight %}
+            <div>体重: {{ player.weight|weight_with_suffix }}</div>
+        {% endif %}
         {% if player.favorite_team %}
             <div>ファン球団: {{ player.favorite_team }}</div>
+        {% endif %}
+        {% if player.place %}
+            <div>出身地: {{ player.place }}</div>
+        {% endif %}
+        {% if player.is_married %}
+            <div>婚姻: {{ player.marriage }}</div>
         {% endif %}
         {% if player.hobby %}
             <div>趣味: {{ player.hobby }}</div>
@@ -42,12 +43,25 @@
         {% if player.specialty %}
             <div>特技: {{ player.specialty }}</div>
         {% endif %}
-        {% if player.is_married %}
-            <div>婚姻: {{ player.marriage }}</div>
+        {% if player.wikipedia_parameter %}
+            <div>
+                Wikipedia: 
+                <a href={{ player.wikipedia_parameter|format_wikipedia_url }} target="_blank" title="Wikipedia">
+                    <i class="fa-brands fa-wikipedia-w"></i>
+                </a>
+            </div>
+        {% endif %}
+        {% if player.youtube_parameter %}
+            <div>
+                Youtube: 
+                <a href={{ player.youtube_parameter|format_youtube_url }} target="_blank" title="YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+            </div>
         {% endif %}
     </div>
     {% if careers %}
-        <div class = "custom-heading">経歴</div>
+        <div class="custom-heading">経歴</div>
         <table>
             <tbody>
                 {% for career in careers %}
@@ -59,15 +73,15 @@
         </table>
     {% endif %}
     {% if drafts %}
-        <div class = "custom-heading">ドラフト</div>
+        <div class="custom-heading">ドラフト</div>
         <table>
             <tbody>
                 {% for draft in drafts %}
                     <tr>
-                        <td>{{ draft.draft.year }}年</td>
+                        <td>{{ draft.draft.year|year_with_suffix }}</td>
                         <td>{{ draft.draft.draft_category }}</td>
-                        <td class="center"><img src="{{ draft.team.logo.url }}" alt="Team Logo" height="25"></td>
-                        <td class="numeric">{{ draft.rank }}位</td>
+                        <td class="center"><img src="{{ draft.team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
+                        <td class="numeric">{{ draft.rank|rank_with_suffix }}</td>
                         <td class="center">{{ draft.is_hit|hit_mark }}</td>
                         <td class="center">{{ draft|join_mark }}</td>
                     </tr>
@@ -75,12 +89,12 @@
             </tbody>
         </table>
     {% endif %}
-    <div class = "custom-heading">タイトル</div>
+    <div class="custom-heading">タイトル</div>
     <table>
         <tbody>
             {% for title in titles %}
                 <tr>
-                    <td>{{ title.year }}年</td>
+                    <td>{{ title.year|year_with_suffix }}</td>
                     <td class="center">
                         {% if title.position.id %}
                             {% with label_list=position_labels|dict_get:title.position.id %}
@@ -98,7 +112,7 @@
         </tbody>
     </table>
     {% if commons %}
-        <div class = "custom-heading">共通情報</div>
+        <div class="custom-heading">共通情報</div>
         <table>
             <thead>
                 <tr>
@@ -113,9 +127,9 @@
                     <tr>
                         <td><a href="{% url 'player_year_detail' player.id common.year %}">{{ common.year|format_year:mlb_exists }}</a></td>
                         <td class="center">
-                            <div class="team-logo">
+                            <div>
                                 {% if common.team.logo %}
-                                    <img src="{{ common.team.logo.url }}" alt="Team Logo" height="25">
+                                    <img src="{{ common.team.logo.url }}" alt="Team Logo" class="team-logo-small">
                                 {% else %}
                                     {{ common.team.league.organization }}
                                 {% endif %}
@@ -139,7 +153,7 @@
         </table>
     {% endif %}
     {% if pitchings %}
-        <div class = "custom-heading">投手成績</div>
+        <div class="custom-heading">投手成績</div>
         <table>
             <tbody>
                 {% for pitching in pitchings %}
@@ -147,11 +161,11 @@
                         <td><a href="{% url 'player_year_detail' player.id pitching.year %}">{{ pitching.year|format_year:mlb_exists }}</a></td>
                         {% if pitching.games != 0 %}
                             <td class="numeric">{{ pitching.earned_run_average|format_pitching_average }}</td>
-                            <td class="numeric">{{ pitching.wins|format_integer }}勝</td>
-                            <td class="numeric">{{ pitching.loses|format_integer }}敗</td>
-                            <td class="numeric">{{ pitching.saves|format_integer }}S</td>
-                            <td class="numeric">{{ pitching.holds|format_integer }}H</td>
-                            <td class="numeric">{{ pitching.strike_outs|format_integer }}奪</td>
+                            <td class="numeric">{{ pitching.wins|win_with_suffix }}</td>
+                            <td class="numeric">{{ pitching.loses|lose_with_suffix }}</td>
+                            <td class="numeric">{{ pitching.saves|save_with_suffix }}</td>
+                            <td class="numeric">{{ pitching.holds|hold_with_suffix }}</td>
+                            <td class="numeric">{{ pitching.strike_outs|strike_with_suffix }}</td>
                         {% else %}
                             <td colspan=6 class="center">記録無し</td>
                         {% endif %}
@@ -165,7 +179,7 @@
         </table>
     {% endif %}
     {% if battings %}
-        <div class = "custom-heading">打者成績</div>
+        <div class="custom-heading">打者成績</div>
         <table>
             <tbody>
                 {% for batting in battings %}
@@ -173,10 +187,10 @@
                         <td><a href="{% url 'player_year_detail' player.id batting.year %}">{{ batting.year|format_year:mlb_exists }}</a></td>
                         {% if batting.plate_appearances != 0 %}
                             <td class="numeric">{{ batting.batting_average|format_batting_average }}</td>
-                            <td class="numeric">{{ batting.home_runs|format_integer }}本</td>
-                            <td class="numeric">{{ batting.runs_batted_in|format_integer }}点</td>
-                            <td class="numeric">{{ batting.stolen_bases|format_integer }}盗</td>
-                            <td class="numeric">{{ batting.hits|format_integer }}安打</td>
+                            <td class="numeric">{{ batting.home_runs|homerun_with_suffix }}</td>
+                            <td class="numeric">{{ batting.runs_batted_in|rbi_with_suffix }}</td>
+                            <td class="numeric">{{ batting.stolen_bases|steel_with_suffix }}</td>
+                            <td class="numeric">{{ batting.hits|hit_with_suffix }}</td>
                         {% else %}
                             <td colspan=5 class="center">記録無し</td>
                         {% endif %}
@@ -190,7 +204,7 @@
         </table>
     {% endif %}
     {% if fieldings %}
-        <div class = "custom-heading">守備成績</div>
+        <div class="custom-heading">守備成績</div>
         <table>
             <tbody>
                 {% for year, data in fieldings.items %}
@@ -211,24 +225,22 @@
         </table>
     {% endif %}
     {% if classmates %}
-        <div class = "custom-heading">同学年</div>
+        <div class="custom-heading">同学年</div>
         <table>
             <tbody>
                 {% for classmate in classmates %}
                     <tr>
                         <td>
-                            {% if classmate.team_logo %}
-                                <img src="{{ classmate.team_logo.url }}" alt="Team Logo" height="25">
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if classmate.common_record_registered_name %}
-                                {{ classmate.common_record_registered_name }}
-                            {% else %}
-                                {{ classmate.player_name }}
-                            {% endif %}
+                            <div class="player-name-logo">
+                                {% if classmate.team_logo %}
+                                    <img src="{{ classmate.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                                {% endif %}
+                                {% if classmate.common_record_registered_name %}
+                                    {{ classmate.common_record_registered_name }}
+                                {% else %}
+                                    {{ classmate.player_name }}
+                                {% endif %}
+                            </div>
                         </td>
                     </tr>
                 {% empty %}
@@ -240,22 +252,26 @@
         </table>
     {% endif %}
     {% if same_time_joined %}
-        <div class = "custom-heading">同期入団</div>
+        <div class="custom-heading">同期入団</div>
         <table>
             <tbody>
                 {% for player in same_time_joined %}
                     <tr>
                         <td>
-                            {% if player.team_logo %}
-                                <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
-                            {% else %}
-                                -
-                            {% endif %}
+                            <div class="player-name-logo">
+                                {% if player.team_logo %}
+                                    <img src="{{ player.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                                {% endif %}
+                                {% if player.common_record_registered_name %}
+                                    {{ player.common_record_registered_name }}
+                                {% else %}
+                                    {{ player.player_name }}
+                                {% endif %}
+                            </div>
                         </td>
-                        <td>{{player.common_record_registered_name}}</td>
                         <td>
                             {% if player.player_draft_rank %}
-                                {{player.draft_year}}年 {{player.draft_category_name}} {{player.player_draft_rank}}位
+                                {{ player.draft_year|year_with_suffix }} {{ player.draft_category_name }} {{ player.player_draft_rank|rank_with_suffix }}
                             {% endif %}
                         </td>
                     </tr>
