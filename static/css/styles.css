@@ -51,7 +51,7 @@ option {
 }
 
 /* アイコン */
-.fas,
+.fa-solid,
 .fa-brands {
     font-size: 1em;
     padding-right: 1vw;
@@ -258,13 +258,17 @@ option {
 }
 
 /* 球団名などのスタイル */
-.card .card-info .team-name {
+.card .card-info .card-header {
     font-size: 1.2rem;
     font-weight: bold;
 }
 
-.team-card {
+.image-card {
     display: flex;  /* Flexboxを使用 */
+}
+
+.card-image {
+    margin-right: 1rem;
 }
 
 .no-result {
@@ -381,5 +385,9 @@ option {
 
     .team-grid {
         grid-template-columns: repeat(6, 1fr);  /* スマホ向け: 6個/行 */
+    }
+
+    .no-wrap-cell {
+        white-space: nowrap;
     }
 }

@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
-
 {% block title %}ドラフト一覧{% endblock %}
-
 {% block content %}
-    {% for draft in drafts %}
-        <div class="card">
-        <div class="card-info">
-            <div class="team-name"><a href="{% url 'draft_detail' draft.year %}">{{ draft.year }}年</a></div>
-        </div>
-    </div>
-    {% empty %}
-        <div>ドラフトが未登録です。</div>
-    {% endfor %}
+    <div class="page-title">ドラフト一覧</div>
+    <table>
+        <tbody>
+            {% for draft in drafts %}
+                <tr>
+                    <td><a href="{% url 'draft_detail' draft.year %}">{{ draft.year }}年</a></td>
+                </tr>
+            {% empty %}
+                <div class="no-result">データがありません</div>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

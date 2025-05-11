@@ -334,7 +334,7 @@ def generation_list(request):
         )
         .values("school_year")
         .annotate(count=Count("id"))
-        .order_by("school_year")
+        .order_by("-school_year")
     )
 
     return render(request, "players/generation_list.html", {"generations": players})

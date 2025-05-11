@@ -1,32 +1,36 @@
 {% extends "base.html" %}
 {% load format_filters %}
-
 {% block title %}{{ year }}年ドラフト{% endblock %}
-
 {% block content %}
-    <h2>{{ year }}年ドラフト</h2>
-    {% for league_order, teams in grouped_drafts.items %}
-        {% for team_name, categories in teams.items %}
-            <p>{{ team_name }}</p>
-            {% for draft_category_order, drafts in categories.items %}
-                {% if drafts %}
-                    <div>{{ drafts.0.draft_category_name }}</div>
-                    <table>
-                        {% for player_draft in drafts %}
+    <div class="page-title">{{ year }}年ドラフト</div>
+    {% for team_name, team_info in grouped_drafts.items %}
+        <div class="custom-heading">
+            {% if team_info.logo %}
+                <img src="{{ team_info.logo.url }}" alt="Team Logo" class="team-logo-small">
+            {% endif %}
+            {{ team_name }}
+        </div>
+        {% for category_name, players in team_info.categories.items %}
+            {% if players %}
+                <div><strong>{{ category_name }}</strong></div>
+                <table>
+                    <tbody>
+                        {% for player in players %}
                             <tr>
                                 <td>
-                                    {{ player_draft.player_draft_miss_count | get_miss_text }}
-                                    {{ player_draft.player_draft_rank }}位
+                                    {{ player.player_draft_miss_count | get_miss_text }}
+                                    {{ player.player_draft_rank }}位
                                 </td>
-                                <td><a href="{% url 'player_detail' player_draft.player_id %}">{{ player_draft.player_name }}</a></td>
-                                <td>{{ player_draft.player_draft_is_hit | hit_mark }}</td>
+                                <td><a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a></td>
+                                <td>{{ player.player_draft_is_hit|hit_mark }}</td>
+                                <td>{{ player.player_draft_is_joined|join_mark:player.player_draft_is_hit }}</td>
                             </tr>
                         {% endfor %}
-                    </table>
-                {% else %}
-                    <p>→ drafts が空です。</p>
-                {% endif %}
-            {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-result">データがありません</div>
+            {% endif %}
         {% endfor %}
     {% endfor %}
 {% endblock %}

@@ -83,7 +83,7 @@
                         <td class="center"><img src="{{ draft.team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
                         <td class="numeric">{{ draft.rank|rank_with_suffix }}</td>
                         <td class="center">{{ draft.is_hit|hit_mark }}</td>
-                        <td class="center">{{ draft|join_mark }}</td>
+                        <td class="center">{{ draft.is_joined|join_mark:draft.is_hit }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

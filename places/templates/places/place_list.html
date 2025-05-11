@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
-
 {% block title %}場所一覧{% endblock %}
-
 {% block content %}
-    {% for place in places %}
-        <div class="card">
-        <div class="card-info">
-            <div class="team-name"><a href="{% url 'place_detail' place.id %}">{{ place.name }}</a></div>
-        </div>
-    </div>
-    {% empty %}
-        <div>場所が未登録です。</div>
-    {% endfor %}
+    <div class="page-title">場所一覧</div>
+    <table>
+        <tbody>
+            {% for place in places %}
+                <tr>
+                    <td><a href="{% url 'place_detail' place.id %}">{{ place.name }}</a></td>
+                </tr>
+            {% empty %}
+                <div class="no-result">データがありません</div>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

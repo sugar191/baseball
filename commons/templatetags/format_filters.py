@@ -177,10 +177,10 @@ def hit_mark(is_hit):
 
 
 @register.filter
-def join_mark(draft):
-    if draft.is_joined is True:
+def join_mark(is_joined, is_hit):
+    if is_joined is True:
         return "入団"
-    elif draft.is_hit is False:
+    elif is_hit is False:
         return ""
     else:
         return "入団拒否"
@@ -287,16 +287,6 @@ def format_salary(salary):
             formatted_num %= value
 
     return "".join(result)
-
-
-@register.filter
-def get_dynamic_field(record, field_name):
-    """フィールド名を動的に受け取って値を取り出す（モデルにも辞書にも対応）"""
-    if not record or not field_name:
-        return None
-    if isinstance(record, dict):
-        return record.get(field_name)
-    return getattr(record, field_name, None)
 
 
 @register.filter

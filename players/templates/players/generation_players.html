@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-
 {% block title %}{{ year }}年度生まれの選手{% endblock %}
-
 {% block content %}
-    <h2>{{ year }}年度生まれの選手</h2>
-    {% for player in players %}
-        <div class="card">
-            <div class="card-info">
-                <div class="team-name"><a href="{% url 'player_detail' player.id %}">{{ player.name }}</a></div>
-            </div>
-        </div>
-    {% empty %}
-        <div>該当する選手がいません。</div>
-    {% endfor %}
+    <div class="page-title">{{ year }}年度生まれの選手</div>
+    <table>
+        <tbody>
+            {% for player in players %}
+                <tr>
+                    <td><a href="{% url 'player_detail' player.id %}">{{ player.name }}</a></td>
+                    <td>{{ player.birthday }}
+                </tr>
+            {% empty %}
+                <div>該当する選手がいません。</div>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

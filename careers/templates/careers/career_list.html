@@ -1,23 +1,24 @@
 {% extends 'base.html' %}
-
 {% block title %}経歴一覧{% endblock %}
-
 {% block content %}
-    {% for career in careers %}
-        <div class="card">
-        <div class="card-info">
-            <div class="team-name"><a href="{% url 'career_detail' career.id %}">{{ career.name }}</a></div>
-            <div class="other-info">
-                {% if career.is_private == True %}
-                    私立
-                {% elif career.is_private == False %}
-                    公立
-                {% endif %}
-                {{ career.career_category }}
-            </div>
-        </div>
-    </div>
-    {% empty %}
-        <div>経歴が未登録です。</div>
-    {% endfor %}
+    <div class="page-title">経歴一覧</div>
+    <table>
+        <tbody>
+            {% for career in careers %}
+                <tr>
+                    <td><a href="{% url 'career_detail' career.id %}">{{ career.name }}</a></td>
+                    <td class="no-wrap-cell">
+                        {% if career.is_private == True %}
+                            私立
+                        {% elif career.is_private == False %}
+                            公立
+                        {% endif %}
+                        {{ career.career_category }}
+                    </td>
+                </tr>
+            {% empty %}
+                <div class="no-result">データがありません</div>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
+{% load format_filters %}
 {% block title %}球団一覧{% endblock %}
-
 {% block content %}
     <form method="GET" action="{% url 'team_list' %}">
         {% csrf_token %}
@@ -14,14 +13,18 @@
         <button type="submit">検索</button>
     </form>
     {% for team in teams %}
-        <div class="card team-card">
-            {% if team.logo %}<img src="{{ team.logo.url }}" alt="Team Logo" height="50">{% endif %}
+        <div class="card image-card" style="background-color: rgba({{ team.color|hex_to_rgb }}, 0.2);">
+            <div class="card-image">
+                {% if team.logo %}
+                    <img src="{{ team.logo.url }}" alt="Team Logo" height="50">
+                {% endif %}
+            </div>
             <div class="card-info">
-                <div class="team-name">{{ team.name }}</div>
-                <div class="other-info">{{ team.league }}</div>
+                <div class="card-header">{{ team.name }}</div>
+                <div class="card-content">{{ team.league.organization }} {{ team.league }}</div>
             </div>
         </div>
     {% empty %}
-        <div>球団が未登録です。</div>
+        <div class="no-result">検索結果は0件です。</div>
     {% endfor %}
 {% endblock %}

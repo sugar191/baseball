@@ -1,24 +1,24 @@
 {% extends "base.html" %}
-
 {% block title %}{{ career }}出身の選手{% endblock %}
-
 {% block content %}
-    <h2>{{ career }}出身の選手</h2>
-    {% for player in players %}
-        <div class="card">
-            <div class="card-info">
-                <div class="team-name"><a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a></div>
-                <div class="other-info">
-                    {% if player.after_career_id %}
-                        <a href="{% url 'career_detail' player.after_career_id %}">{{ player.after_career_name }}</a>へ
-                    {% elif player.draft_year %}
-                        <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
-                        {{ player.draft_category_name }}{{ player.player_draft_rank }}位
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    {% empty %}
-        <div>該当する選手がいません。</div>
-    {% endfor %}
+    <div class="page-title">{{ career }}出身の選手</div>
+    <table>
+        <tbody>
+            {% for player in players %}
+                <tr>
+                    <td><a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a></td>
+                    <td>
+                        {% if player.after_career_id %}
+                            <a href="{% url 'career_detail' player.after_career_id %}">{{ player.after_career_name }}</a>へ
+                        {% elif player.draft_year %}
+                            <img src="{{ player.team_logo.url }}" alt="Team Logo" height="25">
+                            {{ player.draft_year }}年{{ player.draft_category_name }}{{ player.player_draft_rank }}位
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <div>該当する選手がいません。</div>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
-
 {% block title %}年代一覧{% endblock %}
-
 {% block content %}
-    {% for generation in generations %}
-        <div class="card">
-            <div class="card-info">
-                <div class="team-name"><a href="{% url 'generation_players' generation.school_year %}">{{ generation.school_year }}年生まれ</a></div>
-            </div>
-        </div>
-    {% empty %}
-        <div>年代が未登録です。</div>
-    {% endfor %}
+    <div class="page-title">年代一覧</div>
+    <table>
+        <tbody>
+            {% for generation in generations %}
+                <tr>
+                    <td><a href="{% url 'generation_players' generation.school_year %}">{{ generation.school_year }}年生まれ</a></td>
+                </tr>
+            {% empty %}
+                <div class="no-result">データがありません</div>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
