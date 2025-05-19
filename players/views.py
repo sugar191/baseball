@@ -155,6 +155,7 @@ def player_list(request):
         filters &= Q(batting_id=batting)
 
     player_data = qs.filter(filters).order_by(
+        "player_category_order",
         "organization_order",
         "league_order",
         "team_order",

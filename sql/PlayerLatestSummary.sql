@@ -15,6 +15,9 @@ SELECT
 	players.usukoi_parameter AS player_usukoi_parameter,
 	players.youtube_parameter AS player_youtube_parameter,
 	players.remarks AS player_remarks,
+	player_categories.id AS player_category_id,
+	player_categories.name AS player_category_name,
+	player_categories.sort_order AS player_category_order,
 	places.id AS place_id,
 	places.name AS place_name,
 	hands_throwing.id AS throwing_id,
@@ -63,6 +66,10 @@ SELECT
 	player_batting_records.batting_average AS batting_average
 FROM
    players
+LEFT JOIN
+	player_categories
+ON
+	players.player_category_id = player_categories.id
 LEFT JOIN
 	places
 ON

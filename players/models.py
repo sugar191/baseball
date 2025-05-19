@@ -27,6 +27,18 @@ class HandBatting(models.Model):
         return self.name
 
 
+# 選手区分
+class PlayerCategory(models.Model):
+    name = models.CharField(max_length=10)
+    sort_order = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        db_table = "player_categories"  # 使用するテーブル名を指定
+
+    def __str__(self):
+        return self.name
+
+
 # 選手テーブル
 class Player(models.Model):
     name = models.CharField("氏名", max_length=50, null=False, blank=False)  # 選手名
@@ -89,6 +101,13 @@ class Player(models.Model):
     youtube_parameter = models.CharField(
         "YouTube", max_length=250, null=True, blank=True
     )  #  Youtubeパラメータ
+    player_category = models.ForeignKey(
+        PlayerCategory,
+        verbose_name="区分",
+        on_delete=models.RESTRICT,
+        null=True,
+        blank=True,
+    )
     remarks = models.CharField("備考", max_length=250, null=True, blank=True)  #  備考
     created_at = models.DateTimeField("作成日時", default=timezone.now)
     updated_at = models.DateTimeField("更新日時", auto_now=True)
@@ -159,6 +178,9 @@ class PlayerLatestSummary(models.Model):
         max_length=250, null=True, blank=True
     )  #  Youtubeパラメータ
     player_remarks = models.CharField(max_length=250, null=True, blank=True)  #  備考
+    player_category_id = models.IntegerField()
+    player_category_name = models.CharField(max_length=10)
+    player_category_order = models.IntegerField(null=True, blank=True)
     place_id = models.IntegerField()
     place_name = models.CharField(max_length=10)  # 場所名
     throwing_id = models.IntegerField()
