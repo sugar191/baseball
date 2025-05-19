@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "positions",
     "titles",
     "drafts",
+    "seasons",
     "admin_panel",
 ]
 

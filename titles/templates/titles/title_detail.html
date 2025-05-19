@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load format_filters %}
+{% block title %}{{ title.name }}{% endblock %}
+{% block content %}
+    <div class="page-title">{{ title.name }}</div>
+    <table>
+        <tbody>
+            {% for player_title in player_titles %}
+                <tr>
+                    <td>{{ player_title.year|year_with_suffix }}{{ player_title.season_label }}</td>
+                    {% if player_title.position_id %}
+                        <td>
+                            {% with label_list=position_labels|dict_get:player_title.position_id %}
+                                <span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>
+                            {% endwith %}
+                        </td>
+                    {% endif %}
+                    <td>
+                        {% if player_title.team_logo %}
+                            <img src="{{ player_title.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                        {% endif %}
+                        <a href="{% url 'player_detail' player_title.player_id %}">{{ player_title.player_name }}</a>
+                    </td>
+                    {% if player_title.batting_average %}
+                        <td class="numeric">
+                            {{ player_title.batting_average|format_batting_average }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.home_runs %}
+                        <td class="numeric">
+                            {{ player_title.home_runs|homerun_with_suffix }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.runs_batted_in %}
+                        <td class="numeric">
+                            {{ player_title.runs_batted_in|rbi_with_suffix }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.stolen_bases %}
+                        <td class="numeric">
+                            {{ player_title.stolen_bases|steel_with_suffix }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.hits %}
+                        <td class="numeric">
+                            {{ player_title.hits|hit_with_suffix }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.on_base_percentage %}
+                        <td class="numeric">
+                            {{ player_title.on_base_percentage|format_batting_average }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.wins %}
+                        <td class="numeric">
+                            {{ player_title.wins|win_with_suffix }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.earned_run_average %}
+                        <td class="numeric">
+                            {{ player_title.earned_run_average|format_pitching_average }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.win_average %}
+                        <td class="numeric">
+                            {{ player_title.win_average|format_batting_average }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.strike_outs %}
+                        <td class="numeric">
+                            {{ player_title.strike_outs|strike_with_suffix }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.saves %}
+                        <td class="numeric">
+                            {{ player_title.saves|save_with_suffix }}
+                        </td>
+                    {% endif %}
+                    {% if player_title.holds %}
+                        <td class="numeric">
+                            {{ player_title.holds|hold_with_suffix }}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <div class="no-result">データがありません</div>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

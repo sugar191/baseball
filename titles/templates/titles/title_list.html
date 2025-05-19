@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}タイトル一覧{% endblock %}
+{% block content %}
+    <div class="page-title">タイトル一覧</div>
+    <table>
+        <tbody>
+            {% for title in titles %}
+                <tr>
+                    <td><a href="{% url 'title_detail' title.id %}">{{ title.name }}</a></td>
+                </tr>
+            {% empty %}
+                <div class="no-result">データがありません</div>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

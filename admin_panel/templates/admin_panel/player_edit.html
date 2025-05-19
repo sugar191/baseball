@@ -88,7 +88,7 @@
             {% for record_form in formset %}
                 <tr>
                     <td>{{ record_form.id }}</td>
-                    <td>{{ record_form.year }}年{% if record_form.year.errors %}<ul>{% for error in record_form.year.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                    <td>{{ record_form.season }}{% if record_form.season.errors %}<ul>{% for error in record_form.season.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
                     <td class="salary-input">{{ record_form.salary }}{% if record_form.errors %}<ul>{% for error in record_form.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
                     <td>{{ record_form.currency }}{% if record_form.currency.errors %}<ul>{% for error in record_form.currency.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
                 </tr>

@@ -9,7 +9,7 @@
                     <td><a href="{% url 'generation_players' generation.school_year %}">{{ generation.school_year }}年生まれ</a></td>
                 </tr>
             {% empty %}
-                <div class="no-result">データがありません</div>
+                <tr><td><div class="no-result">データがありません</div></td></tr>
             {% endfor %}
         </tbody>
     </table>

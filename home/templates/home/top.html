@@ -5,11 +5,13 @@
     <div class="grid team-grid">
         {% for team in teams %}
             <div>
-                {% if team.logo %}
-                    <img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo">
-                {% else %}
-                    {{ team.name }}
-                {% endif %}
+                <a href="{% url 'team_detail' team.id %}">
+                    {% if team.logo %}
+                        <img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo">
+                    {% else %}
+                        {{ team.name }}
+                    {% endif %}
+                </a>
             </div>
         {% empty %}
             <div>球団が未登録です。</div>

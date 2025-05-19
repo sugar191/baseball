@@ -14,10 +14,12 @@ def age_with_suffix(value):
 
 @register.filter(name="year_with_suffix")
 def year_with_suffix(value):
-    try:
-        return f"{value}年"
-    except (ValueError, TypeError):
-        return value  # 数値以外の場合そのまま返す
+    if value:
+        try:
+            return f"{value}年"
+        except (ValueError, TypeError):
+            return ""
+    return ""
 
 
 @register.filter(name="rank_with_suffix")

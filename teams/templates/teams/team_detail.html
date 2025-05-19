@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load format_filters %}
+{% block title %}{{ team.name }}{% endblock %}
+{% block content %}
+    <div>
+        <div class="page-title player-name-logo">
+            {% if team.logo %}
+                <img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small">
+            {% endif %}
+            {{ team.name }}
+        </div>
+    </div>
+{% endblock %}

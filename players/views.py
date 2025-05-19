@@ -23,6 +23,7 @@ from records.models import (
 )
 from careers.models import Career, PlayerCareer
 from drafts.models import PlayerDraft
+from seasons.models import Season
 from titles.models import PlayerTitle
 from teams.models import Team
 from places.models import Place
@@ -197,29 +198,41 @@ def player_list(request):
 
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
-    common_records = PlayerCommonRecord.objects.filter(player=player).order_by("year")
-    mlb_exists = PlayerBattingRecord.objects.filter(player=player, year=9001).exists()
-    batting_records = PlayerBattingRecord.objects.filter(player=player).order_by("year")
+    common_records = PlayerCommonRecord.objects.filter(player=player).order_by(
+        "season__sort_order"
+    )
+    batting_records = PlayerBattingRecord.objects.filter(player=player).order_by(
+        "season__sort_order"
+    )
     pitching_records = PlayerPitchingRecord.objects.filter(player=player).order_by(
-        "year"
+        "season__sort_order"
     )
     fielding_records = PlayerFieldingRecord.objects.filter(player=player).order_by(
-        "year", "position_id"
+        "season__sort_order", "position_id"
     )
     careers = PlayerCareer.objects.filter(player=player).order_by("sort_order")
     drafts = PlayerDraft.objects.filter(player=player).order_by("draft")
-    titles = PlayerTitle.objects.filter(player=player).order_by("year", "title")
+    titles = PlayerTitle.objects.filter(player=player).order_by(
+        "season__sort_order", "title__sort_order"
+    )
 
     # 年ごとにポジション別にまとめる
     yearly_fielding = defaultdict(list)
     for record in fielding_records:
-        yearly_fielding[record.year].append(
-            {"position_id": record.position_id, "games": record.games}
+        sort_order = record.season.sort_order
+        yearly_fielding[sort_order].append(
+            {
+                "season_id": record.season_id,
+                "year": record.season.year,
+                "label": record.season.label,
+                "position_id": record.position_id,
+                "games": record.games,
+            }
         )
 
     # 各年の出場状況とHTML表示用の文字列を追加
     fielding_summary = {}
-    for year, positions in yearly_fielding.items():
+    for sort_order, positions in yearly_fielding.items():
         total_games = sum(p["games"] for p in positions)
         summary_parts = []
         for p in positions:
@@ -230,7 +243,13 @@ def player_detail(request, player_id):
                 html = f'<span class="position-badge {css_class}">{label}</span>{games}'
                 summary_parts.append(html)
         summary_html = " ".join(summary_parts)
-        fielding_summary[year] = {"total_games": total_games, "html": summary_html}
+        fielding_summary[sort_order] = {
+            "season_id": p["season_id"],
+            "year": p["year"],
+            "label": p["label"],
+            "total_games": total_games,
+            "html": summary_html,
+        }
 
     # 年順にソート
     fielding_summary_ordered = OrderedDict(
@@ -263,13 +282,16 @@ def player_detail(request, player_id):
             draft_year=draft_joined.draft.year, player_draft_team=draft_joined.team_id
         ).exclude(pk=player.pk)
 
+    same_birthdays = PlayerLatestSummary.objects.filter(
+        player_birthday__month=birthday.month, player_birthday__day=birthday.day
+    ).exclude(pk=player.pk)
+
     return render(
         request,
         "players/player_detail.html",
         {
             "player": player,
             "commons": common_records,
-            "mlb_exists": mlb_exists,
             "battings": batting_records,
             "pitchings": pitching_records,
             "fieldings": fielding_summary_ordered,  # そのままリストで渡す
@@ -279,22 +301,26 @@ def player_detail(request, player_id):
             "position_labels": POSITION_LABELS,  # 追加
             "classmates": classmates,
             "same_time_joined": same_time_joined,
+            "same_birthdays": same_birthdays,
         },
     )
 
 
-def player_year_detail(request, player_id, year):
+def player_year_detail(request, player_id, season_id):
     player = get_object_or_404(Player, id=player_id)
-    titles = PlayerTitle.objects.filter(player=player, year=year)
-    common_record = PlayerCommonRecord.objects.filter(player=player, year=year).first()
+    season = get_object_or_404(Season, id=season_id)
+    titles = PlayerTitle.objects.filter(player=player, season=season_id)
+    common_record = PlayerCommonRecord.objects.filter(
+        player=player, season=season_id
+    ).first()
     batting_record = PlayerBattingRecord.objects.filter(
-        player=player, year=year
+        player=player, season=season_id
     ).first()
     pitching_record = PlayerPitchingRecord.objects.filter(
-        player=player, year=year
+        player=player, season=season_id
     ).first()
     fielding_record = PlayerFieldingRecord.objects.filter(
-        player=player, year=year, games__gt=0
+        player=player, season=season_id, games__gt=0
     )
     # 他の必要なデータもここで取得
 
@@ -303,7 +329,7 @@ def player_year_detail(request, player_id, year):
         "players/player_year_detail.html",
         {
             "player": player,
-            "year": year,
+            "season": season,
             "titles": titles,
             "common_record": common_record,
             "batting_record": batting_record,
@@ -348,9 +374,9 @@ def generation_players(request, year):
     start_date = date(year, 4, 2)
     end_date = date(year + 1, 4, 1)
 
-    players = Player.objects.filter(
-        birthday__gte=start_date, birthday__lte=end_date
-    ).order_by("birthday")
+    players = PlayerLatestSummary.objects.filter(
+        player_birthday__gte=start_date, player_birthday__lte=end_date
+    ).order_by("player_birthday")
 
     return render(
         request,

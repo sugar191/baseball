@@ -37,7 +37,7 @@
                         <div><strong>年俸({{ player.common_record_year|year_with_suffix }}):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
                     {% endif %}
                     {% if player.draft_year %}
-                        <div><strong>入団:</strong> {{ player.draft_year|year_with_suffix }}{{ player.draft_category_name }}{{ player.player_draft_rank|rank_with_suffix }}</div>
+                        <div><strong>入団:</strong> <a href="{% url 'draft_detail' player.draft_year %}">{{ player.draft_year|year_with_suffix }}{{ player.draft_category_name }}{{ player.player_draft_miss_count | get_miss_text }}{{ player.player_draft_rank|rank_with_suffix }}</a></div>
                     {% endif %}
                     {% if player.player_birthday %}
                         <div><strong>誕生日:</strong> {{ player.player_birthday }}</div>
@@ -46,7 +46,7 @@
                         <div><strong>年齢:</strong> {{ player.age|age_with_suffix }}</div>
                     {% endif %}
                     {% if player.career_version_name %}
-                        <div><strong>経歴:</strong> {{ player.career_version_name }}</div>
+                        <div><strong>経歴:</strong> <a href="{% url 'career_detail' player.career_id %}">{{ player.career_version_name }}</a></div>
                     {% endif %}
                     {% if player.throw_bat %}
                         <div><strong>投打:</strong> {{ player.throw_bat }}</div>
@@ -58,7 +58,7 @@
                         <div><strong>体重:</strong> {{ player.player_weight|weight_with_suffix }}</div>
                     {% endif %}
                     {% if player.place_name %}
-                        <div><strong>出身地:</strong> {{ player.place_name }}</div>
+                        <div><strong>出身地:</strong> <a href="{% url 'place_detail' player.place_id %}">{{ player.place_name }}</a></div>
                     {% endif %}
                     {% if player.marriage %}
                         <div><strong>婚姻:</strong> {{ player.marriage }}</div>

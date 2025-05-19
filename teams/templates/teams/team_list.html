@@ -20,7 +20,7 @@
                 {% endif %}
             </div>
             <div class="card-info">
-                <div class="card-header">{{ team.name }}</div>
+                <div class="card-header"><a href="{% url 'team_detail' team.id %}">{{ team.name }}</a></div>
                 <div class="card-content">{{ team.league.organization }} {{ team.league }}</div>
             </div>
         </div>

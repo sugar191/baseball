@@ -6,7 +6,12 @@
         <tbody>
             {% for player in players %}
                 <tr>
-                    <td><a href="{% url 'player_detail' player.id %}">{{ player.name }}</a></td>
+                    <td>
+                        {% if player.team_logo %}
+                            <img src="{{ player.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                        {% endif %}
+                        <a href="{% url 'player_detail' player.player_id %}">{{ player.common_record_registered_name }}</a>
+                    </td>
                     <td>{{ player.birthday }}
                 </tr>
             {% empty %}

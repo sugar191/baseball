@@ -32,7 +32,7 @@
             <div>ファン球団: {{ player.favorite_team }}</div>
         {% endif %}
         {% if player.place %}
-            <div>出身地: {{ player.place }}</div>
+            <div>出身地: <a href="{% url 'place_detail' player.place_id %}">{{ player.place }}</a></div>
         {% endif %}
         {% if player.is_married %}
             <div>婚姻: {{ player.marriage }}</div>
@@ -66,7 +66,7 @@
             <tbody>
                 {% for career in careers %}
                     <tr>
-                        <td>{{ career.career_version.name }}</td>
+                        <td><a href="{% url 'career_detail' career.career_version.career_id %}">{{ career.career_version.name }}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -78,10 +78,10 @@
             <tbody>
                 {% for draft in drafts %}
                     <tr>
-                        <td>{{ draft.draft.year|year_with_suffix }}</td>
+                        <td><a href="{% url 'draft_detail' draft.draft.year %}">{{ draft.draft.year|year_with_suffix }}</a></td>
                         <td>{{ draft.draft.draft_category }}</td>
                         <td class="center"><img src="{{ draft.team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
-                        <td class="numeric">{{ draft.rank|rank_with_suffix }}</td>
+                        <td class="numeric">{{ draft.miss_count | get_miss_text }}{{ draft.rank|rank_with_suffix }}</td>
                         <td class="center">{{ draft.is_hit|hit_mark }}</td>
                         <td class="center">{{ draft.is_joined|join_mark:draft.is_hit }}</td>
                     </tr>
@@ -94,15 +94,15 @@
         <tbody>
             {% for title in titles %}
                 <tr>
-                    <td>{{ title.year|year_with_suffix }}</td>
-                    <td class="center">
+                    <td><a href="{% url 'player_year_detail' player.id title.season.id %}">{{ title.season.year|year_with_suffix }}{{ title.season.label }}</a></td>
+                    <td>
                         {% if title.position.id %}
                             {% with label_list=position_labels|dict_get:title.position.id %}
                                 <span class="position-badge {{ label_list.1 }}">{{ label_list.0 }}</span>
                             {% endwith %}
                         {% endif %}
+                        {{ title.title }}
                     </td>
-                    <td>{{ title.title }}</td>
                 </tr>
             {% empty %}
                 <tr>
@@ -125,7 +125,7 @@
             <tbody>
                 {% for common in commons %}
                     <tr>
-                        <td><a href="{% url 'player_year_detail' player.id common.year %}">{{ common.year|format_year:mlb_exists }}</a></td>
+                        <td><a href="{% url 'player_year_detail' player.id common.season.id %}">{{ common.season.year|year_with_suffix }}{{ common.season.label }}</a></td>
                         <td class="center">
                             <div>
                                 {% if common.team.logo %}
@@ -158,7 +158,11 @@
             <tbody>
                 {% for pitching in pitchings %}
                     <tr>
-                        <td><a href="{% url 'player_year_detail' player.id pitching.year %}">{{ pitching.year|format_year:mlb_exists }}</a></td>
+                        <td>
+                            <a href="{% url 'player_year_detail' player.id pitching.season.id %}">
+                                {{ pitching.season.year|year_with_suffix }}{{ pitching.season.label }}
+                            </a>
+                        </td>
                         {% if pitching.games != 0 %}
                             <td class="numeric">{{ pitching.earned_run_average|format_pitching_average }}</td>
                             <td class="numeric">{{ pitching.wins|win_with_suffix }}</td>
@@ -184,7 +188,11 @@
             <tbody>
                 {% for batting in battings %}
                     <tr>
-                        <td><a href="{% url 'player_year_detail' player.id batting.year %}">{{ batting.year|format_year:mlb_exists }}</a></td>
+                        <td>
+                            <a href="{% url 'player_year_detail' player.id batting.season.id %}">
+                                {{ batting.season.year|year_with_suffix }}{{ batting.season.label }}
+                            </a>
+                        </td>
                         {% if batting.plate_appearances != 0 %}
                             <td class="numeric">{{ batting.batting_average|format_batting_average }}</td>
                             <td class="numeric">{{ batting.home_runs|homerun_with_suffix }}</td>
@@ -209,7 +217,11 @@
             <tbody>
                 {% for year, data in fieldings.items %}
                     <tr>
-                        <td><a href="{% url 'player_year_detail' player.id year %}">{{ year|format_year:mlb_exists }}</a></td>
+                        <td>
+                            <a href="{% url 'player_year_detail' player.id data.season_id %}">
+                                {{ data.year|year_with_suffix }}{{ data.label }}
+                            </a>
+                        </td>
                         {% if data.total_games != 0 %}
                             <td>{{ data.html|safe }}</td>
                         {% else %}
@@ -235,12 +247,48 @@
                                 {% if classmate.team_logo %}
                                     <img src="{{ classmate.team_logo.url }}" alt="Team Logo" class="team-logo-small">
                                 {% endif %}
-                                {% if classmate.common_record_registered_name %}
-                                    {{ classmate.common_record_registered_name }}
-                                {% else %}
-                                    {{ classmate.player_name }}
-                                {% endif %}
+                                <a href="{% url 'player_detail' classmate.player_id %}">
+                                    {% if classmate.common_record_registered_name %}
+                                        {{ classmate.common_record_registered_name }}
+                                    {% else %}
+                                        {{ classmate.player_name }}
+                                    {% endif %}
+                                </a>
                             </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="center">データがありません</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if same_birthdays %}
+        <div class="custom-heading">同じ誕生日</div>
+        <table>
+            <tbody>
+                {% for player in same_birthdays %}
+                    <tr>
+                        <td>
+                            <div class="player-name-logo">
+                                {% if player.team_logo %}
+                                    <img src="{{ player.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                                {% endif %}
+                                <a href="{% url 'player_detail' player.player_id %}">
+                                    {% if player.common_record_registered_name %}
+                                        {{ player.common_record_registered_name }}
+                                    {% else %}
+                                        {{ player.player_name }}
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            {% if player.age %}
+                                {{ player.age|age_with_suffix }}
+                            {% endif %}
                         </td>
                     </tr>
                 {% empty %}
@@ -262,11 +310,13 @@
                                 {% if player.team_logo %}
                                     <img src="{{ player.team_logo.url }}" alt="Team Logo" class="team-logo-small">
                                 {% endif %}
-                                {% if player.common_record_registered_name %}
-                                    {{ player.common_record_registered_name }}
-                                {% else %}
-                                    {{ player.player_name }}
-                                {% endif %}
+                                <a href="{% url 'player_detail' player.player_id %}">
+                                    {% if player.common_record_registered_name %}
+                                        {{ player.common_record_registered_name }}
+                                    {% else %}
+                                        {{ player.player_name }}
+                                    {% endif %}
+                                </a>
                             </div>
                         </td>
                         <td>

@@ -6,7 +6,12 @@
         <tbody>
             {% for player in players %}
                 <tr>
-                    <td><a href="{% url 'player_detail' player.id %}">{{ player.name }}</a></td>
+                    <td class="player-name-logo">
+                        {% if player.team_logo %}
+                            <img src="{{ player.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                        {% endif %}
+                        <a href="{% url 'player_detail' player.player_id %}">{{player.player_name}}</a>
+                    </td>
                 </tr>
             {% empty %}
                 <div>該当する選手がいません。</div>

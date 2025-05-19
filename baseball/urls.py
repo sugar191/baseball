@@ -13,6 +13,7 @@ urlpatterns = [
     path("", include("careers.urls")),
     path("", include("drafts.urls")),
     path("", include("places.urls")),
+    path("", include("titles.urls")),
     path("admin-tool/", include("admin_panel.urls")),
     # path('api/', include('api.urls')),  # 未使用でもコメントで残しておくと便利
 ]
