@@ -57,8 +57,8 @@
                 <tr><td>ボーク</td><td class="numeric">{{ pitching_record.balk }}</td></tr>
                 <tr><td>失点</td><td class="numeric">{{ pitching_record.runs }}</td></tr>
                 <tr><td>自責点</td><td class="numeric">{{ pitching_record.earned_runs }}</td></tr>
-                <tr><td>防御率</td><td class="numeric">{{ pitching_record.earned_run_average }}</td></tr>
-                <tr><td>WHIP</td><td class="numeric">{{ pitching_record.whip }}</td></tr>
+                <tr><td>防御率</td><td class="numeric">{{ pitching_record.earned_run_average|format_pitching_average }}</td></tr>
+                <tr><td>WHIP</td><td class="numeric">{{ pitching_record.whip|format_pitching_average }}</td></tr>
             </tbody>
         </table>
     {% endif %}
