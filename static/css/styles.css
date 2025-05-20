@@ -343,6 +343,7 @@ option {
 
 .numeric {
     text-align: right;
+    white-space: nowrap;
 }
 
 .salary-input input[type="number"] {

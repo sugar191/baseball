@@ -280,7 +280,7 @@ def format_salary(salary):
     else:
         formatted_num = salary
 
-    units = [("億", 10**8), ("万", 10**4), ("", 1)]
+    units = [("億", 10**8), ("万", 10**4)]
     result = []
 
     for unit, value in units:

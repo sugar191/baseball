@@ -31,6 +31,159 @@ from positions.models import PositionCategory
 from positions.utils.constants import POSITION_LABELS
 
 
+def calculate_batting_average(hits, at_bats):
+    if at_bats > 0:
+        return hits / at_bats
+    else:
+        return 0
+
+
+def calculate_on_base_percentage(
+    hits, bases_on_balls, hit_by_pitch, at_bats, sacrifice_flys
+):
+    denominator = at_bats + bases_on_balls + hit_by_pitch + sacrifice_flys
+    if denominator > 0:
+        numerator = hits + bases_on_balls + hit_by_pitch
+        return numerator / denominator
+    else:
+        return 0
+
+
+def calculate_slugging_percentage(total_bases, at_bats):
+    if at_bats > 0:
+        return total_bases / at_bats
+    else:
+        return 0
+
+
+def convert_innings(decimal_innings):
+    # 小数点以下の桁を分離
+    whole = int(decimal_innings)
+    fraction = decimal_innings - whole
+    if fraction == 0.1:
+        return whole + 1 / 3
+    elif fraction == 0.2:
+        return whole + 2 / 3
+    else:
+        return whole  # または適切に例外処理してもOK
+
+
+def calculate_era(earned_runs, decimal_innings):
+    innings = convert_innings(decimal_innings)
+    if innings == 0:
+        return 0  # 0回の場合は防御率なし
+    return (earned_runs * 9) / innings
+
+
+def calculate_whip(hits, walks, decimal_innings):
+    innings = convert_innings(decimal_innings)
+    if innings == 0:
+        return 0  # 0回の場合は防御率なし
+    return (hits + walks) / innings
+
+
+def sum_batting_total(player, dummy_season):
+    total = PlayerBattingRecord()
+    batting_total_records = PlayerBattingRecord.objects.filter(
+        player=player, season__year__isnull=True
+    )
+    if batting_total_records.count() > 1:
+        for record in batting_total_records:
+            total.player = player
+            total.games = (total.games or 0) + record.games
+            total.plate_appearances = (
+                total.plate_appearances or 0
+            ) + record.plate_appearances
+            total.at_bats = (total.at_bats or 0) + record.at_bats
+            total.runs = (total.runs or 0) + record.runs
+            total.hits = (total.hits or 0) + record.hits
+            total.doubles = (total.doubles or 0) + record.doubles
+            total.triples = (total.triples or 0) + record.triples
+            total.home_runs = (total.home_runs or 0) + record.home_runs
+            total.total_bases = (total.total_bases or 0) + record.total_bases
+            total.runs_batted_in = (total.runs_batted_in or 0) + (
+                record.runs_batted_in or 0
+            )
+            total.stolen_bases = (total.stolen_bases or 0) + record.stolen_bases
+            total.caught_stealing = (
+                total.caught_stealing or 0
+            ) + record.caught_stealing
+            total.sacrifice_bunts = (total.sacrifice_bunts or 0) + (
+                record.sacrifice_bunts or 0
+            )
+            total.sacrifice_flys = (total.sacrifice_flys or 0) + record.sacrifice_flys
+            total.bases_on_balls = (total.bases_on_balls or 0) + record.bases_on_balls
+            total.intentional_walks = (
+                total.intentional_walks or 0
+            ) + record.intentional_walks
+            total.hit_by_pitch = (total.hit_by_pitch or 0) + record.hit_by_pitch
+            total.strike_outs = (total.strike_outs or 0) + record.strike_outs
+            total.grounded_into_double_plays = (
+                total.grounded_into_double_plays or 0
+            ) + record.grounded_into_double_plays
+            total.interferences = (total.interferences or 0) + (
+                record.interferences or 0
+            )
+        total.batting_average = calculate_batting_average(total.hits, total.at_bats)
+        total.on_base_percentage = calculate_on_base_percentage(
+            total.hits,
+            total.bases_on_balls,
+            total.hit_by_pitch,
+            total.at_bats,
+            total.sacrifice_flys,
+        )
+        total.slugging_percentage = calculate_slugging_percentage(
+            total.total_bases, total.at_bats
+        )
+        total.ops = total.on_base_percentage + total.slugging_percentage
+        total.season = dummy_season
+        return total
+
+
+def sum_pitching_total(player, dummy_season):
+    total = PlayerPitchingRecord()
+    pitching_total_records = PlayerPitchingRecord.objects.filter(
+        player=player, season__year__isnull=True
+    )
+    if pitching_total_records.count() > 1:
+        for record in pitching_total_records:
+            total.player = player
+            total.games = (total.games or 0) + record.games
+            total.games_started = (total.games_started or 0) + record.games_started
+            total.games_finished = (total.games_finished or 0) + record.games_finished
+            total.complete_games = (total.complete_games or 0) + record.complete_games
+            total.shutouts = (total.shutouts or 0) + record.shutouts
+            total.no_base_on_balls_games = (total.no_base_on_balls_games or 0) + (
+                record.no_base_on_balls_games or 0
+            )
+            total.wins = (total.wins or 0) + record.wins
+            total.loses = (total.loses or 0) + record.loses
+            total.saves = (total.saves or 0) + record.saves
+            total.holds = (total.holds or 0) + (record.holds or 0)
+            total.innings_pitched = (
+                total.innings_pitched or 0
+            ) + record.innings_pitched
+            total.plate_appearances = (
+                total.plate_appearances or 0
+            ) + record.plate_appearances
+            total.at_bats = (total.at_bats or 0) + (record.at_bats or 0)
+            total.hits = (total.hits or 0) + record.hits
+            total.home_runs = (total.home_runs or 0) + record.home_runs
+            total.walks = (total.walks or 0) + record.walks
+            total.hit_batsmen = (total.hit_batsmen or 0) + record.hit_batsmen
+            total.strike_outs = (total.strike_outs or 0) + record.strike_outs
+            total.wild_pitches = (total.wild_pitches or 0) + record.wild_pitches
+            total.balk = (total.balk or 0) + record.balk
+            total.runs = (total.runs or 0) + record.runs
+            total.earned_runs = (total.earned_runs or 0) + record.earned_runs
+        total.earned_run_average = calculate_era(
+            total.earned_runs, total.innings_pitched
+        )
+        total.whip = calculate_whip(total.hits, total.walks, total.innings_pitched)
+        total.season = dummy_season
+        return total
+
+
 # 選手一覧を表示するビュー
 def player_list(request):
     # 検索キーワード取得
@@ -199,15 +352,26 @@ def player_list(request):
 
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
+    dummy_season = get_object_or_404(Season, id=9999)
     common_records = PlayerCommonRecord.objects.filter(player=player).order_by(
         "season__sort_order"
     )
-    batting_records = PlayerBattingRecord.objects.filter(player=player).order_by(
-        "season__sort_order"
+    batting_records = list(
+        PlayerBattingRecord.objects.filter(player=player).order_by("season__sort_order")
     )
-    pitching_records = PlayerPitchingRecord.objects.filter(player=player).order_by(
-        "season__sort_order"
+    batting_total_record = sum_batting_total(player, dummy_season)
+    if batting_total_record:
+        batting_records.append(batting_total_record)
+
+    pitching_records = list(
+        PlayerPitchingRecord.objects.filter(player=player).order_by(
+            "season__sort_order"
+        )
     )
+    pitching_total_record = sum_pitching_total(player, dummy_season)
+    if pitching_total_record:
+        pitching_records.append(pitching_total_record)
+
     fielding_records = PlayerFieldingRecord.objects.filter(player=player).order_by(
         "season__sort_order", "position_id"
     )
@@ -310,16 +474,21 @@ def player_detail(request, player_id):
 def player_year_detail(request, player_id, season_id):
     player = get_object_or_404(Player, id=player_id)
     season = get_object_or_404(Season, id=season_id)
+    dummy_season = get_object_or_404(Season, id=9999)
     titles = PlayerTitle.objects.filter(player=player, season=season_id)
     common_record = PlayerCommonRecord.objects.filter(
         player=player, season=season_id
     ).first()
-    batting_record = PlayerBattingRecord.objects.filter(
-        player=player, season=season_id
-    ).first()
-    pitching_record = PlayerPitchingRecord.objects.filter(
-        player=player, season=season_id
-    ).first()
+    if season_id == 9999:
+        batting_record = sum_batting_total(player, dummy_season)
+        pitching_record = sum_pitching_total(player, dummy_season)
+    else:
+        batting_record = PlayerBattingRecord.objects.filter(
+            player=player, season=season_id
+        ).first()
+        pitching_record = PlayerPitchingRecord.objects.filter(
+            player=player, season=season_id
+        ).first()
     fielding_record = PlayerFieldingRecord.objects.filter(
         player=player, season=season_id, games__gt=0
     )

@@ -204,3 +204,20 @@ class PlayerFieldingRecord(models.Model):
 
     def __str__(self):
         return f"{self.player.name} ({self.year})"
+
+
+class PlayerSalaryView(models.Model):
+    id = models.IntegerField(primary_key=True)
+    year = models.IntegerField()
+    player_id = models.IntegerField()
+    player_name = models.CharField(max_length=50, null=True, blank=True)
+    team_logo = models.ImageField(upload_to="team_logos/", null=True, blank=True)
+    salary = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    rank = models.IntegerField()
+
+    class Meta:
+        managed = False  # DjangoがCREATE TABLEしないように
+        db_table = "player_salary_view"
+
+    def __str__(self):
+        return f"{self.player_name}"

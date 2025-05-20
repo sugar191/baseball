@@ -79,6 +79,10 @@
                 <td>{{ form.youtube_parameter }}{% if form.youtube_parameter.errors %}<ul>{% for error in form.youtube_parameter.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>
             <tr>
+                <td>{{ form.player_category.label_tag }}</td>
+                <td>{{ form.player_category }}{% if form.player_category.errors %}<ul>{% for error in form.player_category.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
                 <td>{{ form.remarks.label_tag }}</td>
                 <td>{{ form.remarks }}{% if form.remarks.errors %}<ul>{% for error in form.remarks.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
             </tr>

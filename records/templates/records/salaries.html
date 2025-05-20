@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load format_filters %}
+{% block title %}年俸ランキング{% endblock %}
+{% block content %}
+    <div class="custom-heading">年俸ランキング</div>
+    ※{{ year }}/4/1時点の為替レートで換算
+    <table>
+        <tbody>
+            {% for salary in salaries %}
+                <tr>
+                    <td>
+                        {% if salary.team_logo %}
+                            <img src="{{ salary.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                        {% endif %}
+                        <a href="{% url 'player_detail' salary.player_id %}">{{ salary.player_name }}</a>
+                    </td>
+                    <td class="numeric">{{ salary.salary|format_salary }}円</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
