@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .models import Team, Organization
-from titles.models import Title, PlayerLatestTitleView
+from players.models import PlayerLatestSummary
 
 
 # 選手一覧を表示するビュー
@@ -29,9 +29,10 @@ def team_list(request):
 
 def team_detail(request, team_id):
     team = get_object_or_404(Team, id=team_id)
+    players = PlayerLatestSummary.objects.filter(team_id=team_id)
 
     return render(
         request,
         "teams/team_detail.html",
-        {"team": team},
+        {"team": team, "players": players},
     )

@@ -22,6 +22,9 @@
                     {% if player.player_nickname %}
                         <div><strong>{{ player.player_nickname|with_brackets }}</strong></div>
                     {% endif %}
+                    {% if player.player_category_name %}
+                        <div><strong>区分:</strong> {{ player.player_category_name }}</div>
+                    {% endif %}
                     {% if player.common_record_number %}
                         <div><strong>背番号:</strong> {{ player.common_record_number }}</div>
                     {% endif %}

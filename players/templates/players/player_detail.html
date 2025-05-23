@@ -10,6 +10,9 @@
         {% if player.nickname %}
             <div>通称: {{ player.nickname|with_brackets }}</div>
         {% endif %}
+        {% if player.player_category %}
+            <div>区分: {{ player.player_category }}</div>
+        {% endif %}
         {% if player.main_position_category %}
             <div>ポジション: {{player.main_position_category }}</div>
         {% endif %}
