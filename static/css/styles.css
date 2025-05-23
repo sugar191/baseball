@@ -53,7 +53,7 @@ option {
 /* アイコン */
 .fa-solid,
 .fa-brands {
-    font-size: 1em;
+    font-size: 1.3em;
     padding-right: 1vw;
 }
 
@@ -107,7 +107,7 @@ option {
 .logout-button {
     background: none;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 /* 固定メニューバー */
