@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "titles",
     "drafts",
     "seasons",
+    "stadiums",
+    "games",
     "admin_panel",
 ]
 

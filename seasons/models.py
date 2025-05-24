@@ -1,5 +1,4 @@
 from django.db import models
-from teams.models import Organization
 
 
 # Create your models here.
@@ -7,7 +6,7 @@ class Season(models.Model):
     year = models.IntegerField(null=True, blank=True)
     label = models.CharField(max_length=50, null=True, blank=True)
     organization = models.ForeignKey(
-        Organization, on_delete=models.CASCADE, null=True, blank=True
+        "teams.Organization", on_delete=models.CASCADE, null=True, blank=True
     )  # リーグとの関連
     sort_order = models.IntegerField(null=True, blank=True)
 
