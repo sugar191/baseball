@@ -2,6 +2,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from players.models import Player
 from records.models import PlayerCommonRecord
+from games.models import Game
 from teams.models import Team
 
 
@@ -67,3 +68,9 @@ PlayerCommonRecordFormSet = inlineformset_factory(
     extra=0,
     can_delete=False,
 )
+
+
+class GameForm(forms.ModelForm):
+    class Meta:
+        model = Game
+        fields = "__all__"  # 全項目編集可能にする場合

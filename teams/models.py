@@ -74,9 +74,22 @@ class TeamSeason(models.Model):
         upload_to="team_logos/", null=True, blank=True
     )  # 球団ロゴ画像
     sort_order = models.IntegerField(default=0)  # 表示順（順位に基づく）
+    match = models.IntegerField(null=True, blank=True)
+    win = models.IntegerField(null=True, blank=True)
+    lose = models.IntegerField(null=True, blank=True)
+    draw = models.IntegerField(null=True, blank=True)
 
     class Meta:
         db_table = "team_seasons"  # 使用するテーブル名を指定
 
     def __str__(self):
         return self.name
+
+    # 年齢を計算するプロパティ
+    @property
+    def win_percent(self):
+
+        if self.match == 0:
+            return 0
+        else:
+            return self.win / self.match

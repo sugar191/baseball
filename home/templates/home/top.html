@@ -2,21 +2,26 @@
 {% load format_filters %}
 {% block title %}トップページ{% endblock %}
 {% block content %}
-    <div class="grid team-grid">
-        {% for team in teams %}
-            <div>
-                <a href="{% url 'team_detail' team.id %}">
-                    {% if team.logo %}
-                        <img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo">
-                    {% else %}
-                        {{ team.name }}
-                    {% endif %}
-                </a>
-            </div>
-        {% empty %}
-            <div>球団が未登録です。</div>
-        {% endfor %}
-    </div>
+    <form method="GET" action="{% url 'player_list' %}">
+        {% csrf_token %}
+        <input type="text" name="q" placeholder="検索ワード" value="{{ request.GET.q }}">
+        <button type="submit">選手検索</button>
+    </form>
+    <div class="custom-heading">今シーズンの順位</div>
+    <table>
+        <tbody>
+            {% for team in teams %}
+                <tr>
+                    <td class="numeric">{{ team.sort_order|rank_with_suffix }}</td>
+                    <td class="center"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
+                    <td class="numeric">{{ team.win|win_with_suffix }}</td>
+                    <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
+                    <td class="numeric">{{ team.draw|draw_with_suffix }}</td>
+                    <td class="numeric">{{ team.win_percent|format_batting_average }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <div class="custom-heading">今日の試合</div>
     <table>
         <tbody>
@@ -27,19 +32,19 @@
                             <img src="{{ game.home_team.logo.url }}" alt="Team Logo" class="team-logo-small">
                         {% endif %}
                     </td>
-                    <td class="numeric">
+                    <td class="center">
                         {% if game.home_score %}
                             {{ game.home_score }}
                         {% endif %}
                     </td>
                     <td class="center">
-                        {% if game.game_status == 1 %}
+                        {% if game.game_status_id == 1 %}
                             -
                         {% else %}
                             VS
                         {% endif %}
                     </td>
-                    <td class="numeric">
+                    <td class="center">
                         {% if game.away_score %}
                             {{ game.away_score }}
                         {% endif %}
@@ -57,6 +62,11 @@
                     <td>
                         {% if game.start_time %}
                             {{ game.start_time }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if game.game_status_id == 2 %}
+                            中止
                         {% endif %}
                     </td>
                 </tr>

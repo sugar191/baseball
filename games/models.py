@@ -39,7 +39,7 @@ class Game(models.Model):
     stadium = models.ForeignKey(
         Stadium, on_delete=models.RESTRICT, null=True, blank=True
     )
-    remarks = models.CharField(max_length=50)
+    remarks = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return f"{self.date}"

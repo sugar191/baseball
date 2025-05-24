@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load format_filters %}
+{% block title %}{{ season.year|year_with_suffix }}{% endblock %}
+{% block content %}
+    <div class="custom-heading">{{ season.year|year_with_suffix }} 試合一覧</div>
+    <table>
+        <tbody>
+            {% for game in games %}
+                <tr>
+                    <td class="center">
+                        {% if game.home_team.logo %}
+                            <img src="{{ game.home_team.logo.url }}" alt="Team Logo" class="team-logo-small">
+                        {% endif %}
+                    </td>
+                    <td class="numeric">
+                        {% if game.home_score %}
+                            {{ game.home_score }}
+                        {% endif %}
+                    </td>
+                    <td class="center">
+                        {% if game.game_status == 1 %}
+                            -
+                        {% else %}
+                            VS
+                        {% endif %}
+                    </td>
+                    <td class="numeric">
+                        {% if game.away_score %}
+                            {{ game.away_score }}
+                        {% endif %}
+                    </td>
+                    <td class="center">
+                        {% if game.away_team.logo %}
+                            <img src="{{ game.away_team.logo.url }}" alt="Team Logo" class="team-logo-small">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if game.stadium %}
+                            {{ game.stadium }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if game.start_time %}
+                            {{ game.start_time }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <div>試合が未登録です。</div>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

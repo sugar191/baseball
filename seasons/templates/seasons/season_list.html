@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load format_filters %}
+{% block title %}シーズン一覧{% endblock %}
+{% block content %}
+    <div class="custom-heading">シーズン一覧</div>
+    <table>
+        <tbody>
+            {% for season in seasons %}
+                <tr>
+                    <td>
+                        {{ season.organization }}
+                    </td>
+                    <td>
+                        {{ season.year|year_with_suffix }}
+                        {% if season.label %}
+                            {{ season.label }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <div>シーズンが未登録です。</div>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

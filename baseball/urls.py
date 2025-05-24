@@ -14,6 +14,7 @@ urlpatterns = [
     path("", include("places.urls")),
     path("", include("titles.urls")),
     path("", include("records.urls")),
+    path("", include("seasons.urls")),
     path("admin-tool/", include("admin_panel.urls")),
     # path('api/', include('api.urls')),  # 未使用でもコメントで残しておくと便利
 ]

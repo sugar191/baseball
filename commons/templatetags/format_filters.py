@@ -110,6 +110,15 @@ def lose_with_suffix(value):
         return value  # 数値以外の場合そのまま返す
 
 
+@register.filter(name="draw_with_suffix")
+def draw_with_suffix(value):
+    try:
+        draw = format_integer(value)
+        return f"{draw}分"
+    except (ValueError, TypeError):
+        return value  # 数値以外の場合そのまま返す
+
+
 @register.filter(name="save_with_suffix")
 def save_with_suffix(value):
     try:
