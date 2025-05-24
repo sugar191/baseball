@@ -89,7 +89,7 @@ class TeamSeason(models.Model):
     @property
     def win_percent(self):
 
-        if self.match == 0:
+        if self.win + self.lose == 0:
             return 0
         else:
-            return self.win / self.match
+            return self.win / (self.win + self.lose)
