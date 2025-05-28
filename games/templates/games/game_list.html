@@ -1,19 +1,27 @@
 {% extends 'base.html' %}
 {% load format_filters %}
-{% block title %}{{ season.year|year_with_suffix }}{% endblock %}
+{% block title %}2025年 試合一覧{% endblock %}
 {% block content %}
-    <div class="custom-heading">{{ season.year|year_with_suffix }} 試合一覧</div>
+    <div class="custom-heading">2025年 試合一覧</div>
+    <form method="get">
+        <label>
+            <input type="checkbox" name="status_null" value="1" {% if request.GET.status_null %}checked{% endif %}>
+            これからの試合のみ
+        </label>
+        <button type="submit">検索</button>
+    </form>
     <table>
         <tbody>
             {% for game in games %}
                 <tr>
+                    <td>{{ game.date }}</td>
                     <td class="center">
                         {% if game.home_team.logo %}
                             <img src="{{ game.home_team.logo.url }}" alt="Team Logo" class="team-logo-small">
                         {% endif %}
                     </td>
                     <td class="numeric">
-                        {% if game.home_score %}
+                        {% if game.home_score is not None %}
                             {{ game.home_score }}
                         {% endif %}
                     </td>
@@ -25,7 +33,7 @@
                         {% endif %}
                     </td>
                     <td class="numeric">
-                        {% if game.away_score %}
+                        {% if game.away_score is not None %}
                             {{ game.away_score }}
                         {% endif %}
                     </td>
@@ -34,16 +42,16 @@
                             <img src="{{ game.away_team.logo.url }}" alt="Team Logo" class="team-logo-small">
                         {% endif %}
                     </td>
-                    <td>
-                        {% if game.stadium %}
-                            {{ game.stadium }}
+                    <td class="center">
+                        {% if game.game_status %}
+                            {{ game.game_status }}
                         {% endif %}
                     </td>
-                    <td>
-                        {% if game.start_time %}
-                            {{ game.start_time }}
-                        {% endif %}
-                    </td>
+                    {% if user.is_authenticated and user.is_superuser %}
+                        <td class="center">
+                            <a href="{% url 'game_edit' game.id %}?next={{ request.get_full_path|urlencode }}">[編集]</a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% empty %}
                 <div>試合が未登録です。</div>

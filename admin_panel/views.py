@@ -1,8 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import PlayerForm, PlayerCommonRecordFormSet, GameForm
+from .forms import (
+    PlayerForm,
+    PlayerCommonRecordFormSet,
+    GameForm,
+    TransferForm,
+    TeamSeasonEditForm,
+)
 from players.models import Player
 from games.models import Game
+from transfers.models import Transfer
+from teams.models import TeamSeason
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.forms import modelformset_factory
 
 
 def staff_check(user):
@@ -42,12 +51,58 @@ def game_edit(request, game_id):
         form = GameForm(request.POST, instance=game)
         if form.is_valid():
             form.save()
-            return redirect("games", pk=game.pk)  # 適切なリダイレクト先に変更
-        else:
-            form = GameForm(instance=game)
+
+            # 元の検索条件に戻す
+            next_url = request.GET.get(
+                "next", request.META.get("HTTP_REFERER", "/games/")
+            )
+            return redirect(next_url)
+    else:
+        form = GameForm(instance=game)
 
     return render(
         request,
         "admin_panel/game_edit.html",
         {"form": form, "game": game},
     )
+
+
+@login_required
+@user_passes_test(staff_check)
+def transfer_edit(request):
+    if request.method == "POST":
+        form = TransferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("transfer_edit")
+    else:
+        form = TransferForm()
+        transfers = Transfer.objects.all()
+
+    return render(
+        request,
+        "admin_panel/transfer_edit.html",
+        {"form": form, "transfers": transfers},
+    )
+
+
+def team_season_edit(request):
+    TeamSeasonFormSet = modelformset_factory(
+        TeamSeason, form=TeamSeasonEditForm, extra=0
+    )
+    queryset = TeamSeason.objects.all().order_by(
+        "team__league__sort_order", "sort_order"
+    )
+
+    if request.method == "POST":
+        formset = TeamSeasonFormSet(request.POST, queryset=queryset)
+        if formset.is_valid():
+            formset.save()
+            return redirect("top_page")
+        else:
+            for form in formset:
+                print(form.errors)
+    else:
+        formset = TeamSeasonFormSet(queryset=queryset)
+
+    return render(request, "admin_panel/team_season_edit.html", {"formset": formset})

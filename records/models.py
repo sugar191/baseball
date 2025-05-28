@@ -44,7 +44,7 @@ class ExchangeRate(models.Model):
 # 選手共通記録
 class PlayerCommonRecord(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    year = models.IntegerField()  # 年度（シーズン）
+    year = models.IntegerField(null=True, blank=True)  # 年度（シーズン）
     season = models.ForeignKey(
         Season, on_delete=models.CASCADE, null=True, blank=True
     )  # シーズン

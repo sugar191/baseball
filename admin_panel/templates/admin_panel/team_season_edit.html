@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}順位編集{% endblock %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table>
+            <tbody>
+                <thead>
+                    <tr>
+                        <th>順位</th>
+                        <th>チーム</th>
+                        <th>勝</th>
+                        <th>負</th>
+                        <th>引</th>
+                    </tr>
+                </thead>
+                {% for form in formset %}
+                    {{ form.id }}
+                    <tr>
+                        <td class="center">{{ form.sort_order }}{% if form.sort_order.errors %}<ul>{% for error in form.sort_order.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                        <td class="center">
+                            {% if form.instance.logo %}
+                                <img src="{{ form.instance.logo.url }}" alt="Team Logo" class="team-logo-small">
+                            {% endif %}
+                        </td>
+                        <td class="center">{{ form.win }}{% if form.win.errors %}<ul>{% for error in form.win.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                        <td class="center">{{ form.lose }}{% if form.lose.errors %}<ul>{% for error in form.lose.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                        <td class="center">{{ form.draw }}{% if form.draw.errors %}<ul>{% for error in form.draw.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">保存</button>
+    </form>
+{% endblock %}

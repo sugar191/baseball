@@ -3,7 +3,8 @@ from django.forms import inlineformset_factory
 from players.models import Player
 from records.models import PlayerCommonRecord
 from games.models import Game
-from teams.models import Team
+from teams.models import Team, TeamSeason
+from transfers.models import Transfer
 
 
 class PlayerForm(forms.ModelForm):
@@ -74,3 +75,15 @@ class GameForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = "__all__"  # 全項目編集可能にする場合
+
+
+class TransferForm(forms.ModelForm):
+    class Meta:
+        model = Transfer
+        fields = "__all__"  # 全項目編集可能にする場合
+
+
+class TeamSeasonEditForm(forms.ModelForm):
+    class Meta:
+        model = TeamSeason
+        fields = ["sort_order", "win", "lose", "draw"]

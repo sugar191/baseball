@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load format_filters %}
+
+{% block title %}{{ game.date }} を編集{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>{{ form.date.label_tag }}</td>
+                <td>{{ form.date }}{% if form.date.errors %}<ul>{% for error in form.date.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.start_time.label_tag }}</td>
+                <td>{{ form.start_time }}{% if form.start_time.errors %}<ul>{% for error in form.start_time.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.home_team.label_tag }}</td>
+                <td>{{ form.home_team }}{% if form.home_team.errors %}<ul>{% for error in form.home_team.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.away_team.label_tag }}</td>
+                <td>{{ form.away_team }}{% if form.away_team.errors %}<ul>{% for error in form.away_team.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.game_status.label_tag }}</td>
+                <td>{{ form.game_status }}{% if form.game_status.errors %}<ul>{% for error in form.game_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.home_score.label_tag }}</td>
+                <td>{{ form.home_score }}{% if form.home_score.errors %}<ul>{% for error in form.home_score.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.away_score.label_tag }}</td>
+                <td>{{ form.away_score }}{% if form.away_score.errors %}<ul>{% for error in form.away_score.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.stadium.label_tag }}</td>
+                <td>{{ form.stadium }}{% if form.stadium.errors %}<ul>{% for error in form.stadium.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+            <tr>
+                <td>{{ form.remarks.label_tag }}</td>
+                <td>{{ form.remarks }}{% if form.remarks.errors %}<ul>{% for error in form.remarks.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}</td>
+            </tr>
+        </table>
+        <button type="submit">保存</button>
+    </form>
+    <a href="{% url 'game_list' %}">戻る</a>
+{% endblock %}

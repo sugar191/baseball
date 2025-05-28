@@ -8,6 +8,7 @@
         <button type="submit">選手検索</button>
     </form>
     <div class="custom-heading">今シーズンの順位</div>
+    <a href="{% url 'team_season_edit' %}">[編集]</a>
     <table>
         <tbody>
             {% for team in teams %}
@@ -69,6 +70,11 @@
                             中止
                         {% endif %}
                     </td>
+                    {% if user.is_authenticated and user.is_superuser %}
+                        <td class="center">
+                            <a href="{% url 'game_edit' game.id %}?next={{ request.get_full_path|urlencode }}">[編集]</a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% empty %}
                 <div>今日は試合がありません。</div>
