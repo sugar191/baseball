@@ -23,6 +23,12 @@ class League(models.Model):
     organization = models.ForeignKey(
         Organization, on_delete=models.CASCADE, null=True, blank=True
     )  # リーグとの関連
+    logo = models.ImageField(
+        upload_to="league_logos/", null=True, blank=True
+    )  # 球団ロゴ画像
+    color = models.CharField(
+        max_length=50, null=True, blank=True
+    )  # 球団カラーのカラーコード
 
     class Meta:
         db_table = "leagues"  # 使用するテーブル名を指定
@@ -64,6 +70,9 @@ class Team(models.Model):
 class TeamSeason(models.Model):
     name = models.CharField(max_length=50)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)  # 所属球団
+    league = models.ForeignKey(
+        League, on_delete=models.CASCADE, null=True, blank=True
+    )  # リーグとの関連
     season = models.ForeignKey(
         Season, on_delete=models.CASCADE, null=True, blank=True
     )  # シーズン

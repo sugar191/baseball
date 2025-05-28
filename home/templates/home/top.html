@@ -11,7 +11,27 @@
     <a href="{% url 'team_season_edit' %}">[編集]</a>
     <table>
         <tbody>
-            {% for team in teams %}
+            <tr>
+                <td colspan="6" style="background-color: {{ ce_league.color }}; color: #fff;"><img src="{{ ce_league.logo.url }}" alt="League Logo" class="team-logo-small">{{ ce_league.name}}</td>
+            </tr>
+            {% for team in ce_teams %}
+                <tr>
+                    <td class="numeric">{{ team.sort_order|rank_with_suffix }}</td>
+                    <td class="center"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
+                    <td class="numeric">{{ team.win|win_with_suffix }}</td>
+                    <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
+                    <td class="numeric">{{ team.draw|draw_with_suffix }}</td>
+                    <td class="numeric">{{ team.win_percent|format_batting_average }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table style="margin-top: 0.5rem;">
+        <tbody>
+            <tr>
+                <td colspan="6" style="background-color: {{ pa_league.color }}; color: #fff;"><img src="{{ pa_league.logo.url }}" alt="League Logo" class="team-logo-small">{{ pa_league.name}}</td>
+            </tr>
+            {% for team in pa_teams %}
                 <tr>
                     <td class="numeric">{{ team.sort_order|rank_with_suffix }}</td>
                     <td class="center"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
