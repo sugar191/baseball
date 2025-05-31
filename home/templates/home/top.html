@@ -2,17 +2,12 @@
 {% load format_filters %}
 {% block title %}トップページ{% endblock %}
 {% block content %}
-    <form method="GET" action="{% url 'player_list' %}">
-        {% csrf_token %}
-        <input type="text" name="q" placeholder="検索ワード" value="{{ request.GET.q }}">
-        <button type="submit">選手検索</button>
-    </form>
     <div class="custom-heading">今シーズンの順位</div>
     <a href="{% url 'team_season_edit' %}">[編集]</a>
     <table>
         <tbody>
             <tr>
-                <td colspan="6" style="background-color: {{ ce_league.color }}; color: #fff;"><img src="{{ ce_league.logo.url }}" alt="League Logo" class="team-logo-small">{{ ce_league.name}}</td>
+                <td colspan="7" style="background-color: {{ ce_league.color }}; color: #fff;"><img src="{{ ce_league.logo.url }}" alt="League Logo" class="team-logo-small">{{ ce_league.name}}</td>
             </tr>
             {% for team in ce_teams %}
                 <tr>
@@ -22,6 +17,15 @@
                     <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
                     <td class="numeric">{{ team.draw|draw_with_suffix }}</td>
                     <td class="numeric">{{ team.win_percent|format_batting_average }}</td>
+                    <td class="numeric">
+                        {% if team.game_behind == 0 %}
+                            -
+                        {% elif team.game_behind %}
+                            {{ team.game_behind|floatformat:1 }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -29,7 +33,7 @@
     <table style="margin-top: 0.5rem;">
         <tbody>
             <tr>
-                <td colspan="6" style="background-color: {{ pa_league.color }}; color: #fff;"><img src="{{ pa_league.logo.url }}" alt="League Logo" class="team-logo-small">{{ pa_league.name}}</td>
+                <td colspan="7" style="background-color: {{ pa_league.color }}; color: #fff;"><img src="{{ pa_league.logo.url }}" alt="League Logo" class="team-logo-small">{{ pa_league.name}}</td>
             </tr>
             {% for team in pa_teams %}
                 <tr>
@@ -39,6 +43,15 @@
                     <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
                     <td class="numeric">{{ team.draw|draw_with_suffix }}</td>
                     <td class="numeric">{{ team.win_percent|format_batting_average }}</td>
+                    <td class="numeric">
+                        {% if team.game_behind == 0 %}
+                            -
+                        {% elif team.game_behind %}
+                            {{ team.game_behind|floatformat:1 }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
