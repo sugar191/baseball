@@ -12,7 +12,7 @@
             {% for team in ce_teams %}
                 <tr>
                     <td class="numeric">{{ team.sort_order|rank_with_suffix }}</td>
-                    <td class="center"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
+                    <td class="center"><a href="{% url 'team_detail' team.id %}"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></a></td>
                     <td class="numeric">{{ team.win|win_with_suffix }}</td>
                     <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
                     <td class="numeric">{{ team.draw|draw_with_suffix }}</td>
@@ -38,7 +38,7 @@
             {% for team in pa_teams %}
                 <tr>
                     <td class="numeric">{{ team.sort_order|rank_with_suffix }}</td>
-                    <td class="center"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></td>
+                    <td class="center"><a href="{% url 'team_detail' team.id %}"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></a></td>
                     <td class="numeric">{{ team.win|win_with_suffix }}</td>
                     <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
                     <td class="numeric">{{ team.draw|draw_with_suffix }}</td>
@@ -63,7 +63,7 @@
                 <tr>
                     <td class="center">
                         {% if game.home_team.logo %}
-                            <img src="{{ game.home_team.logo.url }}" alt="Team Logo" class="team-logo-small">
+                            <a href="{% url 'team_detail' game.home_team.id %}"><img src="{{ game.home_team.logo.url }}" alt="Team Logo" class="team-logo-small"></a>
                         {% endif %}
                     </td>
                     <td class="center">
@@ -85,7 +85,7 @@
                     </td>
                     <td class="center">
                         {% if game.away_team.logo %}
-                            <img src="{{ game.away_team.logo.url }}" alt="Team Logo" class="team-logo-small">
+                            <a href="{% url 'team_detail' game.away_team.id %}"><img src="{{ game.away_team.logo.url }}" alt="Team Logo" class="team-logo-small"></a>
                         {% endif %}
                     </td>
                     <td>

@@ -12,7 +12,13 @@ from django.db.models import (
     Case,
     When,
 )
-from django.db.models.functions import Replace, ExtractYear, ExtractMonth, ExtractDay
+from django.db.models.functions import (
+    Replace,
+    ExtractYear,
+    ExtractMonth,
+    ExtractDay,
+    Cast,
+)
 from django.shortcuts import render, get_object_or_404
 from .models import Player, PlayerLatestSummary, HandBatting, HandThrowing
 from records.models import (
@@ -307,13 +313,17 @@ def player_list(request):
     if batting:
         filters &= Q(batting_id=batting)
 
-    player_data = qs.filter(filters).order_by(
-        "player_category_order",
-        "organization_order",
-        "league_order",
-        "team_order",
-        "position_order",
-        "common_record_number",
+    player_data = (
+        qs.filter(filters)
+        .annotate(number_as_int=Cast("common_record_number", IntegerField()))
+        .order_by(
+            "player_category_order",
+            "organization_order",
+            "league_order",
+            "team_order",
+            "position_order",
+            "number_as_int",
+        )
     )
 
     paginator = Paginator(player_data, 30)  # 30件ずつ
