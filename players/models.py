@@ -209,6 +209,7 @@ class PlayerLatestSummary(models.Model):
     common_record_number = models.CharField(
         max_length=5, null=True, blank=True
     )  # 背番号
+    is_training = models.BooleanField(null=True, blank=True)
     common_record_registered_name = models.CharField(
         max_length=50, null=True, blank=True
     )  # 登録名

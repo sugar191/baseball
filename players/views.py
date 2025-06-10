@@ -319,6 +319,7 @@ def player_list(request):
         .order_by(
             "player_category_order",
             "organization_order",
+            "is_training",
             "league_order",
             "team_order",
             "position_order",
@@ -362,7 +363,7 @@ def player_list(request):
 
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
-    dummy_season = get_object_or_404(Season, id=9999)
+    dummy_season = get_object_or_404(Season, id=1)
     common_records = PlayerCommonRecord.objects.filter(player=player).order_by(
         "season__sort_order"
     )
@@ -484,12 +485,12 @@ def player_detail(request, player_id):
 def player_year_detail(request, player_id, season_id):
     player = get_object_or_404(Player, id=player_id)
     season = get_object_or_404(Season, id=season_id)
-    dummy_season = get_object_or_404(Season, id=9999)
+    dummy_season = get_object_or_404(Season, id=1)
     titles = PlayerTitle.objects.filter(player=player, season=season_id)
     common_record = PlayerCommonRecord.objects.filter(
         player=player, season=season_id
     ).first()
-    if season_id == 9999:
+    if season_id == 1:
         batting_record = sum_batting_total(player, dummy_season)
         pitching_record = sum_pitching_total(player, dummy_season)
     else:

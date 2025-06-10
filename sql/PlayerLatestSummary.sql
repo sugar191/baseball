@@ -40,6 +40,7 @@ SELECT
 	draft_categories.name AS draft_category_name,
 	player_common_records.year AS common_record_year,
 	player_common_records.number AS common_record_number,
+	LENGTH(player_common_records.number) >= 3 AS is_training,
 	player_common_records.registered_name AS common_record_registered_name,
 	player_common_records.salary AS common_record_salary,
 	currencies.name AS currency_name,
