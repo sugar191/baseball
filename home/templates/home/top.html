@@ -3,7 +3,9 @@
 {% block title %}トップページ{% endblock %}
 {% block content %}
     <div class="custom-heading">今シーズンの順位</div>
-    <a href="{% url 'team_season_edit' %}">[編集]</a>
+    {% if user.is_authenticated and user.is_superuser %}
+        <a href="{% url 'team_season_edit' %}">[編集]</a>
+    {% endif %}
     <table>
         <tbody>
             <tr>

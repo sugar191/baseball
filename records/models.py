@@ -48,7 +48,9 @@ class PlayerCommonRecord(models.Model):
     season = models.ForeignKey(
         Season, on_delete=models.CASCADE, null=True, blank=True
     )  # シーズン
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)  # 所属球団
+    team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True
+    )  # 所属球団
     number = models.CharField(max_length=5, null=True, blank=True)  # 背番号
     registered_name = models.CharField(max_length=50, null=True, blank=True)  # 登録名
     salary = models.DecimalField(
@@ -79,7 +81,7 @@ class PlayerCommonRecord(models.Model):
 # 選手投手記録
 class PlayerPitchingRecord(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    year = models.IntegerField()  # 年度（シーズン）
+    year = models.IntegerField(null=True, blank=True)  # 年度（シーズン）
     season = models.ForeignKey(
         Season, on_delete=models.CASCADE, null=True, blank=True
     )  # シーズン
@@ -127,7 +129,7 @@ class PlayerPitchingRecord(models.Model):
 # 選手打撃記録
 class PlayerBattingRecord(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    year = models.IntegerField()  # 年度（シーズン）
+    year = models.IntegerField(null=True, blank=True)  # 年度（シーズン）
     season = models.ForeignKey(
         Season, on_delete=models.CASCADE, null=True, blank=True
     )  # シーズン
@@ -177,7 +179,7 @@ class PlayerBattingRecord(models.Model):
 # 選手守備記録
 class PlayerFieldingRecord(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    year = models.IntegerField()  # 年度（シーズン）
+    year = models.IntegerField(null=True, blank=True)  # 年度（シーズン）
     season = models.ForeignKey(
         Season, on_delete=models.CASCADE, null=True, blank=True
     )  # シーズン

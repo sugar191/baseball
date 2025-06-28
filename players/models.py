@@ -47,6 +47,9 @@ class Player(models.Model):
     )  # 選手名(ふりがな)
     nickname = models.CharField("通称", max_length=50, null=True, blank=True)  # 通称
     birthday = models.DateField("誕生日", null=True, blank=True)  # 生年月日
+    birth_year = models.IntegerField("誕生年", null=True, blank=True)
+    is_dead = models.BooleanField("死去", null=True, blank=True)
+    death_date = models.DateField("没年月日", null=True, blank=True)  # 生年月日
     place = models.ForeignKey(
         Place, verbose_name="出身地", on_delete=models.RESTRICT, null=True, blank=True
     )  # 出身地をForeignKeyで参照
@@ -132,6 +135,20 @@ class Player(models.Model):
             )
         return None
 
+    # 享年を計算するプロパティ
+    @property
+    def old_age(self):
+        if self.birthday and self.death_date:
+            return (
+                self.death_date.year
+                - self.birthday.year
+                - (
+                    (self.death_date.month, self.death_date.day)
+                    < (self.birthday.month, self.birthday.day)
+                )
+            )
+        return None
+
     # 利腕を表示するプロパティ
     @property
     def throw_bat(self):
@@ -156,6 +173,9 @@ class PlayerLatestSummary(models.Model):
     )  # 選手名(ふりがな)
     player_nickname = models.CharField(max_length=50, null=True, blank=True)  # 通称
     player_birthday = models.DateField(null=True, blank=True)  # 生年月日
+    player_birth_year = models.IntegerField("誕生年", null=True, blank=True)
+    player_is_dead = models.BooleanField("死去", null=True, blank=True)
+    player_death_date = models.DateField("没年月日", null=True, blank=True)  # 生年月日
     player_height = models.DecimalField(
         max_digits=5, decimal_places=2, null=True, blank=True
     )  # 身長（cm）
@@ -266,6 +286,20 @@ class PlayerLatestSummary(models.Model):
                 - self.player_birthday.year
                 - (
                     (today.month, today.day)
+                    < (self.player_birthday.month, self.player_birthday.day)
+                )
+            )
+        return None
+
+    # 享年を計算するプロパティ
+    @property
+    def old_age(self):
+        if self.player_birthday and self.player_death_date:
+            return (
+                self.player_death_date.year
+                - self.player_birthday.year
+                - (
+                    (self.player_death_date.month, self.player_death_date.day)
                     < (self.player_birthday.month, self.player_birthday.day)
                 )
             )
