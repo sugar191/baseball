@@ -6,8 +6,8 @@ SELECT
 	players.nickname AS player_nickname,
 	players.birthday AS player_birthday,
 	players.birth_year AS player_birth_year,
-   players.is_dead AS player_is_dead,
-   players.death_date AS player_death_date,
+	players.is_dead AS player_is_dead,
+	players.death_date AS player_death_date,
 	players.height AS player_height,
 	players.weight AS player_weight,
 	players.is_married AS player_is_married,
@@ -143,6 +143,8 @@ LEFT JOIN (
 		seasons
 	ON
 		player_common_records.season_id = seasons.id
+	WHERE
+		seasons.year = (SELECT MAX(YEAR) FROM seasons)
 	GROUP BY
 		player_common_records.player_id
 ) latest_common_record
@@ -197,7 +199,7 @@ LEFT JOIN (
 	ON
 		player_pitching_records.season_id = seasons.id
    WHERE
-		seasons.year < 9000
+		seasons.year = (SELECT MAX(YEAR) FROM seasons) - 1
 	GROUP BY
 		player_pitching_records.player_id
 ) latest_pitching_record
@@ -238,7 +240,7 @@ LEFT JOIN (
 	ON
 		player_batting_records.season_id = seasons.id
    WHERE
-		seasons.year < 9000
+		seasons.year = (SELECT MAX(YEAR) FROM seasons) - 1
 	GROUP BY
 		player_batting_records.player_id
 ) latest_batting_record

@@ -12,6 +12,14 @@ def age_with_suffix(value):
         return value  # 数値以外の場合そのまま返す
 
 
+@register.filter(name="old_age_with_suffix")
+def old_age_with_suffix(value):
+    try:
+        return f"享年{value}歳"
+    except (ValueError, TypeError):
+        return value  # 数値以外の場合そのまま返す
+
+
 @register.filter(name="year_with_suffix")
 def year_with_suffix(value):
     if value:

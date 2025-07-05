@@ -59,12 +59,23 @@
 
         <div id="search-modal" class="modal hidden">
             <div class="modal-content">
-                <form method="get" action="">
+                <form method="GET" action="{% url 'player_list' %}">
                     <table class="search-table">
                         <tbody>
                             <tr>
                                 <td><label>名前</label></td>
                                 <td><input type="text" name="name" value="{{ request.GET.name }}"></td>
+                            </tr>
+                            <tr>
+                                <td><label>区分</label></td>
+                                <td>
+                                    <select name="player_category">
+                                        <option value="">すべて</option>
+                                        {% for player_category in player_categories %}
+                                            <option value="{{ player_category.id }}" {% if request.GET.team == player_category.id|stringformat:"s" %}selected{% endif %}>{{ player_category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td><label>球団</label></td>

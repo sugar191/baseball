@@ -33,7 +33,7 @@ def top_page(request):
     pa_league, pa_teams = league_rank(2)
     players = PlayerLatestSummary.objects.filter(
         player_birthday__month=today.month, player_birthday__day=today.day
-    )
+    ).order_by("-player_birthday")
     games = Game.objects.filter(date=today)
 
     return render(

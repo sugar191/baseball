@@ -337,6 +337,10 @@ option {
     background-color: #ccff99;
 }
 
+.position-none {
+    background-color: #cccccc;
+}
+
 .center {
     text-align: center;
 }

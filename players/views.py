@@ -208,6 +208,7 @@ def player_list(request):
     birth_year = request.GET.get("birth_year", "")
     pitching = request.GET.get("pitching", "")
     batting = request.GET.get("batting", "")
+    player_category = request.GET.get("player_category", "")
 
     # スペースを除去（全角・半角）
     query_no_space = re.sub(r"\s+", "", query)
@@ -312,6 +313,9 @@ def player_list(request):
 
     if batting:
         filters &= Q(batting_id=batting)
+
+    if player_category:
+        filters &= Q(player_category_id=player_category)
 
     player_data = (
         qs.filter(filters)

@@ -128,7 +128,13 @@
             <tbody>
                 {% for common in commons %}
                     <tr>
-                        <td><a href="{% url 'player_year_detail' player.id common.season.id %}">{{ common.season.year|year_with_suffix }}{{ common.season.label }}</a></td>
+                        <td>
+                            {% if common.season.id %}
+                                <a href="{% url 'player_year_detail' player.id common.season.id %}">{{ common.season.year|year_with_suffix }}{{ common.season.label }}</a>
+                            {% else %}
+                                {{ common.season.year|year_with_suffix }}{{ common.season.label }}
+                            {% endif %}
+                        </td>
                         <td class="center">
                             <div>
                                 {% if common.team.logo %}
@@ -162,9 +168,11 @@
                 {% for pitching in pitchings %}
                     <tr>
                         <td>
-                            <a href="{% url 'player_year_detail' player.id pitching.season.id %}">
+                            {% if pitching.season.id %}
+                                <a href="{% url 'player_year_detail' player.id pitching.season.id %}">{{ pitching.season.year|year_with_suffix }}{{ pitching.season.label }}</a>
+                            {% else %}
                                 {{ pitching.season.year|year_with_suffix }}{{ pitching.season.label }}
-                            </a>
+                            {% endif %}
                         </td>
                         {% if pitching.games != 0 %}
                             <td class="numeric">{{ pitching.earned_run_average|format_pitching_average }}</td>
@@ -192,9 +200,11 @@
                 {% for batting in battings %}
                     <tr>
                         <td>
-                            <a href="{% url 'player_year_detail' player.id batting.season.id %}">
+                            {% if batting.season.id %}
+                                <a href="{% url 'player_year_detail' player.id batting.season.id %}">{{ batting.season.year|year_with_suffix }}{{ batting.season.label }}</a>
+                            {% else %}
                                 {{ batting.season.year|year_with_suffix }}{{ batting.season.label }}
-                            </a>
+                            {% endif %}
                         </td>
                         {% if batting.plate_appearances != 0 %}
                             <td class="numeric">{{ batting.batting_average|format_batting_average }}</td>
@@ -221,9 +231,11 @@
                 {% for year, data in fieldings.items %}
                     <tr>
                         <td>
-                            <a href="{% url 'player_year_detail' player.id data.season_id %}">
-                                {{ data.year|year_with_suffix }}{{ data.label }}
-                            </a>
+                            {% if data.season.id %}
+                                <a href="{% url 'player_year_detail' player.id data.season.id %}">{{ data.season.year|year_with_suffix }}{{ data.season.label }}</a>
+                            {% else %}
+                                {{ data.season.year|year_with_suffix }}{{ data.season.label }}
+                            {% endif %}
                         </td>
                         {% if data.total_games != 0 %}
                             <td>{{ data.html|safe }}</td>
