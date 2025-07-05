@@ -8,6 +8,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "160.251.200.53",
+    "baseball-record.com",
 ]
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-random-secret-key")
