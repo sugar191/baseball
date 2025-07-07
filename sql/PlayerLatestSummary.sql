@@ -41,6 +41,7 @@ SELECT
 	player_drafts.miss_count AS player_draft_miss_count,
 	drafts.year AS draft_year,
 	draft_categories.name AS draft_category_name,
+	draft_categories.order AS draft_category_order,
 	player_common_records.year AS common_record_year,
 	player_common_records.number AS common_record_number,
 	LENGTH(player_common_records.number) >= 3 AS is_training,

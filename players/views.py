@@ -367,6 +367,17 @@ def player_list(request):
 
 def player_detail(request, player_id):
     player = get_object_or_404(Player, id=player_id)
+
+    if not player.furigana:
+        return render(
+            request,
+            "players/player_detail.html",
+            {
+                "player": player,
+                # 最低限の情報だけ渡す（必要なら）
+            },
+        )
+
     dummy_season = get_object_or_404(Season, id=1)
     common_records = PlayerCommonRecord.objects.filter(player=player).order_by(
         "season__sort_order"
@@ -458,13 +469,22 @@ def player_detail(request, player_id):
 
     same_time_joined = []
     if draft_joined:
-        same_time_joined = PlayerLatestSummary.objects.filter(
-            draft_year=draft_joined.draft.year, player_draft_team=draft_joined.team_id
-        ).exclude(pk=player.pk)
+        same_time_joined = (
+            PlayerLatestSummary.objects.filter(
+                draft_year=draft_joined.draft.year,
+                player_draft_team=draft_joined.team_id,
+            )
+            .exclude(pk=player.pk)
+            .order_by("draft_category_order", "player_draft_rank")
+        )
 
-    same_birthdays = PlayerLatestSummary.objects.filter(
-        player_birthday__month=birthday.month, player_birthday__day=birthday.day
-    ).exclude(pk=player.pk)
+    same_birthdays = (
+        PlayerLatestSummary.objects.filter(
+            player_birthday__month=birthday.month, player_birthday__day=birthday.day
+        )
+        .exclude(pk=player.pk)
+        .order_by("-player_birthday")
+    )
 
     return render(
         request,
@@ -526,42 +546,20 @@ def player_year_detail(request, player_id, season_id):
 
 
 def generation_list(request):
-    players = (
-        Player.objects.annotate(
-            birth_year=ExtractYear("birthday"),
-            birth_month=ExtractMonth("birthday"),
-            birth_day=ExtractDay("birthday"),
-        )
-        .annotate(
-            school_year=Case(
-                # 4月2日以降生まれなら birth_year を学年として扱う
-                When(birth_month__gt=4, then=F("birth_year")),
-                When(birth_month=4, birth_day__gte=2, then=F("birth_year")),
-                # それ以前は前の年を学年として扱う
-                default=ExpressionWrapper(
-                    F("birth_year") - 1, output_field=IntegerField()
-                ),
-            )
-        )
-        .values("school_year")
+    generations = (
+        Player.objects.filter(birth_year__isnull=False)
+        .values("birth_year")
         .annotate(count=Count("id"))
-        .order_by("-school_year")
+        .order_by("-birth_year")
     )
 
-    return render(request, "players/generation_list.html", {"generations": players})
+    return render(request, "players/generation_list.html", {"generations": generations})
 
 
 def generation_players(request, year):
-    """
-    指定された「学年」に属する選手一覧を表示するビュー
-    例: year=1990 の場合、1990/4/2 ～ 1991/4/1 生まれの選手を抽出
-    """
-    start_date = date(year, 4, 2)
-    end_date = date(year + 1, 4, 1)
-
-    players = PlayerLatestSummary.objects.filter(
-        player_birthday__gte=start_date, player_birthday__lte=end_date
-    ).order_by("player_birthday")
+    players = PlayerLatestSummary.objects.filter(player_birth_year=year).order_by(
+        "player_birthday"
+    )
 
     return render(
         request,

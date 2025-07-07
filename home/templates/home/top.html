@@ -14,7 +14,7 @@
             {% for team in ce_teams %}
                 <tr>
                     <td class="numeric">{{ team.sort_order|rank_with_suffix }}</td>
-                    <td class="center"><a href="{% url 'team_detail' team.id %}"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></a></td>
+                    <td class="center"><a href="{% url 'team_detail' team.team.id %}?season_id={{ team.season.id }}"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></a></td>
                     <td class="numeric">{{ team.win|win_with_suffix }}</td>
                     <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
                     <td class="numeric">{{ team.draw|draw_with_suffix }}</td>
@@ -40,7 +40,7 @@
             {% for team in pa_teams %}
                 <tr>
                     <td class="numeric">{{ team.sort_order|rank_with_suffix }}</td>
-                    <td class="center"><a href="{% url 'team_detail' team.id %}"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></a></td>
+                    <td class="center"><a href="{% url 'team_detail' team.team.id %}?season_id={{ team.season.id }}"><img src="{{ team.logo.url }}" alt="Team Logo" class="team-logo-small"></a></td>
                     <td class="numeric">{{ team.win|win_with_suffix }}</td>
                     <td class="numeric">{{ team.lose|lose_with_suffix }}</td>
                     <td class="numeric">{{ team.draw|draw_with_suffix }}</td>

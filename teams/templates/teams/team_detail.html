@@ -9,25 +9,33 @@
             {% endif %}
             {{ team.name }}
         </div>
+        <form method="get" action="">
+            <select name="season_id" id="season" onchange="this.form.submit()">
+                <option value="">-- 年度を選択 --</option>
+                {% for season in seasons %}
+                    <option value="{{ season.id }}" {% if season.id|stringformat:"s" == request.GET.season_id %}selected{% endif %}>
+                        {{ season.year }}年
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
         <table>
             <tbody>
                 {% for player in players %}
                     <tr>
                         <td class="center">{{ player.common_record_number }}</td>
-                        <td>
-                            <a href="{% url 'player_detail' player.player_id %}">
-                                {% if player.common_record_registered_name %}
-                                    {{ player.common_record_registered_name }}
-                                {% else %}
-                                    {{ player.player_name }}
-                                {% endif %}
-                            </a>
-                        </td>
+                        <td><a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a></td>
                         <td>{{ player.position_category_name }}</td>
-                        <td>{{ player.player_category_name }}</td>
+                        <td>
+                            {% if player.position_order == 1 %}
+                                {% format_pitching_stats player.pitching_games player.pitching_earned_run_average player.pitching_wins player.pitching_loses player.pitching_saves player.pitching_holds player.pitching_strike_outs %}
+                            {% else %}
+                                {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% empty %}
-                    <div>該当する選手がいません。</div>
+                    <div>年度を選択してください。</div>
                 {% endfor %}
             </tbody>
     </table>

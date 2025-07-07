@@ -231,10 +231,10 @@
                 {% for year, data in fieldings.items %}
                     <tr>
                         <td>
-                            {% if data.season.id %}
-                                <a href="{% url 'player_year_detail' player.id data.season.id %}">{{ data.season.year|year_with_suffix }}{{ data.season.label }}</a>
+                            {% if data.season_id %}
+                                <a href="{% url 'player_year_detail' player.id data.season_id %}">{{ data.year|year_with_suffix }}{{ data.label }}</a>
                             {% else %}
-                                {{ data.season.year|year_with_suffix }}{{ data.season.label }}
+                                {{ data.year|year_with_suffix }}{{ data.label }}
                             {% endif %}
                         </td>
                         {% if data.total_games != 0 %}
@@ -242,6 +242,40 @@
                         {% else %}
                             <td class="center">記録無し</td>
                         {% endif %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="center">データがありません</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if same_time_joined %}
+        <div class="custom-heading">同期入団</div>
+        <table>
+            <tbody>
+                {% for player in same_time_joined %}
+                    <tr>
+                        <td>
+                            <div class="player-name-logo">
+                                {% if player.team_logo %}
+                                    <img src="{{ player.team_logo.url }}" alt="Team Logo" class="team-logo-small">
+                                {% endif %}
+                                <a href="{% url 'player_detail' player.player_id %}">
+                                    {% if player.common_record_registered_name %}
+                                        {{ player.common_record_registered_name }}
+                                    {% else %}
+                                        {{ player.player_name }}
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            {% if player.player_draft_rank %}
+                                {{ player.draft_year|year_with_suffix }} {{ player.draft_category_name }} {{ player.player_draft_rank|rank_with_suffix }}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>
@@ -303,40 +337,6 @@
                         <td>
                             {% if player.age %}
                                 {{ player.age|age_with_suffix }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="6" class="center">データがありません</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
-    {% if same_time_joined %}
-        <div class="custom-heading">同期入団</div>
-        <table>
-            <tbody>
-                {% for player in same_time_joined %}
-                    <tr>
-                        <td>
-                            <div class="player-name-logo">
-                                {% if player.team_logo %}
-                                    <img src="{{ player.team_logo.url }}" alt="Team Logo" class="team-logo-small">
-                                {% endif %}
-                                <a href="{% url 'player_detail' player.player_id %}">
-                                    {% if player.common_record_registered_name %}
-                                        {{ player.common_record_registered_name }}
-                                    {% else %}
-                                        {{ player.player_name }}
-                                    {% endif %}
-                                </a>
-                            </div>
-                        </td>
-                        <td>
-                            {% if player.player_draft_rank %}
-                                {{ player.draft_year|year_with_suffix }} {{ player.draft_category_name }} {{ player.player_draft_rank|rank_with_suffix }}
                             {% endif %}
                         </td>
                     </tr>

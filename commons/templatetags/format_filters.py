@@ -7,17 +7,25 @@ register = template.Library()
 @register.filter(name="age_with_suffix")
 def age_with_suffix(value):
     try:
-        return f"{value}歳"
+        if value is None:
+            return "不明"
+        if isinstance(value, (int, float)):
+            return f"{int(value)}歳"
     except (ValueError, TypeError):
-        return value  # 数値以外の場合そのまま返す
+        pass
+    return "不明"
 
 
 @register.filter(name="old_age_with_suffix")
 def old_age_with_suffix(value):
     try:
-        return f"享年{value}歳"
+        if value is None:
+            return "享年不明"
+        if isinstance(value, (int, float)):
+            return f"享年{int(value)}歳"
     except (ValueError, TypeError):
-        return value  # 数値以外の場合そのまま返す
+        pass
+    return "享年不明"
 
 
 @register.filter(name="year_with_suffix")
@@ -202,7 +210,7 @@ def join_mark(is_joined, is_hit):
     elif is_hit is False:
         return ""
     else:
-        return "入団拒否"
+        return "拒否"
 
 
 @register.filter

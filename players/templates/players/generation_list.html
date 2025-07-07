@@ -6,7 +6,8 @@
         <tbody>
             {% for generation in generations %}
                 <tr>
-                    <td><a href="{% url 'generation_players' generation.school_year %}">{{ generation.school_year }}年生まれ</a></td>
+                    <td><a href="{% url 'generation_players' generation.birth_year %}">{{ generation.birth_year }}年生まれ</a></td>
+                    <td class="numeric">{{ generation.count }}人</td>
                 </tr>
             {% empty %}
                 <tr><td><div class="no-result">データがありません</div></td></tr>

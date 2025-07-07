@@ -225,6 +225,7 @@ class PlayerLatestSummary(models.Model):
     draft_category_name = models.CharField(
         max_length=50, null=False, blank=False
     )  # 名前
+    draft_category_order = models.IntegerField()
     common_record_year = models.IntegerField()
     common_record_number = models.CharField(
         max_length=5, null=True, blank=True
@@ -318,3 +319,43 @@ class PlayerLatestSummary(models.Model):
         elif self.player_is_married is False:
             return "独身"
         return None
+
+
+# 検索ビュー
+class PlayerRecordView(models.Model):
+    player_id = models.IntegerField(primary_key=True)  # 必ず主キーを指定
+    player_name = models.CharField(max_length=50, null=False, blank=False)  # 選手名
+    team_id = models.IntegerField()
+    season_id = models.IntegerField()
+    age = models.IntegerField(null=True, blank=True)
+    position_category_name = models.CharField(
+        max_length=50, null=False, blank=False
+    )  # 名前
+    position_order = models.IntegerField(default=0)  # 表示順
+    common_record_number = models.CharField(
+        max_length=5, null=True, blank=True
+    )  # 背番号
+    is_training = models.BooleanField(null=True, blank=True)
+    pitching_games = models.IntegerField(null=True, blank=True)  # 登板
+    pitching_wins = models.IntegerField(null=True, blank=True)  # 勝利
+    pitching_loses = models.IntegerField(null=True, blank=True)  # 敗戦
+    pitching_saves = models.IntegerField(null=True, blank=True)  # セーブ
+    pitching_holds = models.IntegerField(null=True, blank=True)  # ホールド
+    pitching_strike_outs = models.IntegerField(null=True, blank=True)  # 奪三振
+    pitching_earned_run_average = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )  # 防御率
+    batting_plate_appearances = models.IntegerField(null=True, blank=True)  # 打席
+    batting_home_runs = models.IntegerField(null=True, blank=True)  # 本塁打
+    batting_runs_batted_in = models.IntegerField(null=True, blank=True)  # 打点
+    batting_stolen_bases = models.IntegerField(null=True, blank=True)  # 盗塁
+    batting_average = models.DecimalField(
+        max_digits=4, decimal_places=3, null=True, blank=True
+    )  # 打率
+
+    class Meta:
+        managed = False  # DjangoがCREATE TABLEしないように
+        db_table = "player_record_view"
+
+    def __str__(self):
+        return f"{self.player_name}"

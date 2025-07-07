@@ -12,6 +12,7 @@ SELECT
 	draft_categories.sort_order AS draft_category_order,
 	players.id AS player_id,
 	players.name AS player_name,
+	players.furigana AS player_furigana,
 	position_categories.name AS position_name,
 	teams.name AS team_name,
 	teams.logo AS team_logo,

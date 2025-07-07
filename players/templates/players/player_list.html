@@ -10,79 +10,85 @@
                     {% if player.team_logo %}
                         <img src="{{ player.team_logo.url }}" alt="Team Logo">
                     {% endif %}
-                    <a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a>
+                    {% if player.player_furigana %}
+                        <a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a>
+                    {% else %}
+                        {{ player.player_name }}
+                    {% endif %}
                 </div>
-                <div class="card-info">
-                    {% if player.player_nickname %}
-                        <div><strong>{{ player.player_nickname|with_brackets }}</strong></div>
-                    {% endif %}
-                    {% if player.player_category_name %}
-                        <div><strong>区分:</strong> {{ player.player_category_name }}</div>
-                    {% endif %}
-                    {% if player.common_record_number %}
-                        <div><strong>背番号:</strong> {{ player.common_record_number }}</div>
-                    {% endif %}
-                    {% if player.position_category_name %}
-                        <div><strong>ポジション:</strong> {{ player.position_category_name }}</div>
-                    {% endif %}
-                    {% if player.position_category_id == 1 and player.pitching_year %}
-                        <div><strong>成績({{ player.pitching_year|year_with_suffix }}):</strong> {% format_pitching_stats player.pitching_games player.pitching_earned_run_average player.pitching_wins player.pitching_loses player.pitching_saves player.pitching_holds player.pitching_strike_outs %}</div>
-                    {% elif player.batting_year %}
-                        <div><strong>成績({{ player.batting_year|year_with_suffix }}):</strong> {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}</div>
-                    {% endif %}
-                    {% if player.common_record_salary %}
-                        <div><strong>年俸({{ player.common_record_year|year_with_suffix }}):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
-                    {% endif %}
-                    {% if player.draft_year %}
-                        <div><strong>入団:</strong> <a href="{% url 'draft_detail' player.draft_year %}">{{ player.draft_year|year_with_suffix }}{{ player.draft_category_name }}{{ player.player_draft_miss_count | get_miss_text }}{{ player.player_draft_rank|rank_with_suffix }}</a></div>
-                    {% endif %}
-                    {% if player.player_birthday %}
-                        <div><strong>誕生日:</strong> {{ player.player_birthday }}</div>
-                    {% endif %}
-                    {% if player.age %}
-                        <div><strong>年齢:</strong> {{ player.age|age_with_suffix }}</div>
-                    {% endif %}
-                    {% if player.career_version_name %}
-                        <div><strong>経歴:</strong> <a href="{% url 'career_detail' player.career_id %}">{{ player.career_version_name }}</a></div>
-                    {% endif %}
-                    {% if player.throw_bat %}
-                        <div><strong>投打:</strong> {{ player.throw_bat }}</div>
-                    {% endif %}
-                    {% if player.player_height %}
-                        <div><strong>身長:</strong> {{ player.player_height|height_with_suffix }}</div>
-                    {% endif %}
-                    {% if player.player_weight %}
-                        <div><strong>体重:</strong> {{ player.player_weight|weight_with_suffix }}</div>
-                    {% endif %}
-                    {% if player.place_name %}
-                        <div><strong>出身地:</strong> <a href="{% url 'place_detail' player.place_id %}">{{ player.place_name }}</a></div>
-                    {% endif %}
-                    {% if player.marriage %}
-                        <div><strong>婚姻:</strong> {{ player.marriage }}</div>
-                    {% endif %}
-                    {% if player.player_hobby %}
-                        <div><strong>趣味:</strong> {{ player.player_hobby }}</div>
-                    {% endif %}
-                    {% if player.player_specialty %}
-                        <div><strong>特技:</strong> {{ player.player_specialty }}</div>
-                    {% endif %}
-                    <div>
-                        <strong>関連リンク:</strong> 
-                        {% if player.player_wikipedia_parameter %}
-                            <a href={{ player.player_wikipedia_parameter|format_wikipedia_url }} target="_blank" title="Wikipedia">
-                                <i class="fa-brands fa-wikipedia-w"></i>
-                            </a>
+                {% if player.player_furigana %}
+                    <div class="card-info">
+                        {% if player.player_nickname %}
+                            <div><strong>{{ player.player_nickname|with_brackets }}</strong></div>
                         {% endif %}
-                        {% if player.player_youtube_parameter %}
-                            <a href={{ player.player_youtube_parameter|format_youtube_url }} target="_blank" title="YouTube">
-                                <i class="fa-brands fa-youtube"></i>
-                            </a>
+                        {% if player.player_category_name %}
+                            <div><strong>区分:</strong> {{ player.player_category_name }}</div>
                         {% endif %}
-                        {% if user.is_authenticated and user.is_superuser %}
-                            <a href="{% url 'player_edit' player.player_id %}">[編集]</a>
+                        {% if player.common_record_number %}
+                            <div><strong>背番号:</strong> {{ player.common_record_number }}</div>
                         {% endif %}
+                        {% if player.position_category_name %}
+                            <div><strong>ポジション:</strong> {{ player.position_category_name }}</div>
+                        {% endif %}
+                        {% if player.position_category_id == 1 and player.pitching_year %}
+                            <div><strong>成績({{ player.pitching_year|year_with_suffix }}):</strong> {% format_pitching_stats player.pitching_games player.pitching_earned_run_average player.pitching_wins player.pitching_loses player.pitching_saves player.pitching_holds player.pitching_strike_outs %}</div>
+                        {% elif player.batting_year %}
+                            <div><strong>成績({{ player.batting_year|year_with_suffix }}):</strong> {% format_batting_stats player.batting_plate_appearances player.batting_average player.batting_home_runs player.batting_runs_batted_in player.batting_stolen_bases %}</div>
+                        {% endif %}
+                        {% if player.common_record_salary %}
+                            <div><strong>年俸({{ player.common_record_year|year_with_suffix }}):</strong> {{ player.common_record_salary|format_salary }}{{ player.currency_name }}</div>
+                        {% endif %}
+                        {% if player.draft_year %}
+                            <div><strong>入団:</strong> <a href="{% url 'draft_detail' player.draft_year %}">{{ player.draft_year|year_with_suffix }}{{ player.draft_category_name }}{{ player.player_draft_miss_count | get_miss_text }}{{ player.player_draft_rank|rank_with_suffix }}</a></div>
+                        {% endif %}
+                        {% if player.player_birthday %}
+                            <div><strong>誕生日:</strong> {{ player.player_birthday }}</div>
+                        {% endif %}
+                        {% if player.age %}
+                            <div><strong>年齢:</strong> {{ player.age|age_with_suffix }}</div>
+                        {% endif %}
+                        {% if player.career_version_name %}
+                            <div><strong>経歴:</strong> <a href="{% url 'career_detail' player.career_id %}">{{ player.career_version_name }}</a></div>
+                        {% endif %}
+                        {% if player.throw_bat %}
+                            <div><strong>投打:</strong> {{ player.throw_bat }}</div>
+                        {% endif %}
+                        {% if player.player_height %}
+                            <div><strong>身長:</strong> {{ player.player_height|height_with_suffix }}</div>
+                        {% endif %}
+                        {% if player.player_weight %}
+                            <div><strong>体重:</strong> {{ player.player_weight|weight_with_suffix }}</div>
+                        {% endif %}
+                        {% if player.place_name %}
+                            <div><strong>出身地:</strong> <a href="{% url 'place_detail' player.place_id %}">{{ player.place_name }}</a></div>
+                        {% endif %}
+                        {% if player.marriage %}
+                            <div><strong>婚姻:</strong> {{ player.marriage }}</div>
+                        {% endif %}
+                        {% if player.player_hobby %}
+                            <div><strong>趣味:</strong> {{ player.player_hobby }}</div>
+                        {% endif %}
+                        {% if player.player_specialty %}
+                            <div><strong>特技:</strong> {{ player.player_specialty }}</div>
+                        {% endif %}
+                        <div>
+                            <strong>関連リンク:</strong> 
+                            {% if player.player_wikipedia_parameter %}
+                                <a href={{ player.player_wikipedia_parameter|format_wikipedia_url }} target="_blank" title="Wikipedia">
+                                    <i class="fa-brands fa-wikipedia-w"></i>
+                                </a>
+                            {% endif %}
+                            {% if player.player_youtube_parameter %}
+                                <a href={{ player.player_youtube_parameter|format_youtube_url }} target="_blank" title="YouTube">
+                                    <i class="fa-brands fa-youtube"></i>
+                                </a>
+                            {% endif %}
+                            {% if user.is_authenticated and user.is_superuser %}
+                                <a href="{% url 'player_edit' player.player_id %}">[編集]</a>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         {% empty %}
             <div class="no-result">検索結果は0件です。</div>

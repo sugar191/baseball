@@ -21,8 +21,14 @@
                                     {{ player.player_draft_miss_count | get_miss_text }}
                                     {{ player.player_draft_rank }}位
                                 </td>
-                                <td><a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a></td>
                                 <td>{{ player.player_draft_is_hit|hit_mark }}</td>
+                                <td>
+                                    {% if player.player_furigana %}
+                                        <a href="{% url 'player_detail' player.player_id %}">{{ player.player_name }}</a>
+                                    {% else %}
+                                        {{ player.player_name }}
+                                    {% endif %}
+                                </td>
                                 <td>{{ player.player_draft_is_joined|join_mark:player.player_draft_is_hit }}</td>
                             </tr>
                         {% endfor %}
